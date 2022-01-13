@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="codingmore-web" />
+        <module name="codingmore-common" />
+        <module name="codingmore-admin" />
+        <module name="codingmore-mbg" />
+        <module name="codingmore-security" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="codingmore" target="1.8" />
+      <module name="codingmore-admin" target="1.8" />
+      <module name="codingmore-common" target="1.8" />
+      <module name="codingmore-mbg" target="1.8" />
+      <module name="codingmore-security" target="1.8" />
+      <module name="codingmore-web" target="1.8" />
+      <module name="learn-common" target="1.5" />
+      <module name="learn-mbg" target="1.5" />
+      <module name="learn-security" target="1.5" />
+      <module name="learn-web" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="codingmore-admin" options="-parameters" />
+      <module name="codingmore-common" options="-parameters" />
+      <module name="codingmore-mbg" options="-parameters" />
+      <module name="codingmore-security" options="-parameters" />
+      <module name="codingmore-web" options="-parameters" />
+    </option>
+  </component>
+</project>

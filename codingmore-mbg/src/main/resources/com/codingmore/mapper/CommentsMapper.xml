@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.CommentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.Comments">
+        <id column="comment_ID" property="commentId" />
+        <result column="comment_post_ID" property="commentPostId" />
+        <result column="comment_author" property="commentAuthor" />
+        <result column="comment_author_email" property="commentAuthorEmail" />
+        <result column="comment_author_url" property="commentAuthorUrl" />
+        <result column="comment_author_IP" property="commentAuthorIp" />
+        <result column="comment_date" property="commentDate" />
+        <result column="comment_content" property="commentContent" />
+        <result column="comment_approved" property="commentApproved" />
+        <result column="comment_agent" property="commentAgent" />
+        <result column="comment_type" property="commentType" />
+        <result column="comment_parent" property="commentParent" />
+        <result column="user_id" property="userId" />
+        <result column="site_id" property="siteId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_author_IP, comment_date, comment_content, comment_approved, comment_agent, comment_type, comment_parent, user_id, site_id
+    </sql>
+
+</mapper>

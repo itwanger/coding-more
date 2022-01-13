@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.PostsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.Posts">
+        <id column="ID" property="id"/>
+        <result column="post_author" property="postAuthor"/>
+        <result column="post_date" property="postDate"/>
+        <result column="post_content" property="postContent"/>
+        <result column="post_title" property="postTitle"/>
+        <result column="post_excerpt" property="postExcerpt"/>
+        <result column="post_status" property="postStatus"/>
+        <result column="comment_status" property="commentStatus"/>
+        <result column="post_modified" property="postModified"/>
+        <result column="menu_order" property="menuOrder"/>
+        <result column="post_type" property="postType"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="site_id" property="siteId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID
+        , post_author, post_date, post_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, post_type, comment_count, site_id
+    </sql>
+
+    <select id="findByPage" resultType="com.codingmore.vo.PostsVo">
+        select a.*, b.term_taxonomy_id,c.user_nicename
+        from posts a
+                 left join term_relationships b
+                           on a.id = b.object_id
+                 left join users c on a.post_author = c.id ${ew.customSqlSegment}
+    </select>
+
+</mapper>
