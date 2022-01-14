@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.PostmetaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.Postmeta">
+        <id column="meta_id" property="metaId" />
+        <result column="post_id" property="postId" />
+        <result column="meta_key" property="metaKey" />
+        <result column="meta_value" property="metaValue" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        meta_id, post_id, meta_key, meta_value
+    </sql>
+
+</mapper>

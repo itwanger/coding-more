@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <properties resource="generator.properties"/>
+    <context id="MySqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 为模型生成序列化方法-->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <!-- 为生成的Java模型创建一个toString方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!--生成mapper.xml时覆盖原文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <commentGenerator type="top.codingmore.hcp.CommentGenerator">
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+            <!-- 时间格式设置 -->
+            <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+            <!--解决mysql驱动升级到8.0后不生成指定数据库代码的问题-->
+           <!-- <property name="nullCatalogMeansCurrent" value="true" />-->
+            <property name="remarksReporting" value="true"></property>
+        </jdbcConnection>
+
+
+
+        <javaModelGenerator targetPackage="top.codingmore.hcp.model" targetProject="D:\work\qingmiaokejiwork\qingmiaokejitpj\trunk\hcp\hcp-platformshare\src\main\java"/>
+
+        <sqlMapGenerator targetPackage="top.codingmore.hcp.mapper" targetProject="D:\work\qingmiaokejiwork\qingmiaokejitpj\trunk\hcp\hcp-platformshare\src\main\resources"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="top.codingmore.hcp.mapper"
+                             targetProject="D:\work\qingmiaokejiwork\qingmiaokejitpj\trunk\hcp\hccp-platformshare\src\main\java"/>
+        <!--生成全部表tableName设为%-->
+
+       <table tableName="JC_REC_MSG_USER">
+            <generatedKey column="ID" sqlStatement="select  sys_guid() from dual" identity="false" />
+        </table>
+        <table tableName="JC_DAILY_REPORT">
+            <generatedKey column="ID" sqlStatement="select  sys_guid() from dual" identity="false" />
+        </table>
+        <!--  <table tableName="DM_HCP_PJSX">
+         </table>
+         <table tableName="DM_HCP_PJLY">
+         </table>
+         <table tableName="DM_HCP_PJJG">
+         </table>
+         <table tableName="DM_HCP_PJQD">
+         </table>-->
+        <!--<table tableName="T_HCP_API_USER">
+            <generatedKey column="APP_ID" sqlStatement="select  sys_guid() from dual" identity="false" />
+        </table>-->
+        <!--<table tableName="DM_GY_SWJG_JINSAN">
+        </table>-->
+        <table tableName="HCP_PJ_DYGX">
+        </table>
+    </context>
+</generatorConfiguration>

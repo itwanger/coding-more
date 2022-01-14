@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.TermRelationshipsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.TermRelationships">
+        <id column="object_id" property="objectId" />
+        <result column="term_taxonomy_id" property="termTaxonomyId" />
+        <result column="term_order" property="termOrder" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        object_id, term_taxonomy_id, term_order, type
+    </sql>
+
+</mapper>
