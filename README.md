@@ -1,7 +1,4 @@
-编程进阶网 GitHub readme
-编程进阶网（codingmore.top）CodingMore
-
-公众号：沉默王二 交流：微信群 学习教程：CodingMoreLearning Cloud版本 CodingMoreSwarm 前端项目 CodingMoreFront 码云地址
+# 编程进阶网（codingmore.top）CodingMore
 
 公众号：沉默王二 交流：微信群 学习教程：code-learning Cloud版本 code-swarm 码云地址
 
