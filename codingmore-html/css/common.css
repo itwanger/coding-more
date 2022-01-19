@@ -1,5 +1,8 @@
 /* PC端样式 */
 @media screen and (min-width: 751px) {
+  html{
+    height: 100%;
+  }
   body{
     min-width: 1200px;
     height: 100%;
@@ -9,10 +12,14 @@
   .top-fixed {
     height: 50px;
     background-color: #63b175;
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    position: fixed;
+  }
+  .top-pos{
+    height: 50px;
+    flex-shrink: 0;
   }
 
   .top-fixed * {
@@ -74,8 +81,7 @@
     align-items: flex-start;
     justify-content: space-between;
     width: 1200px;
-    /* min-height: 800px; */
-    margin: 50px auto 0;
+    margin: 0 auto;
     padding-top: 60px;
     font-size: 16px;
     box-sizing: border-box;
@@ -121,6 +127,7 @@
     left: 0;
     width: 100%; */
     background-color: #3c3c3c;
+    flex-shrink: 0;
   }
 
   .bottom-info .info-container {

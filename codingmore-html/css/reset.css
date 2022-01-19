@@ -332,3 +332,7 @@
   -ms-user-select: none;
   -webkit-user-select: none;
 }
+
+.color_gray1{
+  color: rgb(51, 51, 51);
+}
