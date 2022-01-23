@@ -6,12 +6,11 @@
     <resultMap id="BaseResultMap" type="com.codingmore.model.PostTag">
         <id column="post_id" property="postId" />
         <result column="description" property="description" />
-        <result column="site_id" property="siteId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        post_id, description, site_id
+        post_id, description
     </sql>
 
 </mapper>

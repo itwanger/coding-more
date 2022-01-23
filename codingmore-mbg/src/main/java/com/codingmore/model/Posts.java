@@ -2,8 +2,13 @@ package com.codingmore.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -61,8 +66,8 @@ public class Posts implements Serializable {
     @ApiModelProperty(value = "评论总数")
     private Long commentCount;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
-
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,String> attribute;
 
 }

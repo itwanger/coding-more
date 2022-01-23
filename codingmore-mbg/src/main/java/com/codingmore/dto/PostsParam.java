@@ -1,7 +1,5 @@
 package com.codingmore.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -58,9 +56,7 @@ public class PostsParam implements Serializable {
 
 
 
-    @ApiModelProperty(value = "站点id")
-    @NotNull(message="站点id不能为空")
-    private Long siteId;
+
 
     @ApiModelProperty(value = "栏目ID")
     @NotNull(message="栏目ID不能为空")

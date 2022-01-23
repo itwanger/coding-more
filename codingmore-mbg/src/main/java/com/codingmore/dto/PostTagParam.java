@@ -20,9 +20,7 @@ public class PostTagParam implements Serializable {
     @ApiModelProperty(value = "标签名称")
     private String description;
 
-    @ApiModelProperty(value = "站点id")
-    @NotNull(message="站点id不能为空")
-    private Long siteId;
+
 
     @ApiModelProperty(value = " 对应文章ID")
     private Long objectId;

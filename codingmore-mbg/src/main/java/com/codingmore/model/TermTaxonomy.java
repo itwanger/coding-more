@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -39,12 +41,6 @@ public class TermTaxonomy implements Serializable {
     @ApiModelProperty(value = "父栏目id")
     private Long parentId;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
-
-    @ApiModelProperty(value = "模板路径")
-    private String tplPath;
-
     @TableField("create_user_id")
     @ApiModelProperty("创建用户id")
     private Long createUserId;
@@ -57,8 +53,9 @@ public class TermTaxonomy implements Serializable {
     @ApiModelProperty("修改时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "内容模板模板路径")
-    @TableField("content_tpl_path")
-    private String contentTplPath;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,String> attribute;
+
 
 }

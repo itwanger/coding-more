@@ -1,7 +1,9 @@
 package com.codingmore.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,6 +11,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * <p>
@@ -40,7 +43,9 @@ public class UsersParam implements Serializable {
     @ApiModelProperty(value = "Email")
     private String userEmail;
 
-
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,String> attribute;
 
 
 

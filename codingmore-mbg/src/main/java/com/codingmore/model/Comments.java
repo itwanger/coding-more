@@ -66,8 +66,6 @@ public class Comments implements Serializable {
     @ApiModelProperty(value = "评论者用户ID（不一定存在）")
     private Long userId;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
 
 
 }

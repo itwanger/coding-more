@@ -47,8 +47,7 @@ public class Links implements Serializable {
     @ApiModelProperty(value = "添加者用户ID")
     private Long linkOwner;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
+
 
 
 }

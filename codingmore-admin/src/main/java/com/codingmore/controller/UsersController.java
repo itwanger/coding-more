@@ -55,7 +55,7 @@ public class UsersController {
         return ResultObject.success(usersService.getById(usersId));
     }
 
-    @RequestMapping(value = "/update",method=RequestMethod.POST)
+   /* @RequestMapping(value = "/update",method=RequestMethod.POST)
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Valid Users users) {
@@ -63,7 +63,7 @@ public class UsersController {
             return ResultObject.failed("id不能为空");
         }
         return ResultObject.success(usersService.updateById(users) ? "更新成功" : "更新失败");
-    }
+    }*/
 
     @RequestMapping(value = "/delete",method=RequestMethod.GET)
     @ResponseBody

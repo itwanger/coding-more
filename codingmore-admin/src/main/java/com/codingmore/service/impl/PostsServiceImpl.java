@@ -62,9 +62,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 List<PostTag>  tagList = iPostTagService.list(postTagQueryWrapper);
                 if(tagList.size() == 0){
                     PostTagParam postTagParam = new PostTagParam();
-                    postTagParam.setSiteId(postTagParam.getSiteId());
                     postTagParam.setObjectId(posts.getId());
-                    postTagParam.setSiteId(postsParam.getSiteId());
                     postTagParam.setDescription(tag);
                     // TODO: 2021/11/14 先默认 循环添加
                     postTagParam.setTermOrder(0);

@@ -46,9 +46,6 @@ public class PostsVo {
     @ApiModelProperty(value = "评论总数")
     private Long commentCount;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
-
     @ApiModelProperty(value = "发布人")
     private String userNiceName;
 

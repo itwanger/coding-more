@@ -7,17 +7,13 @@
         <id column="site_id" property="siteId" />
         <result column="site_name" property="siteName" />
         <result column="site_desc" property="siteDesc" />
-        <result column="domain" property="domain" />
-        <result column="tel_name" property="telName" />
-        <result column="static_dir" property="staticDir" />
-        <result column="create_user_id" property="createUserId" />
-        <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="attribute" property="attribute" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        site_id, site_name, site_desc, domain, tel_name, static_dir,create_user_id,create_time,update_time
+        site_id, site_name, site_desc, domain, tel_name, static_dir,create_user_id,create_time,update_time,attribute
     </sql>
 
 </mapper>

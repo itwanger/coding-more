@@ -38,17 +38,6 @@ public class TermTaxonomyParam implements Serializable {
     @ApiModelProperty(value = "父栏目id")
     private Long parentId;
 
-    @ApiModelProperty(value = "模板路径")
-    @NotBlank(message="模板路径不能为空")
-    private String tplPath;
-
-    @ApiModelProperty(value = "内容模板路径")
-    @NotBlank(message="内容模板路径不能为空")
-    private String contentTplPath;
-
-    @ApiModelProperty(value = "站点id")
-    @NotNull(message="站点id不能为空")
-    private Long siteId;
 
 
 }

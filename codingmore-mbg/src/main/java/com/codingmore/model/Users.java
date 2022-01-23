@@ -2,8 +2,13 @@ package com.codingmore.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,7 +32,7 @@ public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(value = "users_id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "登录名")
@@ -57,11 +62,17 @@ public class Users implements Serializable {
     @ApiModelProperty(value = "用户状态")
     private Integer userStatus;
 
-    @ApiModelProperty(value = "显示名称")
+    @ApiModelProperty(value = "图像")
     private String displayName;
 
     @ApiModelProperty(value = "用户类型 0 :后台 1：前端")
     private Integer userType;
 
+    @ApiModelProperty(value = "openid")
+    private String openId;
+
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,String> attribute;
 
 }

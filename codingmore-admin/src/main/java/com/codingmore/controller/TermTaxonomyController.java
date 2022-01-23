@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.TermTaxonomyParam;
 import com.codingmore.model.TermTaxonomy;
-import com.codingmore.service.ITemplateService;
 import com.codingmore.service.ITermTaxonomyService;
 import com.codingmore.service.IUsersService;
 import com.codingmore.vo.TermTaxonomyTreeNode;
@@ -42,8 +41,7 @@ import java.util.Map;
 public class TermTaxonomyController {
     @Autowired
     private ITermTaxonomyService termTaxonomyService;
-    @Autowired
-    private ITemplateService iTemplateService;
+
     @Autowired
     private IUsersService iUsersService;
 
@@ -113,18 +111,5 @@ public class TermTaxonomyController {
         return ResultObject.success(termTaxonomyService.getChildrenByParentId(parentId));
     }
 
-    @RequestMapping(value = "/getChannelTemplateList",method=RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation("根据站点模板名称获取栏目模板列表")
-    public ResultObject<List<String>> getChannelTemplateList(@RequestParam String siteTemplate) {
-        return ResultObject.success(iTemplateService.getChannelTemplateList(siteTemplate));
-    }
-
-    @RequestMapping(value = "/getContentTemplateList",method=RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation("根据站点模板名称获取内容模板列表")
-    public ResultObject<List<String>> getContentTemplateList(@RequestParam String siteTemplate) {
-        return ResultObject.success(iTemplateService.getContentTemplateList(siteTemplate));
-    }
 }
 

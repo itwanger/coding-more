@@ -17,12 +17,11 @@
         <result column="comment_type" property="commentType" />
         <result column="comment_parent" property="commentParent" />
         <result column="user_id" property="userId" />
-        <result column="site_id" property="siteId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_author_IP, comment_date, comment_content, comment_approved, comment_agent, comment_type, comment_parent, user_id, site_id
+        comment_ID, comment_post_ID, comment_author, comment_author_email, comment_author_url, comment_author_IP, comment_date, comment_content, comment_approved, comment_agent, comment_type, comment_parent, user_id
     </sql>
 
 </mapper>

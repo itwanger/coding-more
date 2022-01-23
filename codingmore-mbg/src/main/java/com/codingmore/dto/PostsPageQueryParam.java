@@ -5,7 +5,7 @@ import com.codingmore.util.PostType;
 public class PostsPageQueryParam {
     long pageSize;
     long page;
-    long siteId;
+
     Long termTaxonomyId;
     PostType postType;
 
@@ -25,13 +25,7 @@ public class PostsPageQueryParam {
         this.page = page;
     }
 
-    public long getSiteId() {
-        return siteId;
-    }
 
-    public void setSiteId(long siteId) {
-        this.siteId = siteId;
-    }
 
     public Long getTermTaxonomyId() {
         return termTaxonomyId;

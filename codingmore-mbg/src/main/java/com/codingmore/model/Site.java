@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,6 +28,7 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Site对象", description="站点")
+@TableName(autoResultMap = true)
 public class Site implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,31 +45,18 @@ public class Site implements Serializable {
     @ApiModelProperty("站点介绍")
     private String siteDesc;
 
-    @TableField("domain")
-    @NotBlank(message = "站点域名不能为空")
-    @ApiModelProperty("站点域名")
-    private String domain;
-
-    @TableField("tel_name")
-    @NotBlank(message = "模板方案不能为空")
-    @ApiModelProperty("模板方案")
-    private String telName;
-
-    @TableField("static_dir")
-    @ApiModelProperty("静态目录")
-    private String staticDir;
-
-    @TableField("create_user_id")
-    @ApiModelProperty("创建用户id")
-    private Long createUserId;
-
-    @TableField("create_time")
-    @ApiModelProperty("创建时间")
-    private Date createTime;
+    @TableField("keywords")
+    @NotBlank(message = "关键字不能为空")
+    @ApiModelProperty("关键字")
+    private String keywords;
 
     @TableField("update_time")
     @ApiModelProperty("修改时间")
     private Date updateTime;
+
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,Object> attribute;
 
 
 }

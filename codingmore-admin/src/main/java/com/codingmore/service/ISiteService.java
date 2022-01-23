@@ -12,10 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-09-12
  */
 public interface ISiteService extends IService<Site> {
-    /**
-     * 删除前进行关联判断
-     * @param siteId
-     * @return
-     */
-    boolean deleteSite(long siteId);
 }

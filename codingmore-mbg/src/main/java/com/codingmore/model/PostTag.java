@@ -30,8 +30,7 @@ public class PostTag implements Serializable {
     @ApiModelProperty(value = "标签名称")
     private String description;
 
-    @ApiModelProperty(value = "站点id")
-    private Long siteId;
+
 
 
 }
