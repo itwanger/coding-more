@@ -28,7 +28,7 @@ hs_err_pid*
 
 # idea
 *.iml
-.idea/modules.xml
-.idea/compiler.xml
-.idea/encodings.xml
-codingmore-demo/codingmore-demo.iml
+.idea/
+
+*.log
+
