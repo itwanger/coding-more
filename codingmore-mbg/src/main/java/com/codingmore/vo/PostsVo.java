@@ -1,14 +1,19 @@
 package com.codingmore.vo;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "PostsVo", description = "文章Vo")
+@TableName(autoResultMap = true)
 public class PostsVo {
     @ApiModelProperty(value = "ID")
     private Long id;
@@ -51,4 +56,8 @@ public class PostsVo {
 
     @ApiModelProperty(value = "栏目ID")
     private Long termTaxonomyId;
+
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty("属性")
+    private Map<String,String> attribute;
 }

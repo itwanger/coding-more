@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,12 +26,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Posts对象", description="文章")
+@TableName(autoResultMap = true)
 public class Posts implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "ID")
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(value = "posts_id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "对应作者ID")

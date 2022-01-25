@@ -14,6 +14,8 @@ import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.util.TermRelationType;
 import com.codingmore.vo.PostsVo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public boolean savePosts(PostsParam postsParam) {
         Posts posts = new Posts();
         BeanUtils.copyProperties(postsParam,posts);
+        try {
+            handleAttribute(postsParam,posts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         posts.setCommentCount(0L);
         if(posts.getPostDate() == null){
             posts.setPostDate(new Date());
@@ -88,10 +95,15 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         Posts posts = this.getById(postsParam.getId());
         Date publishDate = posts.getPostDate();
         BeanUtils.copyProperties(postsParam,posts);
+        try {
+            handleAttribute(postsParam,posts);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         //防止修改发布时间
         posts.setPostDate(publishDate);
         posts.setPostModified(new Date());
-
+        this.updateById(posts);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("object_id",postsParam.getId());
         queryWrapper.eq("term_taxonomy_id",postsParam.getTermTaxonomyId());
@@ -151,4 +163,15 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         termRelationships.setType(TermRelationType.CONTENT.getType());
         return iTermRelationshipsService.save(termRelationships);
     }
+
+    /**
+     * 处理扩展字段
+     */
+    private void handleAttribute(PostsParam postsParam, Posts posts) throws JsonProcessingException {
+        if (StringUtils.isNotBlank(postsParam.getAttribute())) {
+            Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
+            posts.setAttribute(attribute);
+        }
+    }
+    private static ObjectMapper objectMapper = new ObjectMapper();
 }
