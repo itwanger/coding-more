@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/codingmore.iml" filepath="$PROJECT_DIR$/codingmore.iml" />
       <module fileurl="file://$PROJECT_DIR$/codingmore-admin/codingmore-admin.iml" filepath="$PROJECT_DIR$/codingmore-admin/codingmore-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/codingmore-common/codingmore-common.iml" filepath="$PROJECT_DIR$/codingmore-common/codingmore-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/codingmore-demo/codingmore-demo.iml" filepath="$PROJECT_DIR$/codingmore-demo/codingmore-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/codingmore-mbg/codingmore-mbg.iml" filepath="$PROJECT_DIR$/codingmore-mbg/codingmore-mbg.iml" />
       <module fileurl="file://$PROJECT_DIR$/codingmore-security/codingmore-security.iml" filepath="$PROJECT_DIR$/codingmore-security/codingmore-security.iml" />
       <module fileurl="file://$PROJECT_DIR$/codingmore-web/codingmore-web.iml" filepath="$PROJECT_DIR$/codingmore-web/codingmore-web.iml" />

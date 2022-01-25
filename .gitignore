@@ -23,4 +23,12 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-/.idea/
+# macOS.gitignore
+.DS_Store
+
+# idea
+*.iml
+.idea/modules.xml
+.idea/compiler.xml
+.idea/encodings.xml
+codingmore-demo/codingmore-demo.iml
