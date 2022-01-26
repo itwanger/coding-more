@@ -38,6 +38,7 @@ public class TermTaxonomyParam implements Serializable {
     @ApiModelProperty(value = "父栏目id")
     private Long parentId;
 
-
+    @ApiModelProperty("属性")
+    private String attribute;
 
 }

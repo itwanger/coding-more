@@ -26,10 +26,9 @@ public interface ITermTaxonomyService extends IService<TermTaxonomy> {
     /**
      * 根据站点id和父栏目id获得所有子孙栏目节点
      * @param parentId 父栏目id
-     * @param siteId 所属站点id
      * @return
      */
-    List<TermTaxonomyTreeNode> getAllByParentId(Long parentId, long siteId);
+    List<TermTaxonomyTreeNode> getAllByParentId(Long parentId);
 
     /**
      * 根据父栏目id获得直属子栏目

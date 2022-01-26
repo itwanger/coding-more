@@ -42,12 +42,11 @@ public class TermTaxonomyServiceImpl extends ServiceImpl<TermTaxonomyMapper, Ter
     }
 
     @Override
-    public List<TermTaxonomyTreeNode> getAllByParentId(Long parentId, long siteId) {
+    public List<TermTaxonomyTreeNode> getAllByParentId(Long parentId) {
         int firstLevelParentId = 0;
         List<TermTaxonomyTreeNode> treeNodes = new ArrayList<>();
-        QueryWrapper<TermTaxonomy> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("site_id", siteId);
-        List<TermTaxonomy> termTaxonomyList = this.list(queryWrapper);
+
+        List<TermTaxonomy> termTaxonomyList = this.list();
         List<TermTaxonomyTreeNode> rootTreeNodes = new ArrayList<>();
 
         termTaxonomyList.forEach(item->{
