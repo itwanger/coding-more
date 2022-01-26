@@ -16,27 +16,31 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/szjy/";
-    final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/szjy/";
-    final static String key = "tobebetterjavaer-beian";
+    final static String directory = "gongju/";
+    final static String key = "chiner";
+
+    final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
+    final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
+
     final static String fileName = key +".md";
-    final static String imgSuffix = ".png";
-    final static String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/szjy/" + key + "-";
+    final static String pngSuffix = ".png";
+    final static String gifSuffix = ".gif";
+    final static String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/" + directory + key + "-";
     final static Pattern pattern = Pattern.compile("^!\\[](.*)$");
 
     static class MyRunnable implements Runnable {
-        private String num;
-        private String line;
-        public MyRunnable(String num, String line) {
-            this.num = num;
-            this.line = line;
+        private String originImgUrl;
+        private String destinationImgPath;
+        public MyRunnable(String originImgUrl, String destinationImgPath) {
+            this.originImgUrl = originImgUrl;
+            this.destinationImgPath = destinationImgPath;
         }
         @SneakyThrows
         @Override
         public void run() {
-            URL url = new URL(line.substring("![](".length(), line.indexOf(imgSuffix)) + imgSuffix);
+            URL url = new URL(originImgUrl);
             InputStream inputStream = url.openStream();
-            OutputStream outputStream = new FileOutputStream(imgPath + key + "-" +num + imgSuffix);
+            OutputStream outputStream = new FileOutputStream(destinationImgPath);
             byte[] buffer = new byte[2048];
             int length = 0;
             while ((length = inputStream.read(buffer)) != -1) {
@@ -57,11 +61,23 @@ public class Convert {
             Matcher m = pattern.matcher(line);
             if (m.matches()) {
                 // 处理图片
+
+                // png 还是 gif
+                String imgSuffixTemp = pngSuffix;
+
+                int index = line.indexOf(pngSuffix);
+                if (index == -1) {
+                    index = line.indexOf(gifSuffix);
+                    imgSuffixTemp = gifSuffix;
+                }
+                String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
+                String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
+
                 // 1、下载到本地
-                new Thread(new MyRunnable(num + "", line)).start();
+                new Thread(new MyRunnable(originImgUrl, destinationImgPath)).start();
 
                 // 2、修改 MD 文档
-                writer.append("![](" + imgCdnPre +  num + imgSuffix +")\n");
+                writer.append("![](" + imgCdnPre +  num + imgSuffixTemp +")\n");
                 num++;
             } else {
                 writer.append(line+"\n");
