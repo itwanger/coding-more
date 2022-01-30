@@ -33,3 +33,6 @@ hs_err_pid*
 *.log
 
 *.yml
+
+target/
+.idea/
