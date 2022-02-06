@@ -36,3 +36,4 @@ hs_err_pid*
 
 target/
 .idea/
+package-lock.json
