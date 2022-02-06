@@ -1,0 +1,29 @@
+html, body, #app, .el-container{
+  height: 100%;
+  overflow: auto;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-justify{
+  text-align: justify;
+}
+
+.clear{
+  clear: both;
+}
