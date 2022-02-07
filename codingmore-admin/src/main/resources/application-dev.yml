@@ -1,9 +1,10 @@
 spring:
   datasource:
-    username: codingmoredb
-    password: 6XLpmpxzwnPAwCpf
+    # 删减后的 DB
+    username: codingmoretiny01
+    password: wSBWECc2xkAxidkm
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://118.190.99.232:3306/codingmoredb?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://118.190.99.232:3306/codingmoretiny01?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #初始化连接池大小
