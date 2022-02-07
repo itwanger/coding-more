@@ -88,7 +88,6 @@
 
     </dependencies>
 
-    <!--统一子模块中的版本号-->
     <dependencyManagement>
         <dependencies>
             <dependency>
