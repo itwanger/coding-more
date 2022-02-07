@@ -191,9 +191,9 @@
             <!-- mybatis-plus end -->
 
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>3.0.0</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>3.0.2</version>
             </dependency>
 
             <dependency>

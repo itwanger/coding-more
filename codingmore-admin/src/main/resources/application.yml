@@ -26,6 +26,7 @@ mybatis-plus:
 secure:
   ignored:
     urls: #安全路径白名单
+      - /doc.html
       - /swagger-ui/**
       - /swagger/**
       - /swagger-resources/**
@@ -42,6 +43,7 @@ secure:
       - /users/info
       - /users/logout
       - /minio/upload
+
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头

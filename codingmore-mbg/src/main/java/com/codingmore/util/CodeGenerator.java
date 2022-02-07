@@ -59,16 +59,16 @@ public class CodeGenerator {
         gc.setFileOverride(true);
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://118.190.99.232:3306/learn?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
+        dsc.setUrl("jdbc:mysql://118.190.99.232:3306/codingmoretiny02?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("learn");
-        dsc.setPassword("pet8nwhBbinRyrNB");
+        dsc.setUsername("codingmoretiny02");
+        dsc.setPassword("Xw5y8bGFzb86DyGy");
         mpg.setDataSource(dsc);
         // 包配置
         PackageConfig pc = new PackageConfig();
 //        pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.learn");
+        pc.setParent("top.codingmore");
         pc.setEntity("model");
         mpg.setPackageInfo(pc);
         StrategyConfig strategyConfig = new StrategyConfig();
