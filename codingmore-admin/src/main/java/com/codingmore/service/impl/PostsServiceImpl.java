@@ -158,7 +158,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts){
         TermRelationships termRelationships  = new TermRelationships();
         termRelationships.setTermTaxonomyId(postsParam.getTermTaxonomyId());
-        termRelationships.setObjectId(posts.getId());
+        termRelationships.setTermRelationshipsId(posts.getId());
         termRelationships.setTermOrder(postsParam.getMenuOrder());
         termRelationships.setType(TermRelationType.CONTENT.getType());
         return iTermRelationshipsService.save(termRelationships);

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.codingmore.model.TermRelationships">
-        <id column="object_id" property="objectId" />
+        <id column="term_relationships_id" property="termRelationshipsId" />
         <result column="term_taxonomy_id" property="termTaxonomyId" />
         <result column="term_order" property="termOrder" />
         <result column="type" property="type" />
@@ -12,7 +12,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        object_id, term_taxonomy_id, term_order, type
+        term_relationships_id, term_taxonomy_id, term_order, type
     </sql>
 
 </mapper>
