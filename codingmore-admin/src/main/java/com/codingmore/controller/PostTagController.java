@@ -51,9 +51,8 @@ public class PostTagController {
     @RequestMapping(value = "/getByName",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("模糊匹配")
-    public ResultObject<List<PostTag>> getByObjectId(String  keyWord,long siteId) {
+    public ResultObject<List<PostTag>> getByObjectId(String  keyWord) {
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
-        postTagQueryWrapper.eq("site_id",siteId);
         postTagQueryWrapper.like("description",keyWord+"%");
         return ResultObject.success(postTagService.list(postTagQueryWrapper));
     }
@@ -69,11 +68,10 @@ public class PostTagController {
     @RequestMapping(value = "/queryPageable",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page,long siteId){
+    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page){
         Map<String,Object> map = new HashMap<>();
         Page<PostTag> postTagPage = new Page<>(page,pageSize);
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
-        postTagQueryWrapper.eq("site_id",siteId);
         IPage<PostTag> postTagIPage = postTagService.page(postTagPage,postTagQueryWrapper);
         map.put("items",postTagIPage.getRecords());
         map.put("total",postTagIPage.getTotal());

@@ -23,8 +23,8 @@ public class PostTag implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "ID")
-    @TableId(value = "post_id", type = IdType.AUTO)
+    @ApiModelProperty(value = "post_tag_id")
+    @TableId(value = "post_tag_id", type = IdType.AUTO)
     private Long postId;
 
     @ApiModelProperty(value = "标签名称")
