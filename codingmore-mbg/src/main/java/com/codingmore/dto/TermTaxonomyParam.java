@@ -41,4 +41,6 @@ public class TermTaxonomyParam implements Serializable {
     @ApiModelProperty("属性")
     private String attribute;
 
+    private String type;
+
 }

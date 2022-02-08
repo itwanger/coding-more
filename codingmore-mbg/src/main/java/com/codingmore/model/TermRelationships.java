@@ -27,7 +27,7 @@ public class TermRelationships implements Serializable {
 
     @ApiModelProperty(value = "对应文章ID/链接ID")
     @MppMultiId
-    private Long objectId;
+    private Long termRelationshipsId;
 
     @ApiModelProperty(value = "栏目ID")
     @MppMultiId
