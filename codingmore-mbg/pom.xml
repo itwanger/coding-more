@@ -14,13 +14,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
-
     <dependencies>
-
-
-
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

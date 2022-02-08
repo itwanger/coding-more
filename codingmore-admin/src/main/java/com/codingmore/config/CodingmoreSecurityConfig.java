@@ -24,8 +24,6 @@ public class CodingmoreSecurityConfig extends SecurityConfig {
 
     @Autowired
     private IUsersService usersService;
-   /* @Autowired
-    private UmsResourceService resourceService;*/
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -39,10 +37,6 @@ public class CodingmoreSecurityConfig extends SecurityConfig {
             @Override
             public Map<String, ConfigAttribute> loadDataSource() {
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
-               /* List<UmsResource> resourceList = resourceService.listAll();
-                for (UmsResource resource : resourceList) {
-                    map.put(resource.getUrl(), new org.springframework.security.access.SecurityConfig(resource.getId() + ":" + resource.getName()));
-                }*/
                 return map;
             }
         };

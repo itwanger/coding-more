@@ -137,8 +137,6 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         Users admin = getAdminByUsername(username);
         if (admin != null) {
             List<AdminResource> resourceList = new ArrayList<>();
-//            List<UmsResource> resourceList = getResourceList(admin.getId());
-//            return new AdminUserDetails(admin, resourceList);
             return new AdminUserDetails(admin, resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");

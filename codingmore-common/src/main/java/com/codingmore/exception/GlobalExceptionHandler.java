@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @ControllerAdvice(basePackages="com.codingmore.controller")
 public class GlobalExceptionHandler {
-
-    static {
-        System.out.println(1);
-    }
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
     public ResultObject handle(ApiException e) {

@@ -1,4 +1,4 @@
-package com.codingmore.comonent;
+package com.codingmore.component;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
