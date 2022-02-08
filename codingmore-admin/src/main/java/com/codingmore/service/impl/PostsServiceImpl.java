@@ -59,16 +59,16 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         }
         posts.setPostAuthor(iUsersService.getCurrentUserId());
         this.save(posts);
-        ObjectUtil.clone(posts);
         if(StringUtils.isNotBlank(postsParam.getTags())){
             String[] tags = postsParam.getTags().split(",");
+            QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
+            postTagQueryWrapper.in("description",tags);
+            List<PostTag>  tagList = iPostTagService.list(postTagQueryWrapper);
+            // todo: bug 标签 去重 不存在
             for(String tag:tags){
-                QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
-                postTagQueryWrapper.eq("description",tag);
-                List<PostTag>  tagList = iPostTagService.list(postTagQueryWrapper);
                 if(tagList.size() == 0){
                     PostTagParam postTagParam = new PostTagParam();
-                    postTagParam.setObjectId(posts.getId());
+                    postTagParam.setPostId(posts.getPostsId());
                     postTagParam.setDescription(tag);
                     // TODO: 2021/11/14 先默认 循环添加
                     postTagParam.setTermOrder(0);
@@ -76,7 +76,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 }else{
                     PostTagRelation postTagRelation = new PostTagRelation();
                     postTagRelation.setPostTagId(tagList.get(0).getPostId());
-                    postTagRelation.setObjectId(posts.getId());
+                    postTagRelation.setPostId(posts.getPostsId());
                     postTagRelation.setTermOrder(0);
                     iPostTagRelationService.save(postTagRelation);
                 }
@@ -91,7 +91,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     public boolean updatePosts(PostsParam postsParam) {
-        Posts posts = this.getById(postsParam.getId());
+        Posts posts = this.getById(postsParam.getPostsId());
         Date publishDate = posts.getPostDate();
         BeanUtils.copyProperties(postsParam,posts);
         try {
@@ -99,12 +99,13 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        // todo: 处理标签
         //防止修改发布时间
         posts.setPostDate(publishDate);
         posts.setPostModified(new Date());
         this.updateById(posts);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("object_id",postsParam.getId());
+        queryWrapper.eq("term_relationships_id",postsParam.getPostsId());
         queryWrapper.eq("term_taxonomy_id",postsParam.getTermTaxonomyId());
         int count = iTermRelationshipsService.count(queryWrapper);
         // 关系不能重复
@@ -119,7 +120,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public boolean removePostsById(Long id) {
         this.removeById(id);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("object_id",id);
+        queryWrapper.eq("term_relationships_id",id);
 
         return  iTermRelationshipsService.remove(queryWrapper);
     }
@@ -130,7 +131,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         PostsVo postsVo = new PostsVo();
         BeanUtils.copyProperties(posts,postsVo);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("object_id",posts.getId());
+        queryWrapper.eq("term_relationships_id",posts.getPostsId());
         List<TermRelationships> termRelationshipsList = iTermRelationshipsService.list(queryWrapper);
         if(termRelationshipsList.size()>0){
             postsVo.setTermTaxonomyId(termRelationshipsList.get(0).getTermTaxonomyId());
@@ -157,7 +158,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts){
         TermRelationships termRelationships  = new TermRelationships();
         termRelationships.setTermTaxonomyId(postsParam.getTermTaxonomyId());
-        termRelationships.setTermRelationshipsId(posts.getId());
+        termRelationships.setTermRelationshipsId(posts.getPostsId());
         termRelationships.setTermOrder(postsParam.getMenuOrder());
         termRelationships.setType(TermRelationType.CONTENT.getType());
         return iTermRelationshipsService.save(termRelationships);

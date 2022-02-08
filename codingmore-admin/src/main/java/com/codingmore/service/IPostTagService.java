@@ -20,8 +20,8 @@ public interface IPostTagService extends IService<PostTag> {
 
     /**
      * 获取文章标签
-     * @param objectId
+     * @param postId
      * @return
      */
-    List<PostTag> getByObjectId(Long objectId);
+    List<PostTag> getByPostId(Long postId);
 }

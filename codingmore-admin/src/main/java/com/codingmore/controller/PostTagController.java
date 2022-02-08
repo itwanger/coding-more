@@ -40,12 +40,12 @@ public class PostTagController {
 
 
 
-    @RequestMapping(value = "/getByObjectId",method=RequestMethod.GET)
+    @RequestMapping(value = "/getByPostId",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("根据文章内容获取标签")
-    public ResultObject<List<PostTag>> getByObjectId(long objectId) {
+    public ResultObject<List<PostTag>> getByPostId(long objectId) {
 
-        return ResultObject.success(postTagService.getByObjectId(objectId));
+        return ResultObject.success(postTagService.getByPostId(objectId));
     }
 
     @RequestMapping(value = "/getByName",method=RequestMethod.GET)

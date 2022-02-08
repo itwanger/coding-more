@@ -4,14 +4,14 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.codingmore.model.PostTagRelation">
-        <id column="object_id" property="objectId" />
+        <id column="post_id" property="postId" />
         <result column="post_tag_id" property="postTagId" />
         <result column="term_order" property="termOrder" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        object_id, post_tag_id, term_order
+        post_id, post_tag_id, term_order
     </sql>
 
 </mapper>

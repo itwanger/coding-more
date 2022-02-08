@@ -66,7 +66,7 @@ public class PostsController {
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Valid PostsParam postsParam) {
-        if (postsParam.getId() == null) {
+        if (postsParam.getPostsId() == null) {
             return ResultObject.failed("id不能为空");
         }
         PostStatus postStatus = PostStatus.valueOf(postsParam.getPostStatus());

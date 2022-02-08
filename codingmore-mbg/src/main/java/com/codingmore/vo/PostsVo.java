@@ -15,8 +15,8 @@ import java.util.Map;
 @ApiModel(value = "PostsVo", description = "文章Vo")
 @TableName(autoResultMap = true)
 public class PostsVo {
-    @ApiModelProperty(value = "ID")
-    private Long id;
+    @ApiModelProperty(value = "postsId")
+    private Long postsId;
 
     @ApiModelProperty(value = "对应作者ID")
     private Long postAuthor;

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.codingmore.model.Posts">
-        <id column="ID" property="id"/>
+        <id column="posts_id" property="postsId"/>
         <result column="post_author" property="postAuthor"/>
         <result column="post_date" property="postDate"/>
         <result column="post_content" property="postContent"/>
@@ -21,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID
+        posts_id
         , post_author, post_date, post_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, post_type, comment_count,attribute
     </sql>
 
@@ -29,7 +29,7 @@
         select a.*, b.term_taxonomy_id,c.user_nicename
         from posts a
                  left join term_relationships b
-                           on a.id = b.object_id
+                           on a.posts_id = b.term_relationships_id
                  left join users c on a.post_author = c.id ${ew.customSqlSegment}
     </select>
 

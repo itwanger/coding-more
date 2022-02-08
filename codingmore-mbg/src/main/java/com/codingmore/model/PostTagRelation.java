@@ -27,7 +27,7 @@ public class PostTagRelation implements Serializable {
 
     @ApiModelProperty(value = "对应文章ID")
     @MppMultiId
-    private Long objectId;
+    private Long postId;
 
     @ApiModelProperty(value = "标签ID")
     @MppMultiId

@@ -33,7 +33,7 @@ public class Posts implements Serializable {
 
     @ApiModelProperty(value = "posts_id")
     @TableId(value = "posts_id", type = IdType.AUTO)
-    private Long id;
+    private Long postsId;
 
     @ApiModelProperty(value = "对应作者ID")
     private Long postAuthor;

@@ -33,10 +33,10 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
         PostTag postTag = new PostTag();
         BeanUtils.copyProperties(postTagParam,postTag);
         boolean result = this.save(postTag);
-        if(postTagParam.getObjectId()!=null){
+        if(postTagParam.getPostId()!=null){
             PostTagRelation postTagRelation = new PostTagRelation();
             postTagRelation.setPostTagId(postTag.getPostId());
-            postTagRelation.setObjectId(postTagParam.getObjectId());
+            postTagRelation.setPostId(postTagParam.getPostId());
             postTagRelation.setTermOrder(postTagParam.getTermOrder());
             postTagRelationService.save(postTagRelation);
         }
@@ -44,13 +44,13 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
     }
 
     @Override
-    public List<PostTag> getByObjectId(Long objectId) {
+    public List<PostTag> getByPostId(Long postId) {
         QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper<>();
-        postTagRelationQueryWrapper.eq("object_id",objectId);
+        postTagRelationQueryWrapper.eq("post_id",postId);
         List <PostTagRelation> postTagRelationList = postTagRelationService.list(postTagRelationQueryWrapper);
         List<Long> postTagIdList = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
-        postTagQueryWrapper.in("post_id",postTagIdList);
+        postTagQueryWrapper.in("post_tag_id",postTagIdList);
         return this.list(postTagQueryWrapper);
     }
 }

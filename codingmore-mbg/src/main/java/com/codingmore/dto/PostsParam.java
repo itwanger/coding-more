@@ -26,7 +26,7 @@ public class PostsParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "posts_id")
-    private Long id;
+    private Long postsId;
 
     @ApiModelProperty(value = "发布时间")
     private Date postDate;
