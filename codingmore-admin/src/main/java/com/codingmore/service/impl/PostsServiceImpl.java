@@ -1,7 +1,6 @@
 package com.codingmore.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,7 +11,7 @@ import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.codingmore.util.TermRelationType;
+import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

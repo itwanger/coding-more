@@ -1,6 +1,7 @@
 package com.codingmore.dto;
 
-import com.codingmore.util.PostType;
+
+import com.codingmore.state.PostType;
 
 public class PostsPageQueryParam {
     long pageSize;

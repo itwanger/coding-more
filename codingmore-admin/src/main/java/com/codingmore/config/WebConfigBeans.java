@@ -1,6 +1,6 @@
 package com.codingmore.config;
 
-import com.codingmore.util.DateConverter;
+import com.codingmore.componet.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.stereotype.Component;

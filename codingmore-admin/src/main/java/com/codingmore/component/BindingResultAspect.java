@@ -1,4 +1,4 @@
-package com.codingmore.componet;
+package com.codingmore.component;
 
 import com.codingmore.webapi.ResultObject;
 import org.aspectj.lang.ProceedingJoinPoint;

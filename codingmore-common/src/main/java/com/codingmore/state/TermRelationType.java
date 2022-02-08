@@ -1,4 +1,4 @@
-package com.codingmore.util;
+package com.codingmore.state;
 
 /**
  * 文章栏目关系类型

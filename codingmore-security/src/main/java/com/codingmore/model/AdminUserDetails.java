@@ -1,8 +1,6 @@
 package com.codingmore.model;
 
-import com.codingmore.model.AdminResource;
-import com.codingmore.model.Users;
-import com.codingmore.util.UserStatus;
+import com.codingmore.state.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

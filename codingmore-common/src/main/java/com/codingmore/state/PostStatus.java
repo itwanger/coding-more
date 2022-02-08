@@ -1,4 +1,4 @@
-package com.codingmore.util;
+package com.codingmore.state;
 
 /**
  * 文章发布状态

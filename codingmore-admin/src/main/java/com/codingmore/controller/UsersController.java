@@ -45,9 +45,6 @@ public class UsersController {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-
-
-
     @RequestMapping(value = "/getById",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("根据id获取用户")

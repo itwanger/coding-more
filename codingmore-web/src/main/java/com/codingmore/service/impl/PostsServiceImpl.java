@@ -1,20 +1,15 @@
 package com.codingmore.service.impl;
 
-import cn.hutool.Hutool;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.codingmore.dto.PostTagParam;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.dto.PostsParam;
 import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.codingmore.util.TermRelationType;
+import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +35,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private IPostTagService iPostTagService;
     @Autowired
     private IPostTagRelationService iPostTagRelationService;
-
-
-
-
-
-
 
     @Override
     public PostsVo getPostsById(Long id) {
@@ -80,7 +69,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts){
         TermRelationships termRelationships  = new TermRelationships();
         termRelationships.setTermTaxonomyId(postsParam.getTermTaxonomyId());
-        termRelationships.setObjectId(posts.getId());
+        termRelationships.setTermRelationshipsId(posts.getId());
         termRelationships.setTermOrder(postsParam.getMenuOrder());
         termRelationships.setType(TermRelationType.CONTENT.getType());
         return iTermRelationshipsService.save(termRelationships);

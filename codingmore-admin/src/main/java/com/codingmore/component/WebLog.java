@@ -1,4 +1,4 @@
-package com.codingmore.bo;
+package com.codingmore.component;
 
 /**
  * Controller层的日志封装类
