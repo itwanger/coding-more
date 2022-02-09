@@ -25,8 +25,7 @@ public class TermTaxonomyTreeNode implements Serializable {
 
 
 
-    @ApiModelProperty(value = "内容模板模板路径")
-    private String contentTplPath;
+    
 
     @ApiModelProperty(value = "说明")
     private String description;

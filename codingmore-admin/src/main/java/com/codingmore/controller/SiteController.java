@@ -1,8 +1,6 @@
 package com.codingmore.controller;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.SiteParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +44,11 @@ public class SiteController {
     @ResponseBody
     @ApiOperation("添加站点")
     public ResultObject<String> insert(@Valid SiteParam siteParam) throws JsonProcessingException {
+        int count = siteService.count();
+        if (count > 0) {
+            return ResultObject.failed("只能有一条配置信息");
+        }
+
         Site site = new Site();
         BeanUtils.copyProperties(siteParam, site);
         handleAttribute(siteParam, site);
@@ -55,9 +57,14 @@ public class SiteController {
 
     @RequestMapping(value = "/getById", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation("根据id获取站点")
-    public ResultObject<Site> getById(long siteId) {
-        return ResultObject.success(siteService.getById(siteId));
+    @ApiOperation("获取站点配置")
+    public ResultObject<Site> getSite() {
+        int count = siteService.count();
+        if (count == 0) {
+            return ResultObject.failed("没有配置信息");
+        }
+        List<Site> siteList = siteService.list();
+        return ResultObject.success(siteList.get(0));
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -76,17 +83,7 @@ public class SiteController {
     }
 
 
-    @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
-    @ResponseBody
-    @ApiOperation("分页查询")
-    public ResultObject<Map<String, Object>> queryPageable(@RequestParam long pageSize, @RequestParam long page) {
-        Map<String, Object> map = new HashMap<>();
-        Page<Site> sitePage = new Page<>(page, pageSize);
-        IPage<Site> siteIPage = siteService.page(sitePage);
-        map.put("items", siteIPage.getRecords());
-        map.put("total", siteIPage.getTotal());
-        return ResultObject.success(map);
-    }
+    
 
     /**
      * 处理扩展字段

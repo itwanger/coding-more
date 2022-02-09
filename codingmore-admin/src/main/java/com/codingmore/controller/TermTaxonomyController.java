@@ -1,6 +1,7 @@
 package com.codingmore.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.TermTaxonomyParam;
@@ -85,6 +86,12 @@ public class TermTaxonomyController {
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(long termTaxonomyId) {
+        QueryWrapper<TermTaxonomy> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_id", termTaxonomyId);
+        int size = termTaxonomyService.count(queryWrapper);
+        if(size > 0){
+            return ResultObject.failed("该栏目下有子栏目，不能删除");
+        }
         return ResultObject.success(termTaxonomyService.removeTermTaxonomy(termTaxonomyId) ? "删除成功" : "删除失败");
     }
 

@@ -12,3 +12,4 @@ public class CodingmoreAdminBootstrap {
         SpringApplication.run(CodingmoreAdminBootstrap.class);
     }
 }
+
