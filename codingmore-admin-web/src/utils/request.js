@@ -1,6 +1,14 @@
 import axios from 'axios'
-import { Loading, MessageBox, Message } from 'element-ui'
-import { getToken, removeToken } from '@/utils/auth'
+import {
+  Loading,
+  MessageBox,
+  Message
+} from 'element-ui'
+import {
+  getToken,
+  removeToken
+} from '@/utils/auth'
+import router from '../router'
 
 // #region 处理ajax效果
 // 标记页面加载对象是否存在
@@ -63,7 +71,7 @@ httpRequest.interceptors.response.use(
     console.log('服务器返回最外层响应：', response)
     const {
       code,
-      data,
+      result,
       message
     } = response.data
     if ( // 请求正常的情况
@@ -77,24 +85,26 @@ httpRequest.interceptors.response.use(
       if (response.data instanceof Blob) {
         return response.data
       } else {
-        return data
+        return result
       }
     } else {
-      Message({
-        message: message,
-        type: 'error',
-        duration: 3 * 1000,
-        showClose: true
-      })
-      if (code === 401) { // 无效 token
-        removeToken() // 删除本地缓存
-        // 跳转到登录页面
-        window.location.href = '/login'
-      }
       // #region 处理ajax效果
       ajaxCount--
       checkAllAjaxDone()
       // #endregion
+      if (code === 401) { // 无效 token
+        removeToken() // 删除本地缓存
+        // 跳转到登录页面
+        router.push('/login')
+      }
+
+      Message({
+        message,
+        type: 'error',
+        duration: 3 * 1000,
+        showClose: true
+      })
+
       return Promise.reject(message)
     }
   },
@@ -104,15 +114,22 @@ httpRequest.interceptors.response.use(
     checkAllAjaxDone()
     // #endregion
     console.log('服务器返回异常信息：', error, error.response)
-    if (error.response && error.response.data) {
-      if (error.response.data.message) {
-        MessageBox({ type: 'error', message: error.response.data.message, title: '系统提示' })
-      }
-    }
+
+    // 当用户登录过期，直接跳转登录页面
     if (error.response.status === 401) {
       removeToken()
       window.location.href = '/login'
     }
+
+    // 如果用户没定义异常处理，弹出统一友好提示
+    MessageBox({
+      type: 'error',
+      message: '页面发生异常，请刷新页面重试或联系系统管理员', // error.response.data.message,
+      title: '系统提示'
+    })
+    // if (error.response && error.response.data && error.response.data.message) {
+
+    // }
     return Promise.reject(error.response)
   }
 )

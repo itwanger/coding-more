@@ -27,3 +27,9 @@ html, body, #app, .el-container{
 .clear{
   clear: both;
 }
+
+.flex-row-ver-center{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}

@@ -112,6 +112,16 @@ yarn add element-ui
 yarn add axios
 ```
 
+### 3.3 vuex引入
+
+由于有些信息，比如用户信息我们希望进行全局统一管理，所以这里我们使用vuex作为全局状态管理插件。在终端或者命令行cd到项目文件夹目录下，输入命令：
+
+```
+yarn add vuex
+```
+
+
+
 ## 4.创建必要目录和文件
 
 此时我们的项目目录是这样的：
@@ -571,16 +581,328 @@ export default {
 
 现在需要绑定登陆按钮和重置按钮的点击事件。
 
-- 登陆按钮逻辑：根据当前用户输入的用户名和密码，给登陆接口发送请求，看是否登录成功。
+- 登陆按钮逻辑：根据当前用户输入的用户名和密码，给登陆接口发送请求，看是否登录成功。如果成功，保存登陆用户信息，然后跳转到文章管理页面。如果登陆不成功，提示服务器端返回的错误信息。
 - 重置按钮逻辑：清空当前用户名和密码的输入框。
 
+使用@click事件给两个按钮分别绑定以上逻辑的方法即可。
+
+那么登陆接口我们需要与java后端程序进行交互，所以在src/api文件夹下，创建login.js文件，里面对接所有后端接口。
+
+那么src/api/login.js中的代码如下（利用我们之前在src/utils/request.js中封装的方法进行请求）：
+
+```javascript
+import request from '../utils/request'
+
+// 用户提交登陆请求
+export function UserLogin(data) {
+  return request({
+    url: '/users/login',
+    method: 'post',
+    data
+  })
+}
+```
+
+之后再把export的方法引入login.vue进行使用：
+
+![image-20220209201130873](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209201130873.png)
+
+在方法中使用：
+
+![image-20220209201159716](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209201159716.png)
+
+之后就需要在前端项目中设置后端接口的代理了。
+
+那么访问后端接口，我们希望有个统一的前缀，这里我们有两种做法：
+
+1. 前缀包含具体ip地址和端口号，那么当部署环境变了，后端服务ip地址变了之后，前端程序也需要重新打包。这种做法这里不推荐。
+
+2. 前缀只是多了一段URL而已，例如本来后端登陆接口地址是：http://localhost:9002/users/login，然后前端调用的时候实际调用的是：http://localhost:8080/api/users/login，也就是说，代码里的访问地址变成/api/users/login，在部署的时候，nginx配置文件中可以灵活配置后端服务的ip和端口，进行灵活的改变而不需要重新编译前端程序，我们推荐这种做法。下面来看具体做法：由于之前在src/utils/request.js中，已经包含代码：
+
+   ![image-20220209205420439](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209205420439.png)
+
+   那么下面我们只需要设置打包的环境变量VUE_APP_BASE_API的前缀为/api即可。打开config/dev.env.js，加入如下代码：
+
+   然后打开config/index.js文件，添加如下图红框中的代码：
+
+   ![image-20220209205830929](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209205830929.png)
+
+   之后启动项目，查看效果。
+
+   在登陆界面输入用户名和密码之后，发现返回了奇怪的错误：
+
+   ![image-20220209211437208](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209211437208.png)
+
+   前端F12控制台输出如下：
+
+   ![image-20220209211520105](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209211520105.png)
+
+   
+
+   java后台控制台输出的错误信息如下：
+
+   ![image-20220209210212248](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209210212248.png)
+
+   说明这种情况下，java后台并没有接收到我们的传值。
+
+   我们查看swagger文档，发现了如下信息：
+
+   ![image-20220209210350587](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209210350587.png)
+
+   而通过浏览器F12调试可以发现我们提交数据的请求类型是application/json的格式：
+
+   ![image-20220209210636309](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209210636309.png)
+
+   所以问题出在提交格式上。那么axios默认的请求类型是application/json。所以后端程序不能正常接收我们提交的数据。
+
+   解决这个问题有两种办法：
+
+   1. 后端同学修改一下接口的请求数据类型，改成application/json
+
+   2. 前端同学在请求前多处理一步数据，将json数据变成form表单形式（form表单的请求类型就是application/x-www-urlencoded）的数据即可。下面说具体做法：在login.vue的script标签中引入qs工具，在提交数据之前多加一步处理数据，代码如下：
+
+      ![image-20220209211203246](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209211203246.png)
+
+   前面我们已经讲了具体的解决方法。那么再回头来看我们最初报错的界面：
+
+   ![image-20220209211437208](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209211437208.png)
+
+   这里我们封装代码的本意是想在后端程序和前端程序通信发生异常的时候，给出用户友好的提示，那么上图中这个提示明显是不够友好。那么我们来优化一下之前封装的代码：
+
+   ![image-20220209211935076](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209211935076.png)
+
+   之前我们是不管服务器返回什么错误信息，都直接弹出给用户。那么现在既然后端并没有返回友好的提示，或者说后端这块工作还没有做到尽善尽美。那么我们从前端直接返回一个用户看得懂的提示就好。
+
+   经过优化之后的代码如下：
+
+   ![image-20220209212556787](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209212556787.png)
+
+   
+
+
+
 ### 6.5 框架页面深加工
+
+登陆之后直接进入内容管理的文章管理页面，文章管理页面具体咱们不说。先来统一布局一下框架页。简单规划一下框架页上需要继续添加的内容如下：
+
+![image-20220209233929359](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220209233929359.png)
+
+用ElementUI官网上的菜单例子为模板，写出菜单基本样式。在添加了以下样式之后，菜单基本显示正常了。
+
+借鉴官网的代码：
+
+![image-20220210211536003](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220210211536003.png)
+
+调整默认样式的代码：
+
+```css
+/* 设置菜单背景色 */
+.custom-nav.el-menu {
+  background-color: #030B1E;
+  border-right-color: #030B1E;
+}
+
+/* 让菜单文字左对齐样式 */
+.custom-nav .el-menu .el-menu-item {
+  padding-left: 52px !important;
+  background-color: #030B1E;
+  color: #fff;
+}
+/* .custom-nav .el-submenu__title:hover{
+  background-color: #030B1E;
+} */
+/* 菜单hover效果样式 */
+.custom-nav .el-submenu__title:hover,
+.custom-nav .el-menu .el-menu-item:hover{
+  background-color:#112C6D;
+}
+/* 菜单激活样式 */
+.custom-nav .el-menu .el-menu-item.is-active{
+  background-color:#1890FF !important;
+}
+/* 菜单非叶子节点的样式 */
+.custom-nav .el-submenu__title {
+  color: #fff;
+}
+```
+
+调整之后的左侧菜单的template代码：
+
+```vue
+<!-- 左侧菜单区域 -->
+    <el-aside width="201px">
+      <div class="logo text-center">
+        CodingMore
+      </div>
+      <el-menu default-active="1-1" class="custom-nav">
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>导航一</span>
+          </template>
+          <el-menu-item index="1-1">选项1</el-menu-item>
+          <el-menu-item index="1-2">选项2</el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>导航2</span>
+          </template>
+          <el-menu-item index="2-1">选项1</el-menu-item>
+          <el-menu-item index="2-2">选项2</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </el-aside>
+```
+
+最终查看样式效果：
+
+![image-20220210211250292](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220210211250292.png)
+
+导航的数据我们需要使用定义的路由数据来进行遍历，这里我们先不绑定数据，先继续关注框架页其他地方的样式。
+
+下面是右侧头部上方需要显示的当前位置的样式了。
+
+咱们借鉴ElementUI的面包屑代码：
+
+![image-20220210212303975](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220210212303975.png)
+
+现在思考下头部需要放置什么信息：一个当前位置的图标，一个面包屑导航，一个显示当前登陆的用户名。那么顶部布局思路如下：
+
+![image-20220210232839011](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220210232839011.png)
+
+右侧显示用户的效果用的是ElementUI的Popover+Tag标签组合，因为点击用户名字要出现修改密码和退出登陆的效果：
+
+![image-20220210233027808](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220210233027808.png)
+
+如果想竖排显示按钮则在Popover中给按钮都加上块级元素的父容器即可。
+
+显示当前用户的temlpate代码如下：
+
+```vue
+		<div class="user-area">
+          当前用户：
+          <el-popover trigger="click">
+            <el-button type="primary">修改密码</el-button>
+            <el-button type="danger">退出登陆</el-button>
+            <el-tag style="cursor:pointer;" slot="reference">
+              王二
+            </el-tag>
+          </el-popover>
+        </div>
+```
+
+下面需要把左侧导航、顶部面包屑、当前用户信息都变成真实数据。
+
+之前咱们在router中已经把要显示在左侧导航的路由单独定义了数组，此时需要导入这个数组，并作为data使用，关键代码如下：
+
+![image-20220211001738621](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220211001738621.png)
+
+引入到框架页的代码：
+
+![image-20220211001817394](C:\Users\GuMing\AppData\Roaming\Typora\typora-user-images\image-20220211001817394.png)
+
+循环出导航的代码：
+
+```vue
+	  <el-menu :default-active="$route.path" class="custom-nav" router>
+        <el-submenu v-for="item in pageRouters" :key="item.path" :index="item.path">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span>{{item.meta.title}}</span>
+          </template>
+          <el-menu-item v-for="subitem in item.children" :key="subitem.path" :index="item.path + '/' + subitem.path">{{subitem.meta.title}}</el-menu-item>
+        </el-submenu>
+      </el-menu>
+```
+
+然后面包屑导航这边：
+
+可以使用computed，定义当前匹配的路由数组：
+
+```vue
+  computed: {
+    // 当前面包屑使用数据
+    currentMatchedRoutes() {
+      return this.$route.matched
+    }
+  },
+```
+
+然后遍历面包屑的代码：
+
+```vue
+		<!-- 面包屑 -->
+        <div class="bread-container">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item v-for="item in currentMatchedRoutes" :key="item.path" :to="{ path: item.path }">{{item.meta.title}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+```
+
+当前登陆的用户信息，需要调用服务器接口请求。
+
+在src/api文件夹下创建文件users.js，用来对接用户相关后台接口。对接方式跟登陆接口相同，代码如下：
+
+```javascript
+import request from '../utils/request'
+
+// 获取当前用户登录信息
+export function GetLoginUserInfo() {
+  return request({
+    url: '/users/info',
+    method: 'get'
+  })
+}
+
+```
+
+因为用户信息是全局的，可能其他地方也需要用到。所以需要存在vuex当中，并且获得用户信息的方法，也定义在vuex当中。
+
+那么vuex当中又分为state、mutations、actions，其中actions作为组件调用的入口。所以src/store/index.js的代码更新为：
+
+```javascript
+import Vue from 'vue'
+import Vuex from 'vuex'
+import {
+  GetLoginUserInfo
+} from '../api/users'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    // 定义存储当前登陆用户信息的变量
+    userInfo: null
+  },
+  mutations: {
+    // 设置用户信息的方法
+    SET_USER_INFO(state, data) {
+      state.userInfo = data
+    }
+  },
+  actions: {
+    // 调用后端服务接口，获取当前用户信息并存入vuex
+    refleshUserInfo({commit}, callback) {
+      GetLoginUserInfo().then(res => {
+        console.log('获取登录用户信息成功', res)
+        commit('SET_USER_INFO', res)
+      })
+    }
+  }
+})
+
+```
+
+最后，给框架页的退出登陆按钮对接后端退出接口，然后跳转回登录页面（此过程略）。
+
+
 
 ### 6.6 栏目管理页面
 
 ### 6.7 文章管理页面
 
-### 6.8 用户管理页面
+### 6.8 文章编辑页面
 
 
 
