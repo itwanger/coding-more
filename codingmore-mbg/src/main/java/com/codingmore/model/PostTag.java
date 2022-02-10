@@ -25,7 +25,7 @@ public class PostTag implements Serializable {
 
     @ApiModelProperty(value = "post_tag_id")
     @TableId(value = "post_tag_id", type = IdType.AUTO)
-    private Long postId;
+    private Long postTagId;
 
     @ApiModelProperty(value = "标签名称")
     private String description;
