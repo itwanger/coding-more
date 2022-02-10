@@ -35,7 +35,7 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
         boolean result = this.save(postTag);
         if(postTagParam.getPostId()!=null){
             PostTagRelation postTagRelation = new PostTagRelation();
-            postTagRelation.setPostTagId(postTag.getPostId());
+            postTagRelation.setPostTagId(postTag.getPostTagId());
             postTagRelation.setPostId(postTagParam.getPostId());
             postTagRelation.setTermOrder(postTagParam.getTermOrder());
             postTagRelationService.save(postTagRelation);
