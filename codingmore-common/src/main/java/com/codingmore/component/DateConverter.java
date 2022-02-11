@@ -1,4 +1,4 @@
-package com.codingmore.componet;
+package com.codingmore.component;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.StringUtils;

@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>codingmore</name>
-    <description>Demo project for Spring Boot</description>
+    <description>编程猫学习网站</description>
 
     <properties>
         <java.version>1.8</java.version>
