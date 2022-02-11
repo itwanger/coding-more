@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class Convert {
     final static String directory = "gongju/";
-    final static String key = "chiner";
+    final static String key = "knife4j";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
