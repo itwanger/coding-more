@@ -30,7 +30,7 @@
         from posts a
                  left join term_relationships b
                            on a.posts_id = b.term_relationships_id
-                 left join users c on a.post_author = c.id ${ew.customSqlSegment}
+                 left join users c on a.post_author = c.users_id ${ew.customSqlSegment}
     </select>
 
 </mapper>
