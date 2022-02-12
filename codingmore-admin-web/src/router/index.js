@@ -9,6 +9,7 @@ import log from '../views/system-management/log-management'
 import page404 from '../views/error-pages/404'
 import page500 from '../views/error-pages/500'
 import pageLogin from '../views/login'
+import articleEdit from '../views/content-management/article-editing'
 
 Vue.use(Router)
 
@@ -96,6 +97,11 @@ const systemRouters = [
     path: '/login',
     name: 'login',
     component: pageLogin
+  },
+  {
+    path: '/content/article-editing',
+    name: 'article-editing',
+    component: articleEdit
   }
 ]
 

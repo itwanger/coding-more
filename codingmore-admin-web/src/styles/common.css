@@ -8,28 +8,54 @@ html, body, #app, .el-container{
   padding: 0;
 }
 
-.text-center{
-  text-align: center;
+#app .el-textarea__inner {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
-.text-right{
-  text-align: right;
-}
-
-.text-left{
-  text-align: left;
-}
-
-.text-justify{
-  text-align: justify;
-}
-
-.clear{
-  clear: both;
+.app-container{
+  height: 100%;
 }
 
 .flex-row-ver-center{
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+/* 一些公用样式 */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify{
+  text-align: justify;
+}
+
+.clear {
+  clear: both;
+}
+/* 一些公用样式结束 */
+.styleof-inlineblock{
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  box-sizing: border-box;
+}
+
+/* 修复elementui全局遮罩在有滚动条时候的问题 */
+#app .el-loading-mask {
+  position: fixed;
+}
+
+/* 指定表格溢出内容弹出框显示的最大宽度 */
+.el-tooltip__popper {
+  max-width: 800px;
 }
