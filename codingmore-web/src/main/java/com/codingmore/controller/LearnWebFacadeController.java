@@ -29,28 +29,28 @@ public class LearnWebFacadeController {
     @Resource(name = "indexPageRequestStrategy")
     private ILearnWebRequestStrategy indexPageRequestStrategy;
 
-    @RequestMapping(value = {"/{siteId:[0-9]+}.html"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
     @ApiOperation("首页页入口")
-    public String index(HttpServletRequest request, HttpServletResponse response, ModelMap model, @PathVariable Long siteId) {
+    public String index(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
         WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).model(model).siteId(siteId).build();
         return indexPageRequestStrategy.handleRequest(webRequestParam);
     }
 
 
     @ApiOperation("内容动态页入口")
-    @RequestMapping(value = {"/{siteId:[0-9]+}/{channelId:[0-9]+}/{postId:[0-9]+}.html"}, method = RequestMethod.GET)
-    public String content(@PathVariable Long siteId, @PathVariable Long channelId,@PathVariable Long postId, HttpServletRequest request,
+    @RequestMapping(value = {"/{channelId:[0-9]+}/{postId:[0-9]+}.html"}, method = RequestMethod.GET)
+    public String content( @PathVariable Long channelId,@PathVariable Long postId, HttpServletRequest request,
                           HttpServletResponse response, ModelMap model) {
-        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).siteId(siteId).channelId(channelId).postId(postId).model(model).build();
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).postId(postId).model(model).build();
         return contentPageRequestStrategy.handleRequest(webRequestParam);
     }
 
 
     @ApiOperation("内容动态分页入口")
-    @RequestMapping(value = {"/{siteId:[0-9]+}/{channelId:[0-9]+}/postpage_{page:[0-9]+}.html"}, method = RequestMethod.GET)
-    public String contentPage(@PathVariable Long siteId, @PathVariable Long channelId, @PathVariable Integer page,
+    @RequestMapping(value = {"/{channelId:[0-9]+}/postpage_{page:[0-9]+}.html"}, method = RequestMethod.GET)
+    public String contentPage( @PathVariable Long channelId, @PathVariable Integer page,
                               HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).siteId(siteId).channelId(channelId).page(page).model(model).page(page).build();
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).page(page).model(model).page(page).build();
         return contentPageRequestStrategy.handleRequest(webRequestParam);
     }
 
@@ -58,11 +58,11 @@ public class LearnWebFacadeController {
      * 栏目动态页入口(外网)
      */
     @ApiOperation("栏目动态页入口")
-    @RequestMapping(value = {"/{siteId:[0-9]+}/{channelId:[0-9]+}.html"}, method = RequestMethod.GET)
-    public String channel(@PathVariable Long siteId, @PathVariable Long channelId, HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping(value = {"/{channelId:[0-9]+}.html"}, method = RequestMethod.GET)
+    public String channel(@PathVariable Long channelId, HttpServletRequest request, HttpServletResponse response,
                           ModelMap model){
         ObjectUtil.clone(request);
-        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).siteId(siteId).channelId(channelId).model(model).build();
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).model(model).build();
         return channelPageRequestStrategy.handleRequest(webRequestParam);
     }
 
@@ -71,10 +71,10 @@ public class LearnWebFacadeController {
      * 栏目动态分页入口
      */
     @ApiOperation("栏目动态分页入口")
-    @RequestMapping(value = {"/{siteId:[0-9]+}/{channelId:[0-9]+}_{page:[0-9]+}.html"}, method = RequestMethod.GET)
-    public String channelPage(@PathVariable Long siteId, @PathVariable Long channelId,  @PathVariable Integer page, HttpServletRequest request,
+    @RequestMapping(value = {"/{channelId:[0-9]+}_{page:[0-9]+}.html"}, method = RequestMethod.GET)
+    public String channelPage( @PathVariable Long channelId,  @PathVariable Integer page, HttpServletRequest request,
                               HttpServletResponse response, ModelMap model) /*throws GlobalException*/ {
-        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).siteId(siteId).channelId(channelId).model(model).page(page).build();
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).model(model).page(page).build();
         return channelPageRequestStrategy.handleRequest(webRequestParam);
     }
 
