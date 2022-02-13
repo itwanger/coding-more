@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -108,7 +109,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        // todo: 处理标签
         // 防止修改发布时间
         posts.setPostDate(publishDate);
         posts.setPostModified(new Date());
@@ -143,6 +143,17 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if (termRelationshipsList.size() > 0) {
             postsVo.setTermTaxonomyId(termRelationshipsList.get(0).getTermTaxonomyId());
         }
+        QueryWrapper<PostTagRelation> tagRelationWrapper = new QueryWrapper<>();
+        tagRelationWrapper.eq("post_id", posts.getPostsId());
+        List<PostTagRelation> postTagRelationList = iPostTagRelationService.list(tagRelationWrapper);
+
+        List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
+        QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
+        tagQuery.in("post_tag_id", tagIds);
+        List<PostTag> postTags = iPostTagService.list(tagQuery);
+        
+        postsVo.setTagsName( StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+
         Users users = iUsersService.getById(posts.getPostAuthor());
         postsVo.setUserNiceName(users.getUserNicename());
         return postsVo;
@@ -151,9 +162,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     @Override
     public IPage<PostsVo> findByPage(PostsPageQueryParam postsPageQueryParam) {
         QueryWrapper<PostsPageQueryParam> queryWrapper = new QueryWrapper<>();
-        if (postsPageQueryParam.getPostType() != null) {
-            queryWrapper.eq("a.post_type", postsPageQueryParam.getPostType().toString());
-        }
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }

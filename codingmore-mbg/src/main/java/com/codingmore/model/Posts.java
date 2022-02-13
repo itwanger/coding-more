@@ -70,6 +70,6 @@ public class Posts implements Serializable {
 
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
-    private Map<String,String> attribute;
+    private Map<String,Object> attribute;
 
 }
