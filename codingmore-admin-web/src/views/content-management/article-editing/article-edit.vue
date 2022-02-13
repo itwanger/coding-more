@@ -56,12 +56,28 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <!-- 文章标签 -->
-            <el-form-item label="标签" prop="tags">
-              <el-input v-model="editDataModel.tags" maxlength="100" placeholder="请输入标签，多个标签之间使用逗号分隔" />
-            </el-form-item>
+
           </el-col>
         </el-row>
+        <!-- 文章标签 -->
+        <el-form-item label="标签">
+          <!-- 新增按钮 -->
+          <el-button type="primary" icon="el-icon-plus" @click="addTagClick"></el-button>
+          <!-- 调整到最前面按钮 -->
+          <el-button @click="moveTag(tagSelectedIndex, 't')" type="primary" icon="el-icon-d-arrow-left" size="mini" :disabled="tagSelectedIndex == -1 || tagSelectedIndex == 0" circle></el-button>
+          <!-- 向前调整一位按钮 -->
+          <el-button @click="moveTag(tagSelectedIndex, 'f')" type="primary" icon="el-icon-arrow-left" size="mini" :disabled="tagSelectedIndex == -1 || tagSelectedIndex == 0" circle></el-button>
+          <!-- <el-input v-model="editDataModel.tags" maxlength="100" placeholder="请输入标签，多个标签之间使用逗号分隔" /> -->
+
+          <!-- 标签列表 -->
+          <el-tag class="article-tag" :type="(tagSelectedIndex == index ? 'warning': '')" :key="tag.key" v-for="(tag, index) in tagArray" effect="light" closable :disable-transitions="false" @click="selectTag(index)" @close="deleteTag(index)">
+            {{tag.name}}
+          </el-tag>
+          <!-- 向后调整一个位置按钮 -->
+          <el-button @click="moveTag(tagSelectedIndex, 'b')" style="margin-left:10px;" type="primary" icon="el-icon-arrow-right" size="mini" :disabled="tagSelectedIndex == -1 || tagSelectedIndex == tagArray.length - 1" circle></el-button>
+          <!-- 调整到最后位置按钮 -->
+          <el-button @click="moveTag(tagSelectedIndex, 'l')" type="primary" icon="el-icon-d-arrow-right" size="mini" :disabled="tagSelectedIndex == -1 || tagSelectedIndex == tagArray.length - 1" circle></el-button>
+        </el-form-item>
         <!-- 摘要 -->
         <el-form-item label="摘要">
           <el-input v-model="editDataModel.postExcerpt" :autosize="{ minRows: 4, maxRows: 6}" type="textarea" placeholder="请输入摘要" maxlength="1000" />
@@ -101,6 +117,18 @@
     <el-col :span="2">
       &nbsp;
     </el-col>
+    <el-dialog title="添加标签" :visible="addTagDialog.show" width="350px" :show-close="false">
+      <el-form ref="addTagForm" :model="addTagDialog" label-width="80px">
+        <el-form-item label="名称" prop="text" :rules="tagCheckRule">
+          <el-input v-model="addTagDialog.text" placeholder="请填写标签名称"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="addTagConfirm">确定并继续</el-button>
+        <el-button type="primary" @click="addTagConfirmAndClose">确定</el-button>
+        <el-button @click="addTagDialog.show = false">关闭</el-button>
+      </div>
+    </el-dialog>
   </el-row>
 </template>
 <script>
@@ -108,6 +136,7 @@ import { UserLogout } from '@/api/users'
 import { removeToken } from '@/utils/auth'
 import { getArticleById, deleteArticle, createArticle, updateArticle } from '@/api/articles'
 import { emptyChecker } from '@/utils/validate'
+import { createUuid } from '@/utils/common'
 import qs from 'qs'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -139,6 +168,10 @@ export default {
         tags: '' // 标签
       },
 
+      // 标签数组
+      tagArray: [],
+      tagSelectedIndex: -1,
+
       // 编辑弹窗校验规则
       rules: {
         postTitle: [{ required: true, validator: emptyChecker, message: '文章标题不能为空', trigger: 'blur' }],
@@ -158,6 +191,14 @@ export default {
         }
       },
 
+      // 添加标签对话框可见性
+      addTagDialog: {
+        show: false,
+        text: ''
+      },
+      // 标签名称校验规则
+      tagCheckRule: [{ required: true, validator: emptyChecker, message: '标签名称不能为空', trigger: 'blur' }],
+
       // 当前编辑页面的id
       editId: null,
       // 新增时候的所属栏目id
@@ -167,6 +208,95 @@ export default {
     }
   },
   methods: {
+    // 标签移动方法
+    moveTag(index, way) {
+      let targetIndex = 0
+      let moved = true
+      let temp = this.tagArray[index]
+      if ((way == 'f' && index != 0) || (way == 'b' && index < this.tagArray.length - 1)) {
+        if (way == 'f') {
+          targetIndex = parseInt(index - 1)
+        } else {
+          targetIndex = parseInt(index + 1)
+        }
+        this.tagArray[index] = this.tagArray[targetIndex]
+        this.tagArray[targetIndex] = temp
+      } else if (way == 't' && index != 0) {
+        this.tagArray.splice(index, 1)
+        this.tagArray.splice(0, 0, temp)
+      } else if (way == 'l' && index < this.tagArray.length - 1) {
+        targetIndex = this.tagArray.length - 1
+        this.tagArray.splice(index, 1)
+        this.tagArray.push(temp)
+      } else {
+        moved = false
+        console.log('不移动分支，targetIndex=', targetIndex, 'index=', index, 'way=', way)
+      }
+      if (moved) {
+        console.log('移动后结果', this.tagArray, this.$refs[`elpp_${index}`])
+        this.tagSelectedIndex = targetIndex
+        // this.$refs[`elpp_${index}`].doClose()
+        // this.tagArray = JSON.parse(JSON.stringify(this.tagArray))
+        // this.$nextTick(() => {
+        //   this.$refs[`elpp_${targetIndex}`].doShow()
+        // })
+      }
+    },
+
+    selectTag(index) {
+      if (this.tagSelectedIndex != index) {
+        this.tagSelectedIndex = index
+      } else {
+        this.tagSelectedIndex = -1
+      }
+    },
+
+    // 删除标签方法
+    deleteTag(index) {
+      this.tagArray.splice(index, 1)
+    },
+
+    // 添加标签确认按钮事件
+    addTagConfirmAndClose() {
+      this.$refs['addTagForm'].validate(valid => {
+        if (valid) {
+          const tagText = this.addTagDialog.text
+          this.addTagDataToArray(tagText)
+          this.addTagDialog.text = ''
+          this.addTagDialog.show = false
+        }
+      })
+    },
+    // 添加标签确认并继续按钮事件
+    addTagConfirm() {
+      this.$refs['addTagForm'].validate(valid => {
+        if (valid) {
+          const tagText = this.addTagDialog.text
+          this.addTagDataToArray(tagText)
+          this.addTagDialog.text = ''
+        }
+      })
+    },
+
+    // 向数组中添加数据方法
+    addTagDataToArray(tagName) {
+      tagName = tagName.trim()
+      let tagObject = {
+        name: tagName,
+        key: createUuid()
+      }
+      this.tagArray.push(tagObject)
+    },
+
+    // 添加标签点击事件
+    addTagClick() {
+      if (this.$refs['addTagForm']) {
+        this.$refs['addTagForm'].clearValidate()
+      }
+      this.addTagDialog.text = ''
+      this.addTagDialog.show = true
+    },
+
     // 退出登陆方法
     logoutSystemClick() {
       // 调用服务器方法退出登陆
@@ -192,8 +322,17 @@ export default {
     },
     // 保存文章方法
     saveData(stateSetting) {
+      // 赋值文章状态
       this.editDataModel.postStatus = stateSetting
+      // 赋值属性
       this.editDataModel.attribute = JSON.stringify(this.titleDisplaySettings)
+      // 赋值文章标签
+      if (this.tagArray.length > 0) {
+        let tempArr = this.tagArray.map(x => x.name)
+        let tagsValue = tempArr.join(',')
+        this.editDataModel.tags = tagsValue
+      }
+
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.dialogLoading = true
@@ -212,13 +351,22 @@ export default {
     loadData() {
       getArticleById({ postsId: this.editId }).then(res => {
         this.editDataModel = res
-        if (res.attribute) {
-          this.titleDisplaySettings = JSON.parse(res.attribute)
+        if (this.editDataModel.attribute) {
+          // 赋值界面属性对象
+          this.titleDisplaySettings = this.editDataModel.attribute
+        }
+        // 赋值界面标签数组对象
+        if (this.editDataModel.tagsName) {
+          let tempArr = res.tagsName.split(',')
+          tempArr.forEach(x => {
+            this.addTagDataToArray(x)
+          })
         }
         this.$refs['dataForm'].clearValidate()
-      }).catch(() => {
-        this.alertMessageAndCloseWindow('查询编辑文章信息发生异常，请刷新文章列表重试，将关闭编辑窗口')
       })
+      // .catch(() => {
+      //   this.alertMessageAndCloseWindow('查询编辑文章信息发生异常，请刷新文章列表重试，将关闭编辑窗口')
+      // })
     },
     // 刷新主页面列表
     refleshMainPageTable() {
@@ -280,5 +428,10 @@ export default {
 }
 .user-area {
   margin-left: 15px;
+}
+
+.article-tag.el-tag {
+  margin-left: 10px;
+  cursor: pointer;
 }
 </style>

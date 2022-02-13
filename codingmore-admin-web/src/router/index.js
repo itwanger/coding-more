@@ -102,6 +102,16 @@ const systemRouters = [
     path: '/content/article-editing',
     name: 'article-editing',
     component: articleEdit
+  },
+  {
+    path: '/',
+    name: 'root',
+    redirect: '/content/articles'
+  },
+  {
+    path: '*',
+    name: 'root',
+    redirect: '/'
   }
 ]
 
