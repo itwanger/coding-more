@@ -146,14 +146,14 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         QueryWrapper<PostTagRelation> tagRelationWrapper = new QueryWrapper<>();
         tagRelationWrapper.eq("post_id", posts.getPostsId());
         List<PostTagRelation> postTagRelationList = iPostTagRelationService.list(tagRelationWrapper);
-
-        List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
-        QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
-        tagQuery.in("post_tag_id", tagIds);
-        List<PostTag> postTags = iPostTagService.list(tagQuery);
+        if (postTagRelationList.size() > 0) {
+            List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
+            QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
+            tagQuery.in("post_tag_id", tagIds);
+            List<PostTag> postTags = iPostTagService.list(tagQuery);
+            postsVo.setTagsName( StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+        }
         
-        postsVo.setTagsName( StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
-
         Users users = iUsersService.getById(posts.getPostAuthor());
         postsVo.setUserNiceName(users.getUserNicename());
         return postsVo;
