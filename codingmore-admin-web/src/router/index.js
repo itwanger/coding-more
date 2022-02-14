@@ -3,13 +3,14 @@ import Router from 'vue-router'
 import mainFrame from '@/layout'
 import articles from '../views/content-management/article-management'
 import columns from '../views/content-management/column-management'
-import users from '../views/system-management/users-management'
-import power from '../views/system-management/power-management'
-import log from '../views/system-management/log-management'
+import articleEdit from '../views/content-management/article-editing'
+// import users from '../views/system-management/users-management'
+// import power from '../views/system-management/power-management'
+// import log from '../views/system-management/log-management'
+import siteConfig from '../views/system-management/site-configuration'
 import page404 from '../views/error-pages/404'
 import page500 from '../views/error-pages/500'
 import pageLogin from '../views/login'
-import articleEdit from '../views/content-management/article-editing'
 
 Vue.use(Router)
 
@@ -54,29 +55,37 @@ export const pageRouters = [
     },
     children: [
       {
-        path: 'users',
-        name: 'users-management',
-        component: users,
+        path: 'site',
+        name: 'site-configuration',
+        component: siteConfig,
         meta: {
-          title: '用户管理'
-        }
-      },
-      {
-        path: 'power',
-        name: 'power-management',
-        component: power,
-        meta: {
-          title: '权限管理'
-        }
-      },
-      {
-        path: 'log',
-        name: 'log-management',
-        component: log,
-        meta: {
-          title: '日志管理'
+          title: '站点配置'
         }
       }
+      // {
+      //   path: 'users',
+      //   name: 'users-management',
+      //   component: users,
+      //   meta: {
+      //     title: '用户管理'
+      //   }
+      // },
+      // {
+      //   path: 'power',
+      //   name: 'power-management',
+      //   component: power,
+      //   meta: {
+      //     title: '权限管理'
+      //   }
+      // },
+      // {
+      //   path: 'log',
+      //   name: 'log-management',
+      //   component: log,
+      //   meta: {
+      //     title: '日志管理'
+      //   }
+      // }
     ]
   }
 ]

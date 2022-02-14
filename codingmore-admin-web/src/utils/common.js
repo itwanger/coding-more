@@ -25,3 +25,21 @@ export function loopExpendTree(treeObject, currentNode, rootId) {
     }
   }
 }
+
+// 合并相同对象相同key值的方法
+export function assignSameProperty(targetObject, otherObject) {
+  if (targetObject && otherObject) {
+    let tempArr = []
+    Object.keys(otherObject).forEach(key => {
+      if (!targetObject.hasOwnProperty(key)) {
+        tempArr.push(key)
+      }
+    })
+    tempArr.forEach(key => {
+      Reflect.deleteProperty(otherObject, key)
+    })
+    return Object.assign(targetObject, otherObject)
+  } else {
+    return targetObject || otherObject
+  }
+}
