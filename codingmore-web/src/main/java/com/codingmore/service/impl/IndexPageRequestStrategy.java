@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
     @Override
     public String handleRequest(WebRequestParam webRequestParam) {
+
+        
         return "index.html";
     }
 }

@@ -1,6 +1,5 @@
 package com.codingmore.controller;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.codingmore.service.ILearnWebRequestStrategy;
 import com.codingmore.util.WebRequestParam;
 import io.swagger.annotations.Api;
@@ -61,7 +60,6 @@ public class LearnWebFacadeController {
     @RequestMapping(value = {"/{channelId:[0-9]+}.html"}, method = RequestMethod.GET)
     public String channel(@PathVariable Long channelId, HttpServletRequest request, HttpServletResponse response,
                           ModelMap model){
-        ObjectUtil.clone(request);
         WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).model(model).build();
         return channelPageRequestStrategy.handleRequest(webRequestParam);
     }
