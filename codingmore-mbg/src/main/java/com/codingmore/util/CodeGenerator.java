@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 
 // 演示例子，执行 main 方法控制台输入模块表名回车自动生成对应项目目录中
 public class CodeGenerator {
-
     /**
      * <p>
      * 读取控制台内容
@@ -36,51 +35,58 @@ public class CodeGenerator {
             if (StringUtils.isNotBlank(ipt)) {
                 return ipt;
             }
-    }
+        }
         throw new MybatisPlusException("请输入正确的" + tip + "！");
-}
-
+    }
     public static void main(String[] args) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
-        // 全局配置
+// 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir( "D:\\Temp\\CodeGenerate");
-        gc.setAuthor("石磊");
+        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setAuthor("沉默王二");
         gc.setOpen(false);
         gc.setDateType(DateType.ONLY_DATE);
         gc.setSwagger2(true);
         gc.setIdType(IdType.AUTO);
-        mpg.setGlobalConfig(gc);
         gc.setBaseColumnList(true);
         gc.setBaseResultMap(true);
         gc.setFileOverride(true);
-        // 数据源配置
+
+        mpg.setGlobalConfig(gc);
+
+
+// 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://118.190.99.232:3306/codingmoretiny02?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
-        // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("codingmoretiny02");
         dsc.setPassword("Xw5y8bGFzb86DyGy");
+
         mpg.setDataSource(dsc);
-        // 包配置
+
+// 包配置
         PackageConfig pc = new PackageConfig();
-//        pc.setModuleName(scanner("模块名"));
-        pc.setParent("top.codingmore");
-        pc.setEntity("model");
+        pc.setParent("com.codingmore");
         mpg.setPackageInfo(pc);
-        StrategyConfig strategyConfig = new StrategyConfig();
-        // 配置数据表与实体类名之间映射的策略
-        strategyConfig.setInclude("term_taxonomy");
-        strategyConfig.setNaming(NamingStrategy.underline_to_camel);
-// 配置数据表的字段与实体类的属性名之间映射的策略
-        strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
 
-        strategyConfig.setEntityLombokModel(true);
-        mpg.setStrategy(strategyConfig);
-
+        // 策略配置，去掉就是生成全部，留下就是生成专属表的
+        StrategyConfig strategy = new StrategyConfig();
+        strategy.setNaming(NamingStrategy.underline_to_camel);
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+//        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
+        strategy.setEntityLombokModel(true);
+        strategy.setRestControllerStyle(true);
+        // 公共父类
+//        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
+        // 写于父类中的公共字段
+//        strategy.setSuperEntityColumns("id");
+        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setControllerMappingHyphenStyle(true);
+        strategy.setTablePrefix(pc.getModuleName() + "_");
+        mpg.setStrategy(strategy);
 
         mpg.execute();
     }
