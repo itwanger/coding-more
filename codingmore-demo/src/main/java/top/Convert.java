@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String directory = "gongju/";
-    final static String key = "knife4j";
+    final static String directory = "xianliaolaoke/";
+    final static String key = "daxue-nuli-jisuanji";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
@@ -25,6 +25,8 @@ public class Convert {
     final static String fileName = key +".md";
     final static String pngSuffix = ".png";
     final static String gifSuffix = ".gif";
+    final static String jpgSuffix = ".jpg";
+    final static String jpegSuffix = ".jpeg";
     final static String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/" + directory + key + "-";
     final static Pattern pattern = Pattern.compile("^!\\[](.*)$");
 
@@ -62,14 +64,24 @@ public class Convert {
             if (m.matches()) {
                 // 处理图片
 
-                // png 还是 gif
+                // png 还是 gif 还是 jpg
                 String imgSuffixTemp = pngSuffix;
-
                 int index = line.indexOf(pngSuffix);
+
                 if (index == -1) {
                     index = line.indexOf(gifSuffix);
                     imgSuffixTemp = gifSuffix;
+                    if  (index == -1) {
+                        index = line.indexOf(jpgSuffix);
+                        imgSuffixTemp = jpgSuffix;
+
+                        if (index == -1) {
+                            index = line.indexOf(jpegSuffix);
+                            imgSuffixTemp = jpegSuffix;
+                        }
+                    }
                 }
+
                 String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
                 String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
 
