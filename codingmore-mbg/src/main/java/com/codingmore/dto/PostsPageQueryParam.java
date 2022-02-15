@@ -1,14 +1,13 @@
 package com.codingmore.dto;
 
 
-import com.codingmore.state.PostType;
 
 public class PostsPageQueryParam {
     long pageSize;
     long page;
 
     Long termTaxonomyId;
-    PostType postType;
+    
 
     public long getPageSize() {
         return pageSize;
@@ -36,11 +35,5 @@ public class PostsPageQueryParam {
         this.termTaxonomyId = termTaxonomyId;
     }
 
-    public PostType getPostType() {
-        return postType;
-    }
 
-    public void setPostType(PostType postType) {
-        this.postType = postType;
-    }
 }

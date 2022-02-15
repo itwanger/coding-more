@@ -50,9 +50,7 @@ public class PostsParam implements Serializable {
     @ApiModelProperty(value = "排序ID")
     private Integer menuOrder;
 
-    @ApiModelProperty(value = "文章类型（POST/PAGE等）")
-    @NotBlank(message = "文章类型不能为空")
-    private String postType;
+   
 
 
 

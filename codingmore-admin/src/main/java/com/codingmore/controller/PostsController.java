@@ -7,7 +7,6 @@ import com.codingmore.dto.PostsParam;
 import com.codingmore.service.IPostsService;
 import com.codingmore.service.IUsersService;
 import com.codingmore.state.PostStatus;
-import com.codingmore.state.PostType;
 import com.codingmore.vo.PostsVo;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
@@ -45,13 +44,6 @@ public class PostsController {
     @ApiOperation("添加文章")
     public ResultObject<String> insert(@Valid PostsParam postsParam) {
         PostStatus postStatus = PostStatus.valueOf(postsParam.getPostStatus());
-        if (postStatus == null || postStatus == PostStatus.DELETED) {
-            return ResultObject.failed("文章状态设置错误");
-        }
-        PostType postType = PostType.valueOf(postsParam.getPostType());
-        if (postType == null) {
-            return ResultObject.failed("文章类型设置错误");
-        }
         return ResultObject.success(postsService.savePosts(postsParam) ? "保存成功" : "保存失败");
     }
 
@@ -68,14 +60,6 @@ public class PostsController {
     public ResultObject<String> update(@Valid PostsParam postsParam) {
         if (postsParam.getPostsId() == null) {
             return ResultObject.failed("id不能为空");
-        }
-        PostStatus postStatus = PostStatus.valueOf(postsParam.getPostStatus());
-        if (postStatus == null || postStatus == PostStatus.DELETED) {
-            return ResultObject.failed("文章状态设置错误");
-        }
-        PostType postType = PostType.valueOf(postsParam.getPostType());
-        if (postType == null) {
-            return ResultObject.failed("文章类型设置错误");
         }
         return ResultObject.success(postsService.updatePosts(postsParam) ? "更新成功" : "更新失败");
     }

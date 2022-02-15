@@ -14,10 +14,7 @@ public class WebRequestParam {
      * 分页参数 默认第一页
      */
     private Integer page = 1;
-    /**
-     * 站点id
-     */
-    private Long siteId;
+   
     /**
      * 栏目id
      */
@@ -38,7 +35,7 @@ public class WebRequestParam {
         request = builder.request;
         model = builder.model;
         response = builder.response;
-        siteId = builder.siteId;
+     
         postId = builder.postId;
         channelId = builder.channelId;
     }
@@ -51,7 +48,7 @@ public class WebRequestParam {
         private HttpServletRequest request;
         private ModelMap model;
         private  HttpServletResponse response;
-        private Long siteId;
+      
         private Long channelId;
         private Long postId;
         public Builder(){
@@ -78,10 +75,7 @@ public class WebRequestParam {
             this.response = response;
             return this;
         }
-        public Builder siteId(Long siteId){
-            this.siteId = siteId;
-            return this;
-        }
+      
         public Builder channelId(Long channelId){
             this.channelId = channelId;
             return this;

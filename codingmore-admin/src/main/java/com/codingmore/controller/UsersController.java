@@ -49,7 +49,9 @@ public class UsersController {
     @ResponseBody
     @ApiOperation("根据id获取用户")
     public ResultObject<Users> getById(long usersId) {
-        return ResultObject.success(usersService.getById(usersId));
+        Users users = usersService.getById(usersId);
+        users.setUserPass(null);
+        return ResultObject.success(users);
     }
 
    /* @RequestMapping(value = "/update",method=RequestMethod.POST)

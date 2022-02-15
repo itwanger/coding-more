@@ -49,9 +49,7 @@
 
 <script>
 import { pageRouters } from '../router'
-import {
-  UserLogout
-} from '../api/users'
+import { UserLogout } from '../api/users'
 import { removeToken } from '../utils/auth'
 export default {
   name: 'mainFrame',
@@ -165,6 +163,5 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  text-align: center;
 }
 </style>

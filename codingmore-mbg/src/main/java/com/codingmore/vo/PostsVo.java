@@ -45,8 +45,6 @@ public class PostsVo {
     @ApiModelProperty(value = "排序ID")
     private Integer menuOrder;
 
-    @ApiModelProperty(value = "文章类型（post/page等）")
-    private String postType;
 
     @ApiModelProperty(value = "评论总数")
     private Long commentCount;
@@ -57,7 +55,10 @@ public class PostsVo {
     @ApiModelProperty(value = "栏目ID")
     private Long termTaxonomyId;
 
+    @ApiModelProperty(value = "标签")
+    private String tagsName;
+
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
-    private Map<String,String> attribute;
+    private Map<String,Object> attribute;
 }

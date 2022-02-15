@@ -14,7 +14,6 @@
         <result column="comment_status" property="commentStatus"/>
         <result column="post_modified" property="postModified"/>
         <result column="menu_order" property="menuOrder"/>
-        <result column="post_type" property="postType"/>
         <result column="comment_count" property="commentCount"/>
         <result column="attribute" property="attribute" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler" />
     </resultMap>
@@ -22,7 +21,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         posts_id
-        , post_author, post_date, post_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, post_type, comment_count,attribute
+        , post_author, post_date, post_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, comment_count,attribute
     </sql>
 
     <select id="findByPage" resultType="com.codingmore.vo.PostsVo">
@@ -30,7 +29,7 @@
         from posts a
                  left join term_relationships b
                            on a.posts_id = b.term_relationships_id
-                 left join users c on a.post_author = c.id ${ew.customSqlSegment}
+                 left join users c on a.post_author = c.users_id ${ew.customSqlSegment}
     </select>
 
 </mapper>

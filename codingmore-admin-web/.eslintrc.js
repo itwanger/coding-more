@@ -21,6 +21,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'no-unexpected-multiline': 'off',
+    'eqeqeq': 'off',
     'space-before-function-paren': 'off', 
     // allow async-await
     'generator-star-spacing': 'off',

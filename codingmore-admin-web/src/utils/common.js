@@ -14,3 +14,32 @@ export const createUuid = () => {
   var uuid = s.join('')
   return uuid
 }
+
+// 逐层展开当前节点
+export function loopExpendTree(treeObject, currentNode, rootId) {
+  currentNode.expanded = true
+  while (currentNode.data.parentId !== rootId) {
+    currentNode = treeObject.getNode(currentNode.data.parentId)
+    if (!currentNode.expanded) {
+      currentNode.expanded = true
+    }
+  }
+}
+
+// 合并相同对象相同key值的方法
+export function assignSameProperty(targetObject, otherObject) {
+  if (targetObject && otherObject) {
+    let tempArr = []
+    Object.keys(otherObject).forEach(key => {
+      if (!targetObject.hasOwnProperty(key)) {
+        tempArr.push(key)
+      }
+    })
+    tempArr.forEach(key => {
+      Reflect.deleteProperty(otherObject, key)
+    })
+    return Object.assign(targetObject, otherObject)
+  } else {
+    return targetObject || otherObject
+  }
+}
