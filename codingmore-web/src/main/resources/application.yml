@@ -8,6 +8,12 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  thymeleaf:
+    cache: false 
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html #模板后缀
+    mode: HTML #模板
 
 server:
   port: 8081
@@ -22,6 +28,3 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-# 模板根目录
-template:
-  rootPath: d:/tpl

@@ -32,7 +32,7 @@ public class LearnWebFacadeController {
     @RequestMapping(value = {"/index.html"}, method = RequestMethod.GET)
     @ApiOperation("首页页入口")
     public String index(HttpServletRequest request, HttpServletResponse response, ModelMap model) {
-        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).model(model).siteId(siteId).build();
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).model(model).build();
         return indexPageRequestStrategy.handleRequest(webRequestParam);
     }
 
