@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 全局异常处理
  *    on 2020/2/27.
  */
-@ControllerAdvice(basePackages="com.codingmore.controller")
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
