@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,7 +104,7 @@ public class WebLogAspect {
             if (requestParam != null) {
                 Map<String, Object> map = new HashMap<>();
                 String key = parameters[i].getName();
-                if (!StringUtils.isEmpty(requestParam.value())) {
+                if (!ObjectUtils.isEmpty(requestParam.value())) {
                     key = requestParam.value();
                 }
                 map.put(key, args[i]);

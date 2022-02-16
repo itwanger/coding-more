@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String directory = "xianliaolaoke/";
-    final static String key = "daxue-nuli-jisuanji";
+    final static String directory = "cityselect/";
+    final static String key = "hangzhou";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
