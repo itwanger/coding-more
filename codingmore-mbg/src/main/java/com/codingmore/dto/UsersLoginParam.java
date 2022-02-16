@@ -18,9 +18,7 @@ import java.io.Serializable;
 @Data
 @ApiModel(value="用户登录", description="用户表")
 public class UsersLoginParam implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 
     @ApiModelProperty(value = "登录名")
     @NotBlank(message="登录名不能为空")

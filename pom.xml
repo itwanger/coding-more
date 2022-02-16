@@ -144,18 +144,6 @@
             <version>3.0.2</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>6.0.17.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
-        </dependency>
-
         <!--开源工具类-公共基础类库-->
         <dependency>
             <groupId>cn.hutool</groupId>

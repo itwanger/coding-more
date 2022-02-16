@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -95,7 +96,7 @@ public class UsersController {
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultObject login(@Validated UsersLoginParam users) {
+    public ResultObject login(@Validated UsersLoginParam users, BindingResult result) {
         String token = usersService.login(users.getUserLogin(), users.getUserPass());
         if (token == null) {
             return ResultObject.validateFailed("用户名或密码错误");

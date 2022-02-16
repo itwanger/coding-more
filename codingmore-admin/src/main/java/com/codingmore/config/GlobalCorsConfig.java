@@ -20,7 +20,7 @@ public class GlobalCorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         //允许所有域名进行跨域调用
-        //config.addAllowedOrigin("*");
+//        config.addAllowedOrigin("*");
         //谷明修改——springboot新版本跨域写法，上面写法报错
         config.addAllowedOriginPattern("*");
         //允许跨越发送cookie
