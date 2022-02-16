@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -27,12 +28,5 @@ public class UsersLoginParam implements Serializable {
     @ApiModelProperty(value = "密码")
     @NotBlank(message="密码不能为空")
     private String userPass;
-
-
-
-
-
-
-
 
 }
