@@ -13,10 +13,26 @@
         </el-form-item>
         <div class="text-right">
           <el-button type="primary" @click="btnLoginClick">登陆</el-button>
-          <el-button @click="btnResetClick">重置</el-button>
+          <el-button @click="btnTasteClick">获取体验账号</el-button>
         </div>
       </el-form>
     </el-card>
+    <el-dialog title="公众号二维码" :visible.sync="addTasteDialog.show" width="40%"
+        :show-close="false" :center="true">
+       <div style="text-align: center">
+        <span class="font-title-large">扫描下方二维码关注
+          <span class="color-main font-extra-large">沉默王二</span>
+          公众号回复
+          <span class="color-main font-extra-large">体验</span>
+          获取体验账号
+        </span>
+        <br>
+        <el-image style="width: 160px; height: 160px" :src="itwangerQrcodeUrl"></el-image>
+       </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addTasteDialog.show = false">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -30,7 +46,13 @@ export default {
       form: {
         userLogin: '',
         userPass: ''
-      }
+      },
+      // 添加标签对话框可见性
+      addTasteDialog: {
+        show: false
+      },
+      // 公众号二维码 URL
+      itwangerQrcodeUrl: 'https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/gongzhonghao.png'
     }
   },
   methods: {
@@ -46,9 +68,9 @@ export default {
       })
     },
 
-    // 重置界面输入框方法
-    btnResetClick() {
-      this.form.userLogin = this.userPass = ''
+    // 获取体验账号方法
+    btnTasteClick() {
+      this.addTasteDialog.show = true
     }
   }
 }
@@ -68,5 +90,12 @@ export default {
   align-items: center;
   background: url(~@/assets/login-bg.jpeg) no-repeat center center;
   background-size: 100% 100%;
+}
+.color-main {
+  color: #409eff;
+}
+.font-title-large {
+  font-size: 18px;
+  color: #303133;
 }
 </style>
