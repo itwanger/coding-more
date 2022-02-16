@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       form: {
-        userLogin: '',
+        userLogin: 'admin',
         userPass: ''
       },
       // 添加标签对话框可见性
