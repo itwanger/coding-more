@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String directory = "cityselect/";
-    final static String key = "hangzhou";
+    final static String directory = "gongju/";
+    final static String key = "DBeaver";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
@@ -82,15 +82,20 @@ public class Convert {
                     }
                 }
 
-                String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
-                String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
+                if (index == -1) {
+                    writer.append(line+"\n");
+                } else {
+                    String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
+                    String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
 
-                // 1、下载到本地
-                new Thread(new MyRunnable(originImgUrl, destinationImgPath)).start();
+                    // 1、下载到本地
+                    new Thread(new MyRunnable(originImgUrl, destinationImgPath)).start();
 
-                // 2、修改 MD 文档
-                writer.append("![](" + imgCdnPre +  num + imgSuffixTemp +")\n");
-                num++;
+                    // 2、修改 MD 文档
+                    writer.append("![](" + imgCdnPre +  num + imgSuffixTemp +")\n");
+                    num++;
+                }
+
             } else {
                 writer.append(line+"\n");
             }
