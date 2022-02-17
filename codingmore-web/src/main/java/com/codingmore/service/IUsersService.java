@@ -3,7 +3,6 @@ package com.codingmore.service;
 import com.codingmore.model.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codingmore.dto.UpdateAdminPasswordParam;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * <p>
