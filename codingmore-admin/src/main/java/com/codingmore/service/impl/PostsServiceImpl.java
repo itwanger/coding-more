@@ -62,7 +62,8 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         posts.setPostAuthor(iUsersService.getCurrentUserId());
         this.save(posts);
         this.insertorUpdateTag(postsParam, posts);
-        return insertTermRelationships(postsParam, posts);
+        insertTermRelationships(postsParam, posts);
+        return true;
 
     }
 
@@ -119,7 +120,8 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 删除旧的栏目内容管理
         iTermRelationshipsService.remove(queryWrapper);
         this.insertorUpdateTag(postsParam, posts);
-        return insertTermRelationships(postsParam, posts);
+        insertTermRelationships(postsParam, posts);
+        return true;
 
     }
 
@@ -165,12 +167,18 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }
+        if(postsPageQueryParam.getOrderBy()!=null){
+            queryWrapper.orderBy(true,postsPageQueryParam.isAsc(),postsPageQueryParam.getOrderBy());
+        }
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
         return this.getBaseMapper().findByPage(postsPage, queryWrapper);
     }
 
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts) {
+        if(postsParam.getTermTaxonomyId()==null){
+            return false;
+        }
         TermRelationships termRelationships = new TermRelationships();
         termRelationships.setTermTaxonomyId(postsParam.getTermTaxonomyId());
         termRelationships.setTermRelationshipsId(posts.getPostsId());
