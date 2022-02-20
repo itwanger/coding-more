@@ -53,3 +53,20 @@ jwt:
   secret: learn-admin-secret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
+
+  # oss
+  aliyun:
+    oss:
+      # oss对外服务的访问域名
+      endpoint: oss-cn-beijing.aliyuncs.com
+      # 访问身份验证中用到用户标识
+      accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
+      # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+      accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
+      # oss的存储空间
+      bucketName: codingmore-oss
+      # 上传文件大小(M)
+      maxSize: 3
+      # 上传文件夹路径前缀
+      dir:
+        prefix: codingmore/images/
