@@ -100,7 +100,6 @@ elemet |前端 UI 框架|https://element.eleme.io
 
 工具| 说明 |官网
 ---|---|---
-
 Intellij IDEA |开发环境|https://www.jetbrains.com/idea/download    
 Navicat |数据库连接工具|http://www.formysql.com/xiazai.html  
 Xmind |思维导图设计工具|https://www.xmind.cn/download/
