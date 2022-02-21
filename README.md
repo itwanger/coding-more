@@ -109,7 +109,7 @@ Xmind |思维导图设计工具|https://www.xmind.cn/download/
 
 工具 |版本号 |下载
 ---|---|---
-JDK| 1.8|https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+JDK| 1.8 | https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 MySQL|5.7    | https://www.mysql.com/       
 Redis|5.0    | https://redis.io/download     
 Nginx |1.10   | http://nginx.org/en/download.html      
