@@ -60,9 +60,9 @@ jwt:
       # oss对外服务的访问域名
       endpoint: oss-cn-beijing.aliyuncs.com
       # 访问身份验证中用到用户标识
-      accessKeyId: 
+      accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
       # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
-      accessKeySecret: 
+      accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
       # oss的存储空间
       bucketName: codingmore-oss
       # 上传文件大小(M)
