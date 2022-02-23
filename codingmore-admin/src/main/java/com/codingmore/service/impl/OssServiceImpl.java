@@ -20,5 +20,11 @@ public class OssServiceImpl implements IOssService{
     @Autowired
     private OSS ossClient;
 
+    @Override
+    public String upload(String url) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 }
