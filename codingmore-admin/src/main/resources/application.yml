@@ -55,18 +55,18 @@ jwt:
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
   # oss
-  aliyun:
-    oss:
+aliyun:
+  oss:
       # oss对外服务的访问域名
-      endpoint: oss-cn-beijing.aliyuncs.com
+    endpoint: oss-cn-beijing.aliyuncs.com
       # 访问身份验证中用到用户标识
-      accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
+    accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
       # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
-      accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
+    accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
       # oss的存储空间
-      bucketName: codingmore-oss
+    bucketName: codingmore-oss
       # 上传文件大小(M)
-      maxSize: 3
+    maxSize: 3
       # 上传文件夹路径前缀
-      dir:
-        prefix: codingmore/images/
+    dir:
+      prefix: codingmore/images/
