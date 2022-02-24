@@ -27,15 +27,15 @@ import java.io.IOException;
  */
 @Controller
 @Api(tags = "上传")
-@RequestMapping("/postTag")
+@RequestMapping("/ossController")
 public class OssController {
     @Autowired
     private IOssService ossService;
 
-    @RequestMapping(value = "/getByPostId",method=RequestMethod.GET)
+    @RequestMapping(value = "/upload",method=RequestMethod.POST)
     @ResponseBody
-    @ApiOperation("根据文章内容获取标签")
-    public ResultObject<String> getByPostId(@RequestParam("file") MultipartFile file, HttpServletRequest req) throws IOException {
+    @ApiOperation("上传")
+    public ResultObject<String> upload(@RequestParam("file") MultipartFile file, HttpServletRequest req) throws IOException {
         return ResultObject.success(ossService.upload(file.getInputStream(), file.getOriginalFilename()));
     }
 
