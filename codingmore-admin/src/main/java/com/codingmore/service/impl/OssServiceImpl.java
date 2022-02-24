@@ -51,5 +51,19 @@ public class OssServiceImpl implements IOssService{
         return dirPrefix+"/"+dateStr+"/"+UUID.randomUUID().toString()+ext;
     }
 
+    @Override
+    public String upload(InputStream inputStream,String name) {
+        String objectName = getBucketName(name);
+        try {            
+            // 创建PutObject请求。
+            ossClient.putObject(bucketName, objectName, inputStream);
+        } catch (Exception oe) {
+          LOGGER.error(oe.getMessage());
+        }
+       return "https://" + ossClient.getEndpoint().getHost() + "/" + objectName;
+    }
+
+    
+
 
 }
