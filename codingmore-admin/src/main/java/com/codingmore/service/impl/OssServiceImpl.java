@@ -1,9 +1,17 @@
-import com.aliyun.oss.OSS;
-import com.codingmore.service.IOssService;
+package com.codingmore.service.impl;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.aliyun.oss.OSSClient;
+import com.codingmore.service.IOssService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import cn.hutool.core.lang.UUID;
 
 @Service
 public class OssServiceImpl implements IOssService{
@@ -18,13 +26,44 @@ public class OssServiceImpl implements IOssService{
     private String dirPrefix;
     
     @Autowired
-    private OSS ossClient;
+    private OSSClient ossClient;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
     @Override
     public String upload(String url) {
-        // TODO Auto-generated method stub
-        return null;
+        // 填写Object完整路径，例如exampledir/exampleobject.txt。Object完整路径中不能包含Bucket名称。
+        String objectName =  getBucketName( url);
+         try (InputStream inputStream = new URL(url).openStream()){            
+             // 创建PutObject请求。
+             ossClient.putObject(bucketName, objectName, inputStream);
+         } catch (Exception oe) {
+           LOGGER.error(oe.getMessage());
+         }
+        return "https://" + ossClient.getEndpoint().getHost() + "/" + objectName;
     }
+
+    private String getBucketName(String url){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String dateStr = sdf.format(date);
+        String ext = url.substring(url.lastIndexOf(".") );
+        return dirPrefix+"/"+dateStr+"/"+UUID.randomUUID().toString()+ext;
+    }
+
+    @Override
+    public String upload(InputStream inputStream,String name) {
+        String objectName = getBucketName(name);
+        try {            
+            // 创建PutObject请求。
+            ossClient.putObject(bucketName, objectName, inputStream);
+        } catch (Exception oe) {
+          LOGGER.error(oe.getMessage());
+        }
+       return "https://" + ossClient.getEndpoint().getHost() + "/" + objectName;
+    }
+
+    
 
 
 }

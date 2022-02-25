@@ -1,6 +1,7 @@
 package com.codingmore.config;
 
-import com.aliyun.oss.OSS;
+
+import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ public class OssClientConfig {
     String accessKeySecret;
 
     @Bean
-    public OSS createOssClient() {
-        return new  OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+    public OSSClient createOssClient() {
+        return (OSSClient)new  OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 }
