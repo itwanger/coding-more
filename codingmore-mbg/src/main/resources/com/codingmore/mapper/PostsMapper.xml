@@ -8,6 +8,7 @@
         <result column="post_author" property="postAuthor"/>
         <result column="post_date" property="postDate"/>
         <result column="post_content" property="postContent"/>
+        <result column="html_content" property="htmlContent"/>
         <result column="post_title" property="postTitle"/>
         <result column="post_excerpt" property="postExcerpt"/>
         <result column="post_status" property="postStatus"/>
@@ -21,7 +22,7 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         posts_id
-        , post_author, post_date, post_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, comment_count,attribute
+        , post_author, post_date, post_content,html_content, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, comment_count,attribute
     </sql>
 
     <!-- 通用查询结果列 -->

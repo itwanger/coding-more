@@ -35,6 +35,9 @@ public class PostsParam implements Serializable {
     @NotBlank(message = "正文不能为空")
     private String postContent;
 
+    @ApiModelProperty(value = "正文html")
+    private String htmlContent;
+
     @ApiModelProperty(value = "标题")
     @NotBlank(message = "标题不能为空")
     private String postTitle;
