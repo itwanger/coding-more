@@ -27,8 +27,10 @@ import java.util.Map;
  */
 public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
+
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
+
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}")
@@ -37,7 +39,7 @@ public class JwtTokenUtil {
     private String tokenHead;
 
     /**
-     * 根据负责生成JWT的token
+     * 根据用户名、创建时间生成JWT的token
      */
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
@@ -74,13 +76,12 @@ public class JwtTokenUtil {
      * 从token中获取登录用户名
      */
     public String getUserNameFromToken(String token) {
-        String username;
-        try {
-            Claims claims = getClaimsFromToken(token);
+        String username = null;
+        Claims claims = getClaimsFromToken(token);
+        if (claims != null) {
             username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
         }
+
         return username;
     }
 

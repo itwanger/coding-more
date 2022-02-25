@@ -30,15 +30,10 @@ secure:
   ignored:
     urls: #安全路径白名单
       - /doc.html
-      - /swagger-ui/**
-      - /swagger/**
-      - /swagger-resources/**
-      - /**/v3/api-docs
       - /**/*.js
       - /**/*.css
       - /**/*.png
       - /**/*.ico
-      - /webjars/springfox-swagger-ui/**
       - /actuator/**
       - /druid/**
       - /users/login
@@ -50,7 +45,7 @@ secure:
 # 登录认证 token filter
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
-  secret: learn-admin-secret #JWT加解密使用的密钥
+  secret: codingmore-admin-secret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
@@ -64,7 +59,7 @@ aliyun:
       # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
     accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
       # oss的存储空间
-    bucketName: codingmore-oss
+    bucketName: itwanger-oss
       # 上传文件大小(M)
     maxSize: 3
       # 上传文件夹路径前缀

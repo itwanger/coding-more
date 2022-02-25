@@ -25,16 +25,16 @@ public class SwaggerConfig {
                 //apis： 添加swagger接口提取范围
                 .apis(RequestHandlerSelectors.basePackage("com.codingmore.controller"))
                 .paths(PathSelectors.any())
-                .build();
-
-        docket.securitySchemes(securitySchemes()).securityContexts(securityContexts());
+                .build()
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
         return docket;
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("编程猫学习网站的 admin 管理端 API")
-                .description("codingmore")
+                .title("Codingmore 学习网站的admin管理端API")
+                .description("编程喵")
                 .contact(new Contact("沉默王二&石磊", "https://tobebetterjavaer.com", "983436076@qq.com"))
                 .version("1.0")
                 .build();
