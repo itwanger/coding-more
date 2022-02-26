@@ -1,4 +1,4 @@
-# 编程猫（CodingMore）
+# 编程喵（Codingmore）
 
 <p align="center">
   <a href="#公众号" target="_blank"><img src="https://img.shields.io/badge/公众号-沉默王二-brightgreen.svg"></a>
@@ -21,7 +21,7 @@
 
 ## 前言
 
-编程猫（CodingMore）项目致力于打造一个完整的编程类学习网站，从教程到实战，一站式打法，技术上引领潮流，文档上无微不至。
+编程喵（Codingmore）项目致力于打造一个完整的编程类学习网站，从教程到实战，一站式打法，技术上引领潮流，文档上无微不至。
 
 ## 项目文档
 
@@ -30,7 +30,7 @@
 
 ## 项目介绍
 
-编程猫（CodingMore）是一套成熟的编程类学习网站，基于 SpringBoot+MyBatis实现，采用Docker容器化部署。网站前台包含首页门户、文章搜索、文章展示、文章推荐等模块。网站管理端包括统计报表、文章管理等模块。
+编程喵（Codingmore）是一套成熟的编程类学习网站，基于 SpringBoot+MyBatis实现，采用Docker容器化部署。网站前台包含首页门户、文章搜索、文章展示、文章推荐等模块。网站管理端包括统计报表、文章管理等模块。
 
 ### 项目展示
 
@@ -124,7 +124,7 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 # 公众号
 
-学习不走弯路，关注公众号「**沉默王二**」，回复「**学习路线**」，获取编程猫学习网站专属学习路线！
+学习不走弯路，关注公众号「**沉默王二**」，回复「**学习路线**」，获取编程喵学习网站专属学习路线！
 
 ![当图片不显示的时候可以微信搜索「沉默王二」](https://itwanger-oss.oss-cn-beijing.aliyuncs.com/codingmore/banner/gongzhonghao.png)
 

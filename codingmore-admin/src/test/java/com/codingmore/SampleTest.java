@@ -1,8 +1,7 @@
 package com.codingmore;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.codingmore.mapper.UsersMapper;
+import com.codingmore.service.IOssService;
 import com.codingmore.service.IUsersService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +20,12 @@ public class SampleTest {
     @Autowired
     private IUsersService iUsersService;
     private static Logger LOGGER = LoggerFactory.getLogger(SampleTest.class);
+    @Autowired
+    private IOssService iOssService;
+    
     @Test
     public void testSelect() {
-     
+        iOssService.upload("https://pic1.zhimg.com/80/v2-5a6681d8b77b8f17a517f2858ea0bcd8_400x224.jpg?source=1940ef5c");
     }
 
 }

@@ -68,6 +68,9 @@ public class Posts implements Serializable {
     @ApiModelProperty(value = "评论总数")
     private Long commentCount;
 
+    @ApiModelProperty(value = "正文html")
+    private String htmlContent;
+
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
     private Map<String,Object> attribute;

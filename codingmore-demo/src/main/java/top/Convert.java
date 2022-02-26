@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  */
 public class Convert {
     final static String directory = "springboot/";
-    final static String key = "aop-log";
+    final static String key = "cors";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
