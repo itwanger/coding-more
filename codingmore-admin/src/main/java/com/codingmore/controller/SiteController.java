@@ -1,25 +1,19 @@
 package com.codingmore.controller;
 
-
 import com.codingmore.dto.SiteParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-
 import com.codingmore.model.Site;
 import com.codingmore.service.ISiteService;
 import com.codingmore.webapi.ResultObject;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

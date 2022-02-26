@@ -51,6 +51,7 @@ public class UsersController {
     @ApiOperation("根据id获取用户")
     public ResultObject<Users> getById(long usersId) {
         Users users = usersService.getById(usersId);
+        //不返回密码
         users.setUserPass(null);
         return ResultObject.success(users);
     }
