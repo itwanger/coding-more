@@ -173,6 +173,13 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if(postsPageQueryParam.getOrderBy()!=null){
             queryWrapper.orderBy(true,postsPageQueryParam.isAsc(),postsPageQueryParam.getOrderBy());
         }
+        if(StringUtils.isNotEmpty(postsPageQueryParam.getPostTitleKeyword())){
+            queryWrapper.like("post_title","%"+postsPageQueryParam.getPostTitleKeyword()+"%");
+        }
+        if(StringUtils.isNotEmpty(postsPageQueryParam.getPostStatus())){
+            queryWrapper.eq("post_status",postsPageQueryParam.getPostStatus());
+        }
+
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
         return this.getBaseMapper().findByPage(postsPage, queryWrapper);

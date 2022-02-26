@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.UpdateAdminPasswordParam;
 import com.codingmore.dto.UsersLoginParam;
 import com.codingmore.dto.UsersParam;
+import com.codingmore.model.AdminUserDetails;
 import com.codingmore.model.Users;
 import com.codingmore.service.IUsersService;
 import com.codingmore.webapi.ResultObject;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,11 +132,11 @@ public class UsersController {
         if(principal==null){
             return ResultObject.unauthorized(null);
         }
-        String username = principal.getName();
-        Users users = usersService.getAdminByUsername(username);
+        AdminUserDetails adminUserDetails = (AdminUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = adminUserDetails.getUsers();
         Map<String, Object> data = new HashMap<>();
         users.setUserPass(null);
-        data.put("userDetail", users);
+        data.put("userDetail", adminUserDetails.getUsers());
         data.put("username", users.getUserLogin());
       /*  data.put("menus", roleService.getMenuList(umsAdmin.getId()));
         data.put("icon", umsAdmin.getIcon());

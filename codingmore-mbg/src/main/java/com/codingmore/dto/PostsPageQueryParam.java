@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="文章分页对象", description="文章")
@@ -19,7 +21,10 @@ public class PostsPageQueryParam {
     boolean isAsc;
     @ApiModelProperty(value = "栏目id非必填")
     Long termTaxonomyId;
+    @ApiModelProperty(value = "标题关键字")
+    String postTitleKeyword;
 
-
+    @ApiModelProperty(value = "文章状态PUBLISHED,DELETED,DRAFT")
+    private String postStatus;
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

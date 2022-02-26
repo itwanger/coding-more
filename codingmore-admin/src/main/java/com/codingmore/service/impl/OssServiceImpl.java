@@ -40,7 +40,7 @@ public class OssServiceImpl implements IOssService{
          } catch (Exception oe) {
            LOGGER.error(oe.getMessage());
          }
-        return "https://" + ossClient.getEndpoint().getHost() + "/" + objectName;
+        return getPath(objectName);
     }
 
     private String getBucketName(String url){
@@ -48,8 +48,13 @@ public class OssServiceImpl implements IOssService{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String dateStr = sdf.format(date);
         String ext = url.substring(url.lastIndexOf(".") );
-        return dirPrefix+"/"+dateStr+"/"+UUID.randomUUID().toString()+ext;
+        return dirPrefix+dateStr+"/"+UUID.randomUUID().toString()+ext;
     }
+
+    private String getPath(String objectName){
+        return "https://"  +bucketName+"."+ ossClient.getEndpoint().getHost() + "/" + objectName;
+    }
+
 
     @Override
     public String upload(InputStream inputStream,String name) {
@@ -60,7 +65,7 @@ public class OssServiceImpl implements IOssService{
         } catch (Exception oe) {
           LOGGER.error(oe.getMessage());
         }
-       return "https://" + ossClient.getEndpoint().getHost() + "/" + objectName;
+        return getPath(objectName);
     }
 
     

@@ -14,6 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SampleTest {
+//     http://cdn.tobebetterjavaer.com/
+// https://cdn.tobebetterjavaer.com/
+//https://cdn.tobebetterjavaer.com/codingmore/images/20220226/0fb602cc-13dd-4380-a08b-f80a6bf1ac37.jpg
 
     @Autowired
     private UsersMapper userMapper;
@@ -25,7 +28,8 @@ public class SampleTest {
     
     @Test
     public void testSelect() {
-        iOssService.upload("https://pic1.zhimg.com/80/v2-5a6681d8b77b8f17a517f2858ea0bcd8_400x224.jpg?source=1940ef5c");
+       String path =  iOssService.upload("https://pic1.zhimg.com/80/v2-5a6681d8b77b8f17a517f2858ea0bcd8_400x224.jpg");
+       System.out.print(path);
     }
 
 }
