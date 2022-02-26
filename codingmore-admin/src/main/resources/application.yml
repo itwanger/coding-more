@@ -30,10 +30,15 @@ secure:
   ignored:
     urls: #安全路径白名单
       - /doc.html
+      - /swagger-ui/**
+      - /swagger/**
+      - /swagger-resources/**
+      - /**/v3/api-docs
       - /**/*.js
       - /**/*.css
       - /**/*.png
       - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
       - /actuator/**
       - /druid/**
       - /users/login

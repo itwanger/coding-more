@@ -23,6 +23,26 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+ignored:
+  urls: #安全路径白名单
+    - /doc.html
+    - /swagger-ui/**
+    - /swagger/**
+    - /swagger-resources/**
+    - /**/v3/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
+    - /webjars/springfox-swagger-ui/**
+    - /actuator/**
+    - /druid/**
+    - /users/login
+    - /users/register
+    - /users/info
+    - /users/logout
+    - /minio/upload
+
 # 登录认证 token filter
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
