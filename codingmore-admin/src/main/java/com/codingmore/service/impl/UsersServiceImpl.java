@@ -115,7 +115,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
 
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userLogin", updatePasswordParam.getUsername());
+        queryWrapper.eq("user_login", updatePasswordParam.getUsername());
         List<Users> usersList = baseMapper.selectList(queryWrapper);
 
         if (CollUtil.isEmpty(usersList)) {

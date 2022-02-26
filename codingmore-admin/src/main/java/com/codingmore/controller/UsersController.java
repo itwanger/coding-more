@@ -3,6 +3,7 @@ package com.codingmore.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.dto.UpdateAdminPasswordParam;
 import com.codingmore.dto.UsersLoginParam;
 import com.codingmore.dto.UsersParam;
 import com.codingmore.model.Users;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -133,6 +133,8 @@ public class UsersController {
         String username = principal.getName();
         Users users = usersService.getAdminByUsername(username);
         Map<String, Object> data = new HashMap<>();
+        users.setUserPass(null);
+        data.put("userDetail", users);
         data.put("username", users.getUserLogin());
       /*  data.put("menus", roleService.getMenuList(umsAdmin.getId()));
         data.put("icon", umsAdmin.getIcon());
@@ -149,6 +151,24 @@ public class UsersController {
     @ResponseBody
     public ResultObject logout() {
         return ResultObject.success(null);
+    }
+
+    @ApiOperation("修改指定用户密码")
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultObject updatePassword( UpdateAdminPasswordParam updatePasswordParam) {
+        int status = usersService.updatePassword(updatePasswordParam);
+        if (status > 0) {
+            return ResultObject.success(status);
+        } else if (status == -1) {
+            return ResultObject.failed("提交参数不合法");
+        } else if (status == -2) {
+            return ResultObject.failed("找不到该用户");
+        } else if (status == -3) {
+            return ResultObject.failed("旧密码错误");
+        } else {
+            return ResultObject.failed();
+        }
     }
     
 }
