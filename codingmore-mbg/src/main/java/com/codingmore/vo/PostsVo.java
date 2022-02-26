@@ -58,6 +58,9 @@ public class PostsVo {
     @ApiModelProperty(value = "标签")
     private String tagsName;
 
+    @ApiModelProperty(value = "正文html")
+    private String htmlContent;
+
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
     private Map<String,Object> attribute;

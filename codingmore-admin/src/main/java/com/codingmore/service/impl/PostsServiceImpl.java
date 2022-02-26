@@ -138,6 +138,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public PostsVo getPostsById(Long id) {
         Posts posts = this.getById(id);
         PostsVo postsVo = new PostsVo();
+        if(posts == null){
+            return postsVo;
+        }
         BeanUtils.copyProperties(posts, postsVo);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("term_relationships_id", posts.getPostsId());
