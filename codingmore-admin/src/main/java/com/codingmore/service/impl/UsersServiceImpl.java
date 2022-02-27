@@ -108,14 +108,11 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public int updatePassword(UpdateAdminPasswordParam updatePasswordParam) {
-        if (StringUtils.isEmpty(updatePasswordParam.getUsername())
-                || StringUtils.isEmpty(updatePasswordParam.getOldPassword())
-                || StringUtils.isEmpty(updatePasswordParam.getNewPassword())) {
-            return -1;
-        }
+        AdminUserDetails adminUserDetails = (AdminUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users users = adminUserDetails.getUsers();
 
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_login", updatePasswordParam.getUsername());
+        queryWrapper.eq("user_login", users.getUserLogin());
         List<Users> usersList = baseMapper.selectList(queryWrapper);
 
         if (CollUtil.isEmpty(usersList)) {
