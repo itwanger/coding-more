@@ -28,6 +28,8 @@ public class OssServiceImpl implements IOssService{
     @Autowired
     private OSSClient ossClient;
 
+    private String [] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
     @Override
@@ -47,7 +49,15 @@ public class OssServiceImpl implements IOssService{
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String dateStr = sdf.format(date);
-        String ext = url.substring(url.lastIndexOf(".") );
+        String ext = "";
+        
+        for(String extItem:imageExtension){
+            if(url.indexOf(extItem) != -1){
+                ext = extItem;
+                break;
+            }
+        }
+
         return dirPrefix+dateStr+"/"+UUID.randomUUID().toString()+ext;
     }
 

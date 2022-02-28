@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.model.PostTag;
+import com.codingmore.model.PostTagRelation;
+import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
@@ -31,8 +33,8 @@ import java.util.Map;
 public class PostTagController {
     @Autowired
     private IPostTagService postTagService;
-
- 
+    @Autowired
+    private IPostTagRelationService postTagRelationService;
 
 
 
@@ -58,6 +60,12 @@ public class PostTagController {
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(long postTagId) {
+        QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper();
+        postTagRelationQueryWrapper.eq("post_tag_id",postTagId);
+        int count = postTagRelationService.count(postTagRelationQueryWrapper);
+        if(count>0){
+            return ResultObject.failed("该标签已被使用，不能删除");
+        }
         return ResultObject.success(postTagService.removeById(postTagId) ? "删除成功" : "删除失败");
     }
 
