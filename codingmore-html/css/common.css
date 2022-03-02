@@ -123,11 +123,34 @@
   .bottom-info .info-container a:visited {
     color: #f4f4f4;
   }
+
+  /* PC端第二版样式开始 */
+
+  .main-area {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 960px;
+    margin: 0 auto;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  /* PC端第二版样式结束 */
 }
 
-html,body {
+/* PC、手机共用样式开始 */
+
+html,
+body {
   height: 100%;
   overflow: auto;
+  /* v2版本样式 */
+  background-color: #F4F5F5;
+}
+
+.flex-row {
+  display: flex;
 }
 
 /* 关于flex */
@@ -137,11 +160,19 @@ html,body {
   min-height: 100%;
 }
 
+.flex-fixed-item {
+  flex-shrink: 0;
+}
+
+.flex-fixed-item.v-center {
+  align-items: center;
+}
+
 .flex-item-grow1 {
   flex-grow: 1;
 }
 
-div{
+div {
   box-sizing: border-box;
 }
 
@@ -166,10 +197,38 @@ div{
   background-color: #1C499E;
 }
 
+/* 保留X行显示样式 */
+.keep-1row {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.keep-2row {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.keep-3row {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.noshow {
+  display: none;
+}
+
+/* PC、手机共用样式结束 */
+
 /* 手机端样式 */
 @media screen and (max-width: 750px) {
+
   /* 头部样式 */
-  .top-fixed{
+  .top-fixed {
     background-color: #63b175;
     position: sticky;
     width: 100%;
@@ -180,7 +239,7 @@ div{
   }
 
   /* 网站标题区域 */
-  .logo-area{
+  .logo-area {
     font-size: 6vw;
     letter-spacing: 0.5vw;
     color: #fff;
@@ -192,12 +251,12 @@ div{
   }
 
   /* logo图标大小 */
-  .logo-top{
+  .logo-top {
     width: 7vw;
   }
 
   /* 输入框隐藏 */
-  .txt-search{
+  .txt-search {
     display: none;
   }
 
@@ -207,7 +266,7 @@ div{
   }
 
   /* 内容区域布局 */
-  .main-content{
+  .main-content {
     margin: 0 auto;
     width: 96vw;
   }
