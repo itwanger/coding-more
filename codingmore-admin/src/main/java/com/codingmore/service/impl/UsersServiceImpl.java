@@ -43,6 +43,17 @@ import java.util.List;
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
     private static Logger LOGGER = LoggerFactory.getLogger(UsersServiceImpl.class);
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    /**
+     * 实际查询数据库
+     *
+     * @param username
+     * @return
+     */
     @Override
     public Users getAdminByUsername(String username) {
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
@@ -51,16 +62,11 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
         if (usersList != null && usersList.size() > 0) {
             return usersList.get(0);
-        } else {
-            return null;
         }
 
+        // 用户名错误，提前抛出异常
+        throw new UsernameNotFoundException("用户名错误");
     }
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     public boolean register(Users users) {
@@ -79,26 +85,42 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         return save(users);
     }
 
+    /**
+     * 根据用户名从数据库查询用户，附带资源后，验证密码和账号是否禁用，
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return
+     */
     @Override
     public String login(String username, String password) {
         String token = null;
         //密码需要客户端加密后传递
         try {
+            // 查询用户+用户资源
             UserDetails userDetails = loadUserByUsername(username);
+
+            // 验证密码
             if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 Asserts.fail("密码不正确");
             }
             if (!userDetails.isEnabled()) {
                 Asserts.fail("帐号已被禁用");
             }
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // 返回 JWT
             token = jwtTokenUtil.generateToken(userDetails);
         } catch (AuthenticationException e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
         }
         return token;
+    }
+
+    public void setAuthentication(UserDetails userDetails) {
+        // 当前登录用户+用户权限
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
+                null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
@@ -128,15 +150,17 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         return 1;
     }
 
+    /**
+     * 获取用户对应的资源
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
-        //获取用户信息
+        // 根据用户名查询用户
         Users admin = getAdminByUsername(username);
-        if (admin != null) {
-            List<AdminResource> resourceList = new ArrayList<>();
-            return new AdminUserDetails(admin, resourceList);
-        }
-        throw new UsernameNotFoundException("用户名或密码错误");
+        // TODO 查询用户资源
+        List<AdminResource> resourceList = new ArrayList<>();
+        // 自定义用户详情+资源
+        return new AdminUserDetails(admin, resourceList);
     }
 
   /*  @Override

@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String directory = "springboot/";
-    final static String key = "cors";
+    final static String directory = "overview/sanfene/";
+    final static String key = "news";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
@@ -85,6 +85,7 @@ public class Convert {
                 if (index == -1) {
                     writer.append(line+"\n");
                 } else {
+                    System.out.println("处理图片" + line);
                     String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
                     String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
 
