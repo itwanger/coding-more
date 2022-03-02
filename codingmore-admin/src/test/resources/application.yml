@@ -67,3 +67,18 @@ aliyun:
       # 上传文件夹路径前缀
     dir:
       prefix: codingmore/images/
+
+
+#异步线程配置
+async:
+  executor:
+    #设置核心线程数
+    corePoolSize: 10
+    #设置最大线程数
+    maxPoolSize: 100
+    #设置队列容量
+    queueCapacity: 500
+    #设置线程活跃时间（秒）
+    keepAliveSeconds: 360
+    #设置默认线程名称
+    threadNamePrefix: upload-image-thread-
