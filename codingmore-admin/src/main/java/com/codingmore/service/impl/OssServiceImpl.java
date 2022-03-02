@@ -78,6 +78,13 @@ public class OssServiceImpl implements IOssService{
         return getPath(objectName);
     }
 
+    @Override
+    public String getEndPoint() {
+        // TODO Auto-generated method stub
+        return ossClient.getEndpoint().getHost() ;
+    }
+    
+    
     
 
 

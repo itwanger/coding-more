@@ -16,14 +16,19 @@ import com.codingmore.vo.PostsVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.ExistingWebApplicationScopes;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.Future;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +49,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private IPostTagService iPostTagService;
     @Autowired
     private IPostTagRelationService iPostTagRelationService;
+    @Autowired
+    private ThreadPoolTaskExecutor ossUploadImageExecutor;
+    @Autowired
+    private IOssService iOssService;
+    private static Logger LOGGER = LoggerFactory.getLogger(PostsServiceImpl.class);
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -60,6 +70,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             posts.setPostDate(new Date());
         }
         posts.setPostAuthor(iUsersService.getCurrentUserId());
+        handleContentImg(posts);
         this.save(posts);
         this.insertorUpdateTag(postsParam, posts);
         insertTermRelationships(postsParam, posts);
@@ -113,6 +124,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 防止修改发布时间
         posts.setPostDate(publishDate);
         posts.setPostModified(new Date());
+        handleContentImg(posts);
         this.updateById(posts);
 
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
@@ -205,6 +217,56 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
             posts.setAttribute(attribute);
         }
+    }
+
+    /**
+     * 替换图片
+     * @param posts
+     */
+    private void handleContentImg( Posts posts) {
+        String content = posts.getPostContent();
+        String htmlContent = posts.getHtmlContent();
+        if(StringUtils.isBlank(content)){
+            return;
+        }
+        
+        // System.out.println(content);
+        String pattern = "!\\[[^\\]]+\\]\\([^)]+\\)";
+
+        // StringBuffer operatorStr=new StringBuffer(content);
+        Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(content);
+
+        Map<String, Future<String>> map = new HashMap<>();
+        // List<String> image
+        while (m.find()) {
+            // 使用分组进行替换
+            LOGGER.info("{}", m.group());
+            String imageTag = m.group();
+            String imageUrl = imageTag.substring(imageTag.indexOf("(") + 1, imageTag.indexOf(")"));
+            if(imageUrl.indexOf(iOssService.getEndPoint())>=0){
+                continue;
+            }
+            Future<String> future = ossUploadImageExecutor.submit(() -> {
+                return iOssService.upload(imageUrl);
+            });
+            map.put(imageUrl, future);
+        }
+        try {
+            for (String oldUrl : map.keySet()) {
+                Future<String> future = map.get(oldUrl);
+                String imageUrl = future.get(); // 获取返回结果 不阻塞
+                content = content.replace(oldUrl, imageUrl);
+                if(StringUtils.isBlank(htmlContent)){
+                    htmlContent= htmlContent.replace(oldUrl, imageUrl);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("{}", e);
+        }
+        posts.setPostContent(content);
+        posts.setHtmlContent(htmlContent);
     }
 
     private static ObjectMapper objectMapper = new ObjectMapper();
