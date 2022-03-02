@@ -101,9 +101,12 @@ public class UsersController {
     @ResponseBody
     public ResultObject login(@Validated UsersLoginParam users, BindingResult result) {
         String token = usersService.login(users.getUserLogin(), users.getUserPass());
+
         if (token == null) {
             return ResultObject.validateFailed("用户名或密码错误");
         }
+
+        // 将 JWT 传递回客户端
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         tokenMap.put("tokenHead", tokenHead);
