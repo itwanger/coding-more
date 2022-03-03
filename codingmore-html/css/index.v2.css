@@ -6,6 +6,7 @@
     background-color: #fff;
     margin-top: 20px;
     margin-bottom: 20px;
+    max-width: 700px;
   }
 
   /* 文章列表容器样式 */
@@ -50,7 +51,7 @@
 
   /* 文章摘要容器样式 */
   .article-summary {
-    max-width: 700px;
+    max-width: 516px;
   }
 
   /* 推荐、最新、热榜的文字链接样式 */
