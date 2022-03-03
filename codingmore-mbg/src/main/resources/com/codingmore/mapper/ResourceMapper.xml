@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.ResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.Resource">
+        <id column="resource_id" property="resourceId" />
+        <result column="category_id" property="categoryId" />
+        <result column="create_time" property="createTime" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        resource_id, category_id, create_time, name, url, description
+    </sql>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codingmore.mapper.AdminRoleRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.codingmore.model.AdminRoleRelation">
+        <id column="admin_role_relation_id" property="adminRoleRelationId" />
+        <result column="users_id" property="usersId" />
+        <result column="role_id" property="roleId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        admin_role_relation_id, users_id, role_id
+    </sql>
+
+</mapper>

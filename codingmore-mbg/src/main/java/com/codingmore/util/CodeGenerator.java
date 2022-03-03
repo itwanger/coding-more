@@ -45,8 +45,8 @@ public class CodeGenerator {
 // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setAuthor("沉默王二");
+        gc.setOutputDir("d:/test" + "/src/main/java");
+        gc.setAuthor("石磊");
         gc.setOpen(false);
         gc.setDateType(DateType.ONLY_DATE);
         gc.setSwagger2(true);
@@ -71,6 +71,7 @@ public class CodeGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.codingmore");
         mpg.setPackageInfo(pc);
+        pc.setEntity("model");
 
         // 策略配置，去掉就是生成全部，留下就是生成专属表的
         StrategyConfig strategy = new StrategyConfig();
@@ -78,14 +79,8 @@ public class CodeGenerator {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 //        strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
         strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(true);
-        // 公共父类
-//        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
-        // 写于父类中的公共字段
-//        strategy.setSuperEntityColumns("id");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
         mpg.setStrategy(strategy);
 
         mpg.execute();
