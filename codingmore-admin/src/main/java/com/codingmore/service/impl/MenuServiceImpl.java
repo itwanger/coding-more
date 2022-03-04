@@ -19,38 +19,12 @@ import java.util.List;
  */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
-    @Override
-    public int create(Menu menu) {
-        return 0;
-    }
 
-    @Override
-    public int update(Long id, Menu menu) {
-        return 0;
-    }
-
-    @Override
-    public Menu getItem(Long id) {
-        return null;
-    }
-
-    @Override
-    public int delete(Long id) {
-        return 0;
-    }
-
-    @Override
-    public List<Menu> list(Long parentId, Integer pageSize, Integer pageNum) {
-        return null;
-    }
 
     @Override
     public List<MenuNode> treeList() {
         return null;
     }
 
-    @Override
-    public int updateHidden(Long id, Integer hidden) {
-        return 0;
-    }
+
 }
