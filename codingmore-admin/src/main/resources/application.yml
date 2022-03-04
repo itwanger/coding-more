@@ -70,3 +70,11 @@ aliyun:
       # 上传文件夹路径前缀
     dir:
       prefix: codingmore/images/
+
+redis:
+  database: mall
+  key:
+    admin: 'codingmore:users'
+    resourceList: 'codingmore:resourceList'
+  expire:
+    common: 86400 # 24小时
