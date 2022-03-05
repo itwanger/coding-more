@@ -21,7 +21,7 @@
             #{item.roleId,jdbcType=BIGINT})
         </foreach>
     </insert>
-    <select id="getRoleList" resultMap="com.codingmore.model.Role">
+    <select id="getRoleList"  resultType="com.codingmore.model.Role">
         select r.*
         from admin_role_relation ar left join role r on ar.role_id = r.id
         where ar.admin_id = #{usersId}

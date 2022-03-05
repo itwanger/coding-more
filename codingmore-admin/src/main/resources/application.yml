@@ -78,3 +78,17 @@ redis:
     resourceList: 'codingmore:resourceList'
   expire:
     common: 86400 # 24小时
+
+#异步线程配置
+async:
+  executor:
+    #设置核心线程数
+    corePoolSize: 10
+    #设置最大线程数
+    maxPoolSize: 100
+    #设置队列容量
+    queueCapacity: 500
+    #设置线程活跃时间（秒）
+    keepAliveSeconds: 360
+    #设置默认线程名称
+    threadNamePrefix: sync-thread-
