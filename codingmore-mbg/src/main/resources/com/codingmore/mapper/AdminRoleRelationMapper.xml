@@ -17,7 +17,7 @@
     <insert id="insertList">
         INSERT INTO admin_role_relation (users_id, role_id) VALUES
         <foreach collection="list" separator="," item="item" index="index">
-            (#{item.users_id,jdbcType=BIGINT},
+            (#{item.usersId,jdbcType=BIGINT},
             #{item.roleId,jdbcType=BIGINT})
         </foreach>
     </insert>
