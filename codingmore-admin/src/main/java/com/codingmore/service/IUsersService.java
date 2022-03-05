@@ -1,9 +1,14 @@
 package com.codingmore.service;
 
+import com.codingmore.model.Resource;
+import com.codingmore.model.Role;
 import com.codingmore.model.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codingmore.dto.UpdateAdminPasswordParam;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -61,6 +66,17 @@ public interface IUsersService extends IService<Users> {
     Long getCurrentUserId();
 
 
+    List<Resource> getResourceList(Long adminId);
 
+    /**
+     * 获取用户对于角色
+     */
+    List<Role> getRoleList(Long adminId);
+
+    /**
+     * 修改用户角色关系
+     */
+    @Transactional
+    int updateRole(Long adminId, List<Long> roleIds);
 
 }

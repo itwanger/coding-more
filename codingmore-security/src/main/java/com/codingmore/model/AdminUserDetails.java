@@ -17,8 +17,8 @@ public class AdminUserDetails implements UserDetails {
     //后台用户
     private Users users;
     //拥有资源列表
-    private List<AdminResource> resourceList;
-    public AdminUserDetails(Users users,List<AdminResource> resourceList) {
+    private List<Resource> resourceList;
+    public AdminUserDetails(Users users,List<Resource> resourceList) {
         this.users = users;
         this.resourceList = resourceList;
     }
@@ -27,7 +27,7 @@ public class AdminUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的角色
         return resourceList.stream()
-                .map(role ->new SimpleGrantedAuthority(role.getId()+":"+role.getName()))
+                .map(role ->new SimpleGrantedAuthority(role.getResourceId()+":"+role.getName()))
                 .collect(Collectors.toList());
     }
 

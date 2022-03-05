@@ -18,10 +18,7 @@ import java.util.List;
  */
 public interface IRoleService extends IService<Role> {
 
-    /**
-     * 分页获取角色列表
-     */
-    List<Role> queryList(String keyword, Integer pageSize, Integer pageNum);
+   
 
     /**
      * 根据管理员ID获取对应菜单
@@ -50,10 +47,5 @@ public interface IRoleService extends IService<Role> {
     @Transactional
     int allocResource(Long roleId, List<Long> resourceIds);
 
-    /**
-     * 根据角色名称获取角色id
-     * @param roleName
-     * @return
-     */
-    Role getByName(String roleName);
+  
 }

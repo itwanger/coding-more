@@ -1,13 +1,17 @@
 package com.codingmore.controller;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.UpdateAdminPasswordParam;
 import com.codingmore.dto.UsersLoginParam;
 import com.codingmore.dto.UsersParam;
+import com.codingmore.dto.UsersParamUpdate;
 import com.codingmore.model.AdminUserDetails;
+import com.codingmore.model.Role;
 import com.codingmore.model.Users;
+import com.codingmore.service.IRoleService;
 import com.codingmore.service.IUsersService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
@@ -22,12 +26,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -47,6 +55,8 @@ public class UsersController {
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Autowired
+    private IRoleService roleService;
 
     @RequestMapping(value = "/getById",method=RequestMethod.GET)
     @ResponseBody
@@ -58,15 +68,17 @@ public class UsersController {
         return ResultObject.success(users);
     }
 
-   /* @RequestMapping(value = "/update",method=RequestMethod.POST)
+    @RequestMapping(value = "/update",method=RequestMethod.POST)
     @ResponseBody
     @ApiOperation("更新")
-    public ResultObject<String> update(@Valid Users users) {
-        if (users.getId() == null) {
+    public ResultObject<String> update(@Validated UsersParamUpdate usersParam) {
+        if (usersParam.getId() == null) {
             return ResultObject.failed("id不能为空");
         }
+        Users users = new Users();
+        BeanUtils.copyProperties(usersParam,users);
         return ResultObject.success(usersService.updateById(users) ? "更新成功" : "更新失败");
-    }*/
+    }
 
     @RequestMapping(value = "/delete",method=RequestMethod.GET)
     @ResponseBody
@@ -92,6 +104,7 @@ public class UsersController {
     @ResponseBody
     public ResultObject<String> register(@Validated UsersParam users) {
         Users userDto = new Users();
+        userDto.setUserRegistered(new Date());
         BeanUtils.copyProperties(users,userDto);
         return ResultObject.success(usersService.register(userDto) ? "保存成功" : "保存失败");
     }
@@ -141,13 +154,13 @@ public class UsersController {
         users.setUserPass(null);
         data.put("userDetail", adminUserDetails.getUsers());
         data.put("username", users.getUserLogin());
-      /*  data.put("menus", roleService.getMenuList(umsAdmin.getId()));
-        data.put("icon", umsAdmin.getIcon());
-        List<UmsRole> roleList = usersService.getRoleList(umsAdmin.getId());
+        data.put("menus", roleService.getMenuList(users.getId()));
+        data.put("icon", users.getDisplayName());
+        List<Role> roleList = usersService.getRoleList(users.getId());
         if(CollUtil.isNotEmpty(roleList)){
-            List<String> roles = roleList.stream().map(UmsRole::getName).collect(Collectors.toList());
+            List<String> roles = roleList.stream().map(Role::getName).collect(Collectors.toList());
             data.put("roles",roles);
-        }*/
+        }
         return ResultObject.success(data);
     }
 
@@ -174,6 +187,23 @@ public class UsersController {
         } else {
             return ResultObject.failed();
         }
+    }
+
+    @ApiOperation("获取指定用户的角色")
+    @RequestMapping(value = "/role", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultObject<List<Role>> getRoleList(@RequestParam Long adminId) {
+        List<Role> roleList = usersService.getRoleList(adminId);
+        return ResultObject.success(roleList);
+    }
+
+    @ApiOperation("给用户分配角色")
+    @RequestMapping(value = "/role/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultObject<String> updateRole(@RequestParam("userId") Long userId,
+                                   @RequestParam("roleIds") List<Long> roleIds) {
+        int count = usersService.updateRole(userId, roleIds);
+        return ResultObject.success(count>0?"更新成功":"更新失败");
     }
     
 }

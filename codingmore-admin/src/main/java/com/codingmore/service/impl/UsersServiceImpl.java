@@ -2,13 +2,13 @@ package com.codingmore.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.codingmore.model.AdminUserDetails;
+import com.codingmore.mapper.AdminRoleRelationMapper;
+import com.codingmore.model.*;
 import com.codingmore.exception.Asserts;
-import com.codingmore.model.AdminResource;
-import com.codingmore.model.Users;
 import com.codingmore.mapper.UsersMapper;
 import com.codingmore.service.IUsersService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.codingmore.service.UsersCacheService;
 import com.codingmore.state.UserStatus;
 import com.codingmore.state.UserType;
 import com.codingmore.util.JwtTokenUtil;
@@ -26,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,10 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UsersCacheService usersCacheService;
+    @Autowired
+    private AdminRoleRelationMapper adminRoleRelationMapper;
 
     /**
      * 实际查询数据库
@@ -146,7 +151,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
         user.setUserPass(passwordEncoder.encode(updatePasswordParam.getNewPassword()));
         baseMapper.updateById(user);
-//        adminCacheService.delAdmin(umsAdmin.getId());
+        usersCacheService.delAdmin(user.getId());
         return 1;
     }
 
@@ -157,24 +162,55 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public UserDetails loadUserByUsername(String username) {
         // 根据用户名查询用户
         Users admin = getAdminByUsername(username);
-        // TODO 查询用户资源
-        List<AdminResource> resourceList = new ArrayList<>();
-        // 自定义用户详情+资源
-        return new AdminUserDetails(admin, resourceList);
+        if (admin != null) {
+            List<Resource> resourceList = getResourceList(admin.getId());
+            return new AdminUserDetails(admin,resourceList);
+        }
+        throw new UsernameNotFoundException("用户名或密码错误");
+
     }
 
-  /*  @Override
-    public List<UmsResource> getResourceList(Long adminId) {
-        List<UmsResource> resourceList = adminCacheService.getResourceList(adminId);
+    @Override
+    public List<Resource> getResourceList(Long adminId) {
+        List<Resource> resourceList = usersCacheService.getResourceList(adminId);
         if(CollUtil.isNotEmpty(resourceList)){
             return  resourceList;
         }
-        resourceList = adminRoleRelationDao.getResourceList(adminId);
+        resourceList = adminRoleRelationMapper.getResourceList(adminId);
         if(CollUtil.isNotEmpty(resourceList)){
-            adminCacheService.setResourceList(adminId,resourceList);
+            usersCacheService.setResourceList(adminId,resourceList);
         }
         return resourceList;
-    }*/
+    }
+
+    @Override
+    public List<Role> getRoleList(Long adminId) {
+        return adminRoleRelationMapper.getRoleList(adminId);
+    }
+
+    @Override
+    public int updateRole(Long adminId, List<Long> roleIds) {
+        int count = roleIds == null ? 0 : roleIds.size();
+        //先删除原来的关系
+
+        QueryWrapper< AdminRoleRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("users_id",adminId);
+        adminRoleRelationMapper.delete(queryWrapper);
+
+        //建立新关系
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            List<AdminRoleRelation> list = new ArrayList<>();
+            for (Long roleId : roleIds) {
+                AdminRoleRelation roleRelation = new AdminRoleRelation();
+                roleRelation.setUsersId(adminId);
+                roleRelation.setRoleId(roleId);
+                list.add(roleRelation);
+            }
+            adminRoleRelationMapper.insertList(list);
+        }
+        usersCacheService.delResourceList(adminId);
+        return count;
+    }
 
     @Override
     public Users getCurrentLoginUser() {
@@ -188,4 +224,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public Long getCurrentUserId() {
         return getCurrentLoginUser().getId();
     }
+
+
+
 }

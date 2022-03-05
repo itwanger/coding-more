@@ -1,11 +1,14 @@
 package com.codingmore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.codingmore.mapper.RoleMenuRelationMapper;
 import com.codingmore.mapper.RoleResourceRelationMapper;
 import com.codingmore.model.Menu;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Role;
 import com.codingmore.mapper.RoleMapper;
+import com.codingmore.model.RoleMenuRelation;
+import com.codingmore.model.RoleResourceRelation;
 import com.codingmore.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.service.UsersCacheService;
@@ -39,38 +42,56 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 
 
-    @Override
-    public List<Role> queryList(String keyword, Integer pageSize, Integer pageNum) {
-        return null;
-    }
 
     @Override
     public List<Menu> getMenuList(Long userId) {
-        return null;
+        return roleMapper.getMenuList(userId);
     }
 
     @Override
     public List<Menu> listMenu(Long roleId) {
-        return null;
+        return roleMapper.getMenuListByRoleId(roleId);
     }
 
     @Override
     public List<Resource> listResource(Long roleId) {
-        return null;
+        return roleMapper.getResourceListByRoleId(roleId);
     }
 
     @Override
     public int allocMenu(Long roleId, List<Long> menuIds) {
-        return 0;
+        //先删除原有关系
+        QueryWrapper<RoleMenuRelation> queryWrapper = new QueryWrapper<RoleMenuRelation>();
+        queryWrapper.eq("role_id",roleId);
+        roleMenuRelationMapper.delete(queryWrapper);
+
+        //批量插入新关系
+        for (Long menuId : menuIds) {
+            RoleMenuRelation relation = new RoleMenuRelation();
+            relation.setRoleId(roleId);
+            relation.setMenuId(menuId);
+            roleMenuRelationMapper.insert(relation);
+        }
+
+        return menuIds.size();
     }
 
     @Override
     public int allocResource(Long roleId, List<Long> resourceIds) {
-        return 0;
+           //先删除原有关系
+           QueryWrapper<RoleResourceRelation> queryWrapper = new QueryWrapper<RoleResourceRelation>();
+           queryWrapper.eq("role_id",roleId);
+           roleResourceRelationMapper.delete(queryWrapper);
+           //批量插入新关系
+           for (Long resourceId : resourceIds) {
+               RoleResourceRelation relation = new RoleResourceRelation();
+               relation.setRoleId(roleId);
+               relation.setResourceId(resourceId);
+               roleResourceRelationMapper.insert(relation);
+           }
+           usersCacheService.delResourceListByRole(roleId);
+           return resourceIds.size();
     }
 
-    @Override
-    public Role getByName(String roleName) {
-        return null;
-    }
+   
 }

@@ -13,12 +13,12 @@ public interface UsersCacheService {
     /**
      * 删除后台用户缓存
      */
-    void delAdmin(Long adminId);
+    void delAdmin(Long usersId);
 
     /**
      * 删除后台用户资源列表缓存
      */
-    void delResourceList(Long adminId);
+    void delResourceList(Long usersId);
 
     /**
      * 当角色相关资源信息改变时删除相关后台用户缓存
