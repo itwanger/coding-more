@@ -218,8 +218,19 @@ div {
   overflow: hidden;
 }
 
+.keep-4row {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
 .noshow {
   display: none;
+}
+
+.clear{
+  clear: both;
 }
 
 /* PC、手机共用样式结束 */
