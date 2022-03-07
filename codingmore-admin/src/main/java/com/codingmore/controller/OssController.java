@@ -35,10 +35,8 @@ public class OssController {
     @RequestMapping(value = "/upload",method=RequestMethod.POST)
     @ResponseBody
     @ApiOperation("上传")
-    public ResultObject<String> upload(@RequestParam("file") MultipartFile file, HttpServletRequest req) throws IOException {
-        return ResultObject.success(ossService.upload(file.getInputStream(), file.getOriginalFilename()));
+    public ResultObject<String> upload(@RequestParam("file") MultipartFile file, HttpServletRequest req)  {
+        return ResultObject.success(ossService.upload(file));
     }
-
-
 }
 
