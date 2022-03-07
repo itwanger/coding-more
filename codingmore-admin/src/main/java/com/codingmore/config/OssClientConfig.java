@@ -20,6 +20,6 @@ public class OssClientConfig {
 
     @Bean
     public OSSClient createOssClient() {
-        return (OSSClient)new  OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        return (OSSClient)new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 }
