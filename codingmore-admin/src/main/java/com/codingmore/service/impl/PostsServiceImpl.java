@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +54,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private ThreadPoolTaskExecutor ossUploadImageExecutor;
     @Autowired
     private IOssService iOssService;
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
     private static Logger LOGGER = LoggerFactory.getLogger(PostsServiceImpl.class);
 
     @Override
@@ -60,19 +64,31 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public boolean savePosts(PostsParam postsParam) {
         Posts posts = new Posts();
         BeanUtils.copyProperties(postsParam, posts);
-        try {
-            handleAttribute(postsParam, posts);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+
+        // 处理扩展字段
+        handleAttribute(postsParam, posts);
+
+        // TODO 评论数
         posts.setCommentCount(0L);
+
+        // TODO 定时发布
         if (posts.getPostDate() == null) {
             posts.setPostDate(new Date());
         }
+
+        // 当然登录用户
         posts.setPostAuthor(iUsersService.getCurrentUserId());
+
+        // 对图片进行转链
         handleContentImg(posts);
-        this.save(posts);
-        this.insertorUpdateTag(postsParam, posts);
+
+        // 保存文章
+        save(posts);
+
+        // 处理标签
+        insertorUpdateTag(postsParam, posts);
+
+        // 处理栏目
         insertTermRelationships(postsParam, posts);
         return true;
 
@@ -116,11 +132,8 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         Posts posts = this.getById(postsParam.getPostsId());
         Date publishDate = posts.getPostDate();
         BeanUtils.copyProperties(postsParam, posts);
-        try {
-            handleAttribute(postsParam, posts);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+
+        handleAttribute(postsParam, posts);
         // 防止修改发布时间
         posts.setPostDate(publishDate);
         posts.setPostModified(new Date());
@@ -150,7 +163,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public PostsVo getPostsById(Long id) {
         Posts posts = this.getById(id);
         PostsVo postsVo = new PostsVo();
-        if(posts == null){
+        if (posts == null) {
             return postsVo;
         }
         BeanUtils.copyProperties(posts, postsVo);
@@ -168,9 +181,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
             tagQuery.in("post_tag_id", tagIds);
             List<PostTag> postTags = iPostTagService.list(tagQuery);
-            postsVo.setTagsName( StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
         }
-        
+
         Users users = iUsersService.getById(posts.getPostAuthor());
         postsVo.setUserNiceName(users.getUserNicename());
         return postsVo;
@@ -182,14 +195,14 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }
-        if(postsPageQueryParam.getOrderBy()!=null){
-            queryWrapper.orderBy(true,postsPageQueryParam.isAsc(),postsPageQueryParam.getOrderBy());
+        if (postsPageQueryParam.getOrderBy() != null) {
+            queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), postsPageQueryParam.getOrderBy());
         }
-        if(StringUtils.isNotEmpty(postsPageQueryParam.getPostTitleKeyword())){
-            queryWrapper.like("post_title","%"+postsPageQueryParam.getPostTitleKeyword()+"%");
+        if (StringUtils.isNotEmpty(postsPageQueryParam.getPostTitleKeyword())) {
+            queryWrapper.like("post_title", "%" + postsPageQueryParam.getPostTitleKeyword() + "%");
         }
-        if(StringUtils.isNotEmpty(postsPageQueryParam.getPostStatus())){
-            queryWrapper.eq("post_status",postsPageQueryParam.getPostStatus());
+        if (StringUtils.isNotEmpty(postsPageQueryParam.getPostStatus())) {
+            queryWrapper.eq("post_status", postsPageQueryParam.getPostStatus());
         }
 
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
@@ -198,7 +211,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts) {
-        if(postsParam.getTermTaxonomyId()==null){
+        if (postsParam.getTermTaxonomyId() == null) {
             return false;
         }
         TermRelationships termRelationships = new TermRelationships();
@@ -212,62 +225,76 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     /**
      * 处理扩展字段
      */
-    private void handleAttribute(PostsParam postsParam, Posts posts) throws JsonProcessingException {
+    private void handleAttribute(PostsParam postsParam, Posts posts) {
         if (StringUtils.isNotBlank(postsParam.getAttribute())) {
-            Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
-            posts.setAttribute(attribute);
+            try {
+                Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
+                posts.setAttribute(attribute);
+            } catch (JsonProcessingException e) {
+                LOGGER.error("扩展字段处理出错：{}", e.getMessage());
+            }
+
         }
     }
 
     /**
-     * 替换图片
+     * 对外链图片进行转链
+     *
      * @param posts
      */
-    private void handleContentImg( Posts posts) {
+    private void handleContentImg(Posts posts) {
         String content = posts.getPostContent();
         String htmlContent = posts.getHtmlContent();
-        if(StringUtils.isBlank(content)){
+
+        // 没有内容不处理
+        if (StringUtils.isBlank(content)) {
             return;
         }
-        
-        // System.out.println(content);
-        String pattern = "!\\[[^\\]]+\\]\\([^)]+\\)";
 
-        // StringBuffer operatorStr=new StringBuffer(content);
+        // 匹配图片的 markdown 语法 ![xx](hhhx.png?ax)
+        // ![](hhhx.png)
+        String pattern = "\\!\\[\\]\\((.*)\\)";
         Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(content);
 
         Map<String, Future<String>> map = new HashMap<>();
-        // List<String> image
+
         while (m.find()) {
-            // 使用分组进行替换
-            LOGGER.info("{}", m.group());
             String imageTag = m.group();
+            LOGGER.info("使用分组进行替换{}", imageTag);
+
             String imageUrl = imageTag.substring(imageTag.indexOf("(") + 1, imageTag.indexOf(")"));
-            if(imageUrl.indexOf(iOssService.getEndPoint())>=0){
+
+            // 确认是本站链接，不处理
+            if (imageUrl.indexOf(iOssService.getEndPoint()) != -1) {
                 continue;
             }
+
+            // 通过线程池将图片上传到 OSS
             Future<String> future = ossUploadImageExecutor.submit(() -> {
                 return iOssService.upload(imageUrl);
             });
             map.put(imageUrl, future);
         }
-        try {
             for (String oldUrl : map.keySet()) {
                 Future<String> future = map.get(oldUrl);
-                String imageUrl = future.get(); // 获取返回结果 不阻塞
+                String imageUrl = null; // 获取返回结果 不阻塞
+
+                try {
+                    imageUrl = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    LOGGER.error("获取图片链接出错{}", e.getMessage());
+                }
+
                 content = content.replace(oldUrl, imageUrl);
-                if(StringUtils.isBlank(htmlContent)){
-                    htmlContent= htmlContent.replace(oldUrl, imageUrl);
+
+                if (StringUtils.isNotBlank(htmlContent)) {
+                    htmlContent = htmlContent.replace(oldUrl, imageUrl);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("{}", e);
-        }
         posts.setPostContent(content);
         posts.setHtmlContent(htmlContent);
     }
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+
 }
