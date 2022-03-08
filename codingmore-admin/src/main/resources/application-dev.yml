@@ -55,13 +55,12 @@ spring:
     port: 6379 # Redis服务器连接端口
     password: learnsuccess # Redis服务器连接密码（默认为空）
     timeout: 5000ms # 连接超时时间（毫秒）
-    lettuce:
+    jedis:
       pool:
         max-active: 1000
         min-idle: 2
         max-idle: 3
         max-wait: 3000
-      shutdown-timeout: 1000
 
 
 

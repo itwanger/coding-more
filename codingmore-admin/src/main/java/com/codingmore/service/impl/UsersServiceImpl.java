@@ -6,14 +6,13 @@ import com.codingmore.mapper.AdminRoleRelationMapper;
 import com.codingmore.model.*;
 import com.codingmore.exception.Asserts;
 import com.codingmore.mapper.UsersMapper;
+import com.codingmore.service.IUsersCacheService;
 import com.codingmore.service.IUsersService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.codingmore.service.UsersCacheService;
 import com.codingmore.state.UserStatus;
 import com.codingmore.state.UserType;
 import com.codingmore.util.JwtTokenUtil;
 import com.codingmore.dto.UpdateAdminPasswordParam;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    private UsersCacheService usersCacheService;
+    private IUsersCacheService usersCacheService;
     @Autowired
     private AdminRoleRelationMapper adminRoleRelationMapper;
 

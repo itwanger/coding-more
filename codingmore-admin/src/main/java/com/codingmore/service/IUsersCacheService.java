@@ -2,16 +2,17 @@ package com.codingmore.service;
 
 import java.util.List;
 
+import com.codingmore.model.Resource;
 import com.codingmore.model.Users;
 
 /**
  * 用户缓存
  */
 public interface IUsersCacheService {
-     /**
+    /**
      * 删除后台用户缓存
      */
-    void delUsers(Long usersId);
+    void delAdmin(Long usersId);
 
     /**
      * 删除后台用户资源列表缓存
@@ -46,10 +47,10 @@ public interface IUsersCacheService {
     /**
      * 获取缓存后台用户资源列表
      */
-    // List<UmsResource> getResourceList(Long usersId);
+    List<Resource> getResourceList(Long usersId);
 
     /**
      * 设置后台后台用户资源列表
      */
-    // void setResourceList(Long usersId, List<UmsResource> resourceList);
+    void setResourceList(Long adminId, List<Resource> resourceList);
 }

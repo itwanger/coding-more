@@ -11,7 +11,7 @@ import com.codingmore.model.RoleMenuRelation;
 import com.codingmore.model.RoleResourceRelation;
 import com.codingmore.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.codingmore.service.UsersCacheService;
+import com.codingmore.service.IUsersCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     private RoleResourceRelationMapper roleResourceRelationMapper;
 
     @Autowired
-    private UsersCacheService usersCacheService;
+    private IUsersCacheService usersCacheService;
     
 
 

@@ -5,12 +5,11 @@ import com.codingmore.mapper.AdminRoleRelationMapper;
 import com.codingmore.model.AdminRoleRelation;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Users;
+import com.codingmore.service.IUsersCacheService;
 import com.codingmore.service.IUsersService;
 import com.codingmore.service.RedisService;
-import com.codingmore.service.UsersCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.stereotype.Service;
 
 import cn.hutool.core.collection.CollUtil;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsersCacheServiceImpl implements UsersCacheService {
+public class UsersCacheServiceImpl implements IUsersCacheService {
     @Autowired
     private IUsersService usersService;
     @Autowired
