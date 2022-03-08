@@ -1,6 +1,5 @@
 package com.codingmore.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -54,6 +53,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private ThreadPoolTaskExecutor ossUploadImageExecutor;
     @Autowired
     private IOssService iOssService;
+
+    // 匹配图片的 markdown 语法
+    // ![](hhhx.png)
+    // ![xx](hhhx.png?ax)
+    public static final String IMG_PATTERN = "\\!\\[.*\\]\\((.*)\\)";
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -251,10 +255,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             return;
         }
 
-        // 匹配图片的 markdown 语法 ![xx](hhhx.png?ax)
-        // ![](hhhx.png)
-        String pattern = "\\!\\[\\]\\((.*)\\)";
-        Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(content);
 
         Map<String, Future<String>> map = new HashMap<>();
@@ -276,25 +277,21 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             });
             map.put(imageUrl, future);
         }
-            for (String oldUrl : map.keySet()) {
-                Future<String> future = map.get(oldUrl);
-                String imageUrl = null; // 获取返回结果 不阻塞
+        for (String oldUrl : map.keySet()) {
+            Future<String> future = map.get(oldUrl);
 
-                try {
-                    imageUrl = future.get();
-                } catch (InterruptedException | ExecutionException e) {
-                    LOGGER.error("获取图片链接出错{}", e.getMessage());
-                }
-
+            try {
+                String imageUrl = future.get();
                 content = content.replace(oldUrl, imageUrl);
 
                 if (StringUtils.isNotBlank(htmlContent)) {
                     htmlContent = htmlContent.replace(oldUrl, imageUrl);
                 }
+            } catch (InterruptedException | ExecutionException e) {
+                LOGGER.error("获取图片链接出错{}", e.getMessage());
             }
+        }
         posts.setPostContent(content);
         posts.setHtmlContent(htmlContent);
     }
-
-
 }

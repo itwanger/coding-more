@@ -38,17 +38,18 @@ public class OssServiceImpl implements IOssService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
+    /**
+     * 根据图片链接将其上传到 OSS
+      * @param url
+     * @return
+     */
     @Override
     public String upload(String url) {
-        // 填写Object完整路径，例如exampledir/exampleobject.txt。Object完整路径中不能包含Bucket名称。
         String objectName = getFileName(url);
         try (InputStream inputStream = new URL(url).openStream()) {
-            // 创建PutObject请求。
             ossClient.putObject(bucketName, objectName, inputStream);
-        } catch (MalformedURLException e) {
-            LOGGER.error(e.getMessage());
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("根据外链上传图片到 OSS 出错了：", e.getMessage());
         }
         return formatOSSPath(objectName);
     }
