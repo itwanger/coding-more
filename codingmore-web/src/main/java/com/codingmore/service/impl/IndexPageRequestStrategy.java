@@ -35,6 +35,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
 
     @Override
     public String handleRequest(WebRequestParam webRequestParam) {
+        postsService.increasePageView(1L,webRequestParam.getRequest());
         List<Site> siteList = siteService.list();
         //处理站点配置
         if(siteList.size() > 0) {
