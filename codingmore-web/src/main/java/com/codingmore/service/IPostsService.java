@@ -2,6 +2,8 @@ package com.codingmore.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.model.Posts;
@@ -25,4 +27,7 @@ public interface IPostsService extends IService<Posts> {
     List<Posts> listByTermTaxonomyId(Long termTaxonomyId);
 
     PostsVo getPostsById(Long id);
+
+    void increasePageView(Long id, HttpServletRequest  request);
+
 }

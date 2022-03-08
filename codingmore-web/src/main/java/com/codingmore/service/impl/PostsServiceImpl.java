@@ -7,6 +7,7 @@ import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
+import com.codingmore.util.CusAccessObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.vo.PostsVo;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -35,7 +38,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private IPostTagService iPostTagService;
     @Autowired
     private IPostTagRelationService iPostTagRelationService;
-
+    @Autowired
+    private RedisService redisService;
+    private static final String PAGE_VIEW_KEY = "pageView";
   
 
     @Override
@@ -89,6 +94,12 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         return new ArrayList<Posts>();
     }
 
-  
+    @Override
+    public void increasePageView(Long id, HttpServletRequest  request) {
+        String ip = CusAccessObjectUtil.getIpAddress(request);
+        String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
+        redisService.incr(key, 1);
+        
+    }
 
 }
