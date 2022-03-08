@@ -104,9 +104,14 @@
 
 /* 移动端样式 */
 @media screen and (max-width: 750px) {
+  body{
+    background-color: #fff;
+  }
+  
   .article-main{
     margin: 0 auto;
     width: 96vw;
+    
   }
 
   /* 封面图样式 */
@@ -116,7 +121,8 @@
   }
 
   .article-area{
-    margin-top: 6vw;
+    margin-top: 3vw;
+    
     /* min-height: 100%; */
   }
 
