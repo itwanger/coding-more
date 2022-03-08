@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
  * @since 2021-05-22
  */
 @Controller
-@Api(tags="用户")
+@Api(tags = "用户")
 @RequestMapping("/users")
 public class UsersController {
     @Autowired
@@ -58,7 +58,7 @@ public class UsersController {
     @Autowired
     private IRoleService roleService;
 
-    @RequestMapping(value = "/getById",method=RequestMethod.GET)
+    @RequestMapping(value = "/getById", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("根据id获取用户")
     public ResultObject<Users> getById(long usersId) {
@@ -68,7 +68,7 @@ public class UsersController {
         return ResultObject.success(users);
     }
 
-    @RequestMapping(value = "/update",method=RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Validated UsersParamUpdate usersParam) {
@@ -76,26 +76,26 @@ public class UsersController {
             return ResultObject.failed("id不能为空");
         }
         Users users = new Users();
-        BeanUtils.copyProperties(usersParam,users);
+        BeanUtils.copyProperties(usersParam, users);
         return ResultObject.success(usersService.updateById(users) ? "更新成功" : "更新失败");
     }
 
-    @RequestMapping(value = "/delete",method=RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(long usersId) {
         return ResultObject.success(usersService.removeById(usersId) ? "删除成功" : "删除失败");
     }
 
-    @RequestMapping(value = "/queryPageable",method=RequestMethod.GET)
+    @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page){
-        Map<String,Object> map = new HashMap<>();
-        Page<Users> usersPage = new Page<>(page,pageSize);
+    public ResultObject<Map<String, Object>> queryPageable(long pageSize, long page) {
+        Map<String, Object> map = new HashMap<>();
+        Page<Users> usersPage = new Page<>(page, pageSize);
         IPage<Users> usersIPage = usersService.page(usersPage);
-        map.put("items",usersIPage.getRecords());
-        map.put("total",usersIPage.getTotal());
+        map.put("items", usersIPage.getRecords());
+        map.put("total", usersIPage.getTotal());
         return ResultObject.success(map);
     }
 
@@ -105,7 +105,7 @@ public class UsersController {
     public ResultObject<String> register(@Validated UsersParam users) {
         Users userDto = new Users();
         userDto.setUserRegistered(new Date());
-        BeanUtils.copyProperties(users,userDto);
+        BeanUtils.copyProperties(users, userDto);
         return ResultObject.success(usersService.register(userDto) ? "保存成功" : "保存失败");
     }
 
@@ -145,21 +145,26 @@ public class UsersController {
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ResponseBody
     public ResultObject getAdminInfo(Principal principal) {
-        if(principal==null){
+        if (principal == null) {
             return ResultObject.unauthorized(null);
         }
-        AdminUserDetails adminUserDetails = (AdminUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users users = adminUserDetails.getUsers();
+        AdminUserDetails adminUserDetails = (AdminUserDetails) SecurityContextHolder.
+                getContext().getAuthentication().getPrincipal();
+        Users user = adminUserDetails.getUsers();
+        // ？
+        user.setUserPass(null);
+
         Map<String, Object> data = new HashMap<>();
-        users.setUserPass(null);
+
         data.put("userDetail", adminUserDetails.getUsers());
-        data.put("username", users.getUserLogin());
-        data.put("menus", roleService.getMenuList(users.getId()));
-        data.put("icon", users.getDisplayName());
-        List<Role> roleList = usersService.getRoleList(users.getId());
-        if(CollUtil.isNotEmpty(roleList)){
+        data.put("username", user.getUserLogin());
+        data.put("menus", roleService.getMenuList(user.getId()));
+        data.put("icon", user.getDisplayName());
+
+        List<Role> roleList = usersService.getRoleList(user.getId());
+        if (CollUtil.isNotEmpty(roleList)) {
             List<String> roles = roleList.stream().map(Role::getName).collect(Collectors.toList());
-            data.put("roles",roles);
+            data.put("roles", roles);
         }
         return ResultObject.success(data);
     }
@@ -174,7 +179,7 @@ public class UsersController {
     @ApiOperation("修改指定用户密码")
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     @ResponseBody
-    public ResultObject updatePassword( UpdateAdminPasswordParam updatePasswordParam) {
+    public ResultObject updatePassword(UpdateAdminPasswordParam updatePasswordParam) {
         int status = usersService.updatePassword(updatePasswordParam);
         if (status > 0) {
             return ResultObject.success(status);
@@ -201,10 +206,10 @@ public class UsersController {
     @RequestMapping(value = "/role/update", method = RequestMethod.POST)
     @ResponseBody
     public ResultObject<String> updateRole(@RequestParam("userId") Long userId,
-                                   @RequestParam("roleIds") List<Long> roleIds) {
+                                           @RequestParam("roleIds") List<Long> roleIds) {
         int count = usersService.updateRole(userId, roleIds);
-        return ResultObject.success(count>0?"更新成功":"更新失败");
+        return ResultObject.success(count > 0 ? "更新成功" : "更新失败");
     }
-    
+
 }
 

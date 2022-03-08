@@ -102,7 +102,11 @@ public class UsersCacheServiceImpl implements UsersCacheService {
     @Override
     public List<Resource> getResourceList(Long usersId) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + usersId;
-        return (List<Resource>) redisService.get(key);
+        if (redisService.get(key) != null) {
+            return (List<Resource>) redisService.get(key);
+        }
+        return null;
+
     }
 
     @Override
