@@ -1,17 +1,27 @@
 /* PC端样式 */
 @media screen and (min-width: 751px) {
+  .article-main{
+    width: 1140px;
+    display: flex;
+    margin: 0 auto;
+    align-items: stretch;
+    justify-content: space-between;
+  }
+
   .article-area{
-    min-height: 100%;
+    /* min-height: clac(100% - 20px); */
     flex-grow: 1;
-    padding-right: 70px;
-    /* background-color: aqua; */
+    box-sizing: border-box;
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 30px 30px 40px;
   }
 
   .article-area .title{
-    font-size: 64px;
-    font-weight: 300;
+    font-size: 32px;
+    font-weight: 600;
     line-height: 1.2;
-    text-align: justify;
+    text-align: left;
   }
 
   .article-area .last-update-time{
@@ -63,22 +73,30 @@
     text-decoration: none;
   }
 
+  /* 封面图样式 */
+  .cover-pic{
+    max-width: 820px;
+    margin-bottom: 15px;
+  }
+
   /* 广告列 */
   .fiex-ad{
-    width: 250px;
-    min-height: 100%;
+    width: 240px;
+    /* min-height: 100%; */
     flex-shrink: 0;
+    margin-left: 20px;
+    margin-top: 20px;
     /* background-color: blueviolet; */
   }
 
   .fiex-ad a {
     display: block;
     position: sticky;
-    top: 110px;
+    top: 70px;
   }
 
   .fiex-ad img{
-    width: 250px;
+    width: 240px;
   }
 
 }
@@ -86,10 +104,20 @@
 
 /* 移动端样式 */
 @media screen and (max-width: 750px) {
+  .article-main{
+    margin: 0 auto;
+    width: 96vw;
+  }
+
+  /* 封面图样式 */
+  .cover-pic{
+    max-width: 96vw;
+    margin-bottom: 3vw;
+  }
 
   .article-area{
     margin-top: 6vw;
-    min-height: 100%;
+    /* min-height: 100%; */
   }
 
   .article-area img{
@@ -105,15 +133,15 @@
 
   .article-area .last-update-time{
     font-size: 4vw;
-    margin-top: 12vw;
-    margin-bottom: 12vw;
+    margin-top: 6vw;
+    margin-bottom: 6vw;
   }
 
   .article-area .author-and-flags{
     /* display: flex; */
     font-size: 4vw;
     line-height: 2;
-    margin-bottom: 12vw;
+    margin-bottom: 6vw;
   }
 
   .article-area .author-and-flags .author-box{
