@@ -2,11 +2,14 @@ package top;
 
 import cn.hutool.core.io.file.FileReader;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,27 +19,31 @@ import java.util.regex.Pattern;
  * @author 微信搜「沉默王二」，回复关键字 Java
  */
 public class Convert {
-    final static String directory = "szjy/";
-    final static String key = "tupian-zhuanlian";
+
+    final static String directory = "sidebar/sanfene/";
+    final static String key = "javase";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
 
-    final static String fileName = key +".md";
-    final static String pngSuffix = ".png";
-    final static String gifSuffix = ".gif";
-    final static String jpgSuffix = ".jpg";
-    final static String jpegSuffix = ".jpeg";
-    final static String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/" + directory + key + "-";
-    final static Pattern pattern = Pattern.compile("^!\\[](.*)$");
+    final static String fileName = key + ".md";
+    private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
+    private static final String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/";
+    final static String imgCdn = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/" + directory + key + "-";
+    // 匹配图片的 markdown 语法
+    // ![](hhhx.png)
+    // ![xx](hhhx.png?ax)
+    public static final String IMG_PATTERN = "\\!\\[(.*)\\]\\((.*)\\)";
 
     static class MyRunnable implements Runnable {
         private String originImgUrl;
         private String destinationImgPath;
+
         public MyRunnable(String originImgUrl, String destinationImgPath) {
             this.originImgUrl = originImgUrl;
             this.destinationImgPath = destinationImgPath;
         }
+
         @SneakyThrows
         @Override
         public void run() {
@@ -52,53 +59,48 @@ public class Convert {
     }
 
     public static void main(String[] args) throws IOException {
-        FileReader fileReader = FileReader.create(new File(docPath +fileName),
+        FileReader fileReader = FileReader.create(new File(docPath + fileName),
                 Charset.forName("utf-8"));
 
         List<String> list = fileReader.readLines();
-
         FileWriter writer = new FileWriter(docPath + fileName);
+        Pattern pattern = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
+
         int num = 1;
         for (String line : list) {
-            Matcher m = pattern.matcher(line);
-            if (m.matches()) {
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
                 // 处理图片
 
+                if (line.indexOf(imgCdnPre) != -1) {
+                    continue;
+                }
+
                 // png 还是 gif 还是 jpg
-                String imgSuffixTemp = pngSuffix;
-                int index = line.indexOf(pngSuffix);
-
-                if (index == -1) {
-                    index = line.indexOf(gifSuffix);
-                    imgSuffixTemp = gifSuffix;
-                    if  (index == -1) {
-                        index = line.indexOf(jpgSuffix);
-                        imgSuffixTemp = jpgSuffix;
-
-                        if (index == -1) {
-                            index = line.indexOf(jpegSuffix);
-                            imgSuffixTemp = jpegSuffix;
-                        }
+                String ext = "";
+                for (String extItem : imageExtension) {
+                    if (line.indexOf(extItem) != -1) {
+                        ext = extItem;
+                        break;
                     }
                 }
 
-                if (index == -1) {
-                    writer.append(line+"\n");
-                } else {
-                    System.out.println("处理图片" + line);
-                    String originImgUrl = line.substring("![](".length(), index) + imgSuffixTemp;
-                    String destinationImgPath = imgPath + key + "-" + num + imgSuffixTemp;
+                String imageName = matcher.group(1);
+                String imagePath = matcher.group(2);
+                System.out.println("使用分组进行替换名" + imageName + "路径"+ imagePath);
 
-                    // 1、下载到本地
-                    new Thread(new MyRunnable(originImgUrl, destinationImgPath)).start();
+                String destinationImgPath = imgPath + key + "-" + num + ext;
 
-                    // 2、修改 MD 文档
-                    writer.append("![](" + imgCdnPre +  num + imgSuffixTemp +")\n");
-                    num++;
-                }
+                // 1、下载到本地
+                new Thread(new MyRunnable(imagePath, destinationImgPath)).start();
+
+                // 2、修改 MD 文档
+                writer.append("![" +imageName+ "](" + imgCdn + num + ext + ")\n");
+                num++;
+
 
             } else {
-                writer.append(line+"\n");
+                writer.append(line + "\n");
             }
         }
         writer.flush();

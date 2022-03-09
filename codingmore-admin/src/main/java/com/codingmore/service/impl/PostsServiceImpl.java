@@ -57,7 +57,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     // 匹配图片的 markdown 语法
     // ![](hhhx.png)
     // ![xx](hhhx.png?ax)
-    public static final String IMG_PATTERN = "\\!\\[.*\\]\\((.*)\\)";
+    public static final String IMG_PATTERN = "\\!\\[(.*)\\]\\((.*)\\)";
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -261,10 +261,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         Map<String, Future<String>> map = new HashMap<>();
 
         while (m.find()) {
-            String imageTag = m.group();
-            LOGGER.info("使用分组进行替换{}", imageTag);
+            String imageName = m.group(1);
+            String imageUrl = m.group(2);
 
-            String imageUrl = imageTag.substring(imageTag.indexOf("(") + 1, imageTag.indexOf(")"));
+            LOGGER.info("使用分组进行替换图片名字：{}，图片路径：{}", imageName, imageUrl);
 
             // 确认是本站链接，不处理
             if (imageUrl.indexOf(iOssService.getEndPoint()) != -1) {

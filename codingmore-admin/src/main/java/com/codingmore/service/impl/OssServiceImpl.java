@@ -34,7 +34,7 @@ public class OssServiceImpl implements IOssService {
     @Autowired
     private OSSClient ossClient;
 
-    private String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
+    private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
