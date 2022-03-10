@@ -188,6 +188,12 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
             tagQuery.in("post_tag_id", tagIds);
             List<PostTag> postTags = iPostTagService.list(tagQuery);
+            Collections.sort(postTags, new Comparator<PostTag>() {
+                @Override
+                public int compare(PostTag o1, PostTag o2) {
+                    return tagIds.indexOf(o1.getPostTagId())-tagIds.indexOf(o2.getPostTagId());
+                }
+            });
             postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
         }
 
