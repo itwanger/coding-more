@@ -108,6 +108,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         iPostTagRelationService.remove(queryWrapper);
         String[] tags = postsParam.getTags().split(",");
         // TODO: 2021/11/14 先默认 循环添加
+        int order = 0;
         for (String tag : tags) {
             QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
             postTagQueryWrapper.eq("description", tag);
@@ -116,16 +117,17 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 PostTagParam postTagParam = new PostTagParam();
                 postTagParam.setPostId(posts.getPostsId());
                 postTagParam.setDescription(tag);
-                postTagParam.setTermOrder(0);
+                postTagParam.setTermOrder(order);
                 iPostTagService.savePostTag(postTagParam);
 
             } else {
                 PostTagRelation postTagRelation = new PostTagRelation();
                 postTagRelation.setPostTagId(tagList.get(0).getPostTagId());
                 postTagRelation.setPostId(posts.getPostsId());
-                postTagRelation.setTermOrder(0);
+                postTagRelation.setTermOrder(order);
                 iPostTagRelationService.save(postTagRelation);
             }
+            order++;
         }
 
         return true;
@@ -179,6 +181,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         }
         QueryWrapper<PostTagRelation> tagRelationWrapper = new QueryWrapper<>();
         tagRelationWrapper.eq("post_id", posts.getPostsId());
+        tagRelationWrapper.orderBy(true,true,"term_order");
         List<PostTagRelation> postTagRelationList = iPostTagRelationService.list(tagRelationWrapper);
         if (postTagRelationList.size() > 0) {
             List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
