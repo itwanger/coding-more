@@ -60,7 +60,7 @@
   a.tab-link:visited {
     display: inline-block;
     vertical-align: top;
-    color: #909090;
+    color: #3f3f3f;
     text-decoration: none;
   }
 
@@ -68,7 +68,7 @@
   a.tab-link.active,
   a.tab-link.gray:hover,
   a.tab-link.light-gray:hover {
-    color: #2E8041;
+    color: #267438;
   }
 
   .article-title-cellphone{
@@ -80,7 +80,7 @@
   a.article-title:active,
   a.article-title:hover {
     display: block;
-    color: #1d2129;
+    color: #63b175;
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
@@ -103,14 +103,14 @@
     display: inline-block;
     vertical-align: top;
     font-size: 13px;
-    color: #86909c;
+    color: #3f3f3f;
   }
 
   a.tab-link.gray {
     display: inline-block;
     vertical-align: top;
     font-size: 13px;
-    color: #4e5969;
+    color: #267438;
   }
 
   /* 文章图片样式 */
@@ -143,7 +143,7 @@
     display: inline-block;
     vertical-align: middle;
     font-size: 13px;
-    color: #86909c;
+    color: #3f3f3f;
   }
 
   /* 右侧部分样式 */
