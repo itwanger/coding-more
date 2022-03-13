@@ -49,6 +49,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
            
             indexTermTaxonomyPostVo.setPosts(postsService.listByTermTaxonomyId(termTaxonomy.getTermTaxonomyId()));
         });
+        webRequestParam.getRequest().setAttribute(SITE_CONFIG, siteService.list().get(0));
         webRequestParam.getRequest().setAttribute(INDEX_TERM_TAXONOMY_POST_VO, indexTermTaxonomyPostVos);
         return INDEX_PAGE;
     }

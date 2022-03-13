@@ -1,0 +1,394 @@
+/* PC端样式 */
+@media screen and (min-width: 751px) {
+
+  /* 左侧文章列表容器样式 */
+  .article-list-area {
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  /* 文章列表容器样式 */
+  .article-list {
+    padding: 0 20px;
+  }
+
+  /* 每篇文章容器样式 */
+  .article-item {
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid hsla(0, 0%, 59.2%, .1);
+  }
+
+  /* 文章容器鼠标悬停样式 */
+  .article-item:hover {
+    background-color: #FAFAFA;
+  }
+
+  /* 推荐、最新、热榜的文字链接所在容器的样式 */
+  .article-list-head {
+    padding: 15px 20px 15px 30px;
+    font-size: 14px;
+    line-height: 14px;
+    border-bottom: 1px solid hsla(0, 0%, 59.2%, .1);
+  }
+
+  /* 推荐、最新、热榜的文字链接之间的间隔符样式 */
+  span.wide-border,
+  .article-list-head span {
+    display: inline-block;
+    vertical-align: top;
+    width: 1px;
+    height: 14px;
+    background-color: hsla(0, 0%, 59.2%, .2);
+    margin: 0 14px;
+  }
+
+  span.wide-border.small-margin {
+    margin: 0 10px;
+  }
+
+  /* 文章摘要容器样式 */
+  .article-summary {
+    max-width: 516px;
+  }
+
+  /* 推荐、最新、热榜的文字链接样式 */
+  a.tab-link,
+  a.tab-link:active,
+  a.tab-link:visited {
+    display: inline-block;
+    vertical-align: top;
+    color: #3f3f3f;
+    text-decoration: none;
+  }
+
+  a.tab-link:hover,
+  a.tab-link.active,
+  a.tab-link.gray:hover,
+  a.tab-link.light-gray:hover {
+    color: #267438;
+  }
+
+  .article-title-cellphone{
+    display: none;
+  }
+
+  /* 文章标题样式 */
+  a.article-title,
+  a.article-title:active,
+  a.article-title:hover {
+    display: block;
+    color: #63b175;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 12px;
+    text-decoration: none;
+  }
+
+  a.article-title:visited {
+    color: #86909c;
+  }
+
+  /* 文章顶部作者、时间、分类的文字样式 */
+  .article-basic-info {
+    margin-bottom: 12px;
+  }
+
+  span.tab-link.light-gray,
+  p.tab-link.light-gray,
+  a.tab-link.light-gray {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 13px;
+    color: #3f3f3f;
+  }
+
+  a.tab-link.gray {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 13px;
+    color: #267438;
+  }
+
+  /* 文章图片样式 */
+  .article-img {
+    flex: 0 0 auto;
+    width: 120px;
+    height: 80px;
+    margin-left: 24px;
+    object-fit: cover;
+  }
+
+  /* 文章统计信息样式（阅读量、点赞数、评论数） */
+  .article-statistics-info {
+    margin-top: 4px;
+  }
+
+  .article-statistics-info li {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+  }
+
+  .article-statistics-info li img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+  }
+
+  .article-statistics-info li span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+    color: #3f3f3f;
+  }
+
+  /* 右侧部分样式 */
+  .right-side {
+    box-sizing: border-box;
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 240px;
+  }
+
+  /* 右侧容器 */
+  .right-container {
+    top: 70px;
+    position: sticky;
+  }
+
+  /* 右侧整张图片广告样式 */
+  .ad-link img {
+    display: block;
+    width: 240px;
+    height: 200px;
+  }
+
+  .ad-link {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  /* 右侧二维码加标题和说明文字样式 */
+  .qrcode-item {
+    width: 240px;
+    padding: 12px;
+    box-sizing: border-box;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .img-qrcode {
+    width: 50px;
+    height: 50px;
+    margin-right: 16px;
+  }
+
+  .qrcode-headline {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+    color: #1d2129;
+  }
+
+  .qrcode-desc {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #86909c;
+  }
+
+  /* 网站备案信息样式 */
+  .site-info {
+    margin-top: 16px;
+    color: #909090;
+    font-size: 12px;
+    line-height: 19px;
+  }
+
+  .site-info a,
+  .site-info a:active,
+  .site-info a:link,
+  .site-info a:link:visited {
+    color: #909090;
+  }
+
+  .site-info a:hover {
+    color: #2E8041;
+    text-decoration: none;
+  }
+
+  .keep-rows {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* 移动端样式 */
+@media screen and (max-width: 750px) {
+
+  /* 左侧文章列表容器样式 */
+  .article-list-area {
+    background-color: #fff;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    max-width: unset;
+  }
+
+  /* 文章列表容器样式 */
+  .article-list {
+    padding: 0 3vw;
+  }
+
+  /* 每篇文章容器样式 */
+  .article-item {
+    padding: 3vw 0;
+    cursor: pointer;
+    border-bottom: 0.2vw solid hsla(0, 0%, 59.2%, .1);
+  }
+
+  /* 文章容器鼠标悬停样式 */
+  .article-item:hover {
+    background-color: #FAFAFA;
+  }
+
+  /* 推荐、最新、热榜的文字链接所在容器的样式 */
+  .article-list-head {
+    padding: 3vw 4vw 3vw 5vw;
+    font-size: 3.8vw;
+    line-height: 3.8vw;
+    border-bottom: 0.2vw solid hsla(0, 0%, 59.2%, .1);
+  }
+
+  /* 推荐、最新、热榜的文字链接之间的间隔符样式 */
+  span.wide-border,
+  .article-list-head span {
+    display: inline-block;
+    vertical-align: top;
+    width: 0.2vw;
+    height: 3.8vw;
+    background-color: hsla(0, 0%, 59.2%, .2);
+    margin: 0 3.8vw;
+  }
+
+  span.wide-border.small-margin {
+    margin: 0 2.5vw;
+  }
+
+  /* 文章摘要容器样式 */
+  .article-summary {
+    max-width: unset;
+  }
+
+  /* 隐藏PC端缩略图 */
+  .article-img {
+    flex: 0 0 auto;
+    width: 31.5vw;
+    height: 21vw;
+    margin-left: 3vw;
+    object-fit: cover;
+  }
+
+  /* 推荐、最新、热榜的文字链接样式 */
+  a.tab-link,
+  a.tab-link:active,
+  a.tab-link:visited {
+    display: inline-block;
+    vertical-align: top;
+    color: #909090;
+    text-decoration: none;
+  }
+
+  a.tab-link:hover,
+  a.tab-link.active,
+  a.tab-link.gray:hover,
+  a.tab-link.light-gray:hover {
+    color: #2E8041;
+  }
+
+  a.article-title{
+    display: none;
+  }
+
+  /* 文章标题样式 */
+  a.article-title-cellphone,
+  a.article-title-cellphone:active,
+  a.article-title-cellphone:hover {
+    display: block;
+    color: #1d2129;
+    font-weight: 700;
+    font-size: 5vw;
+    line-height: 7.5vw;
+    margin-bottom: 3vw;
+    text-decoration: none;
+  }
+
+  a.article-title-cellphone:visited {
+    color: #86909c;
+  }
+
+  /* 文章顶部作者、时间、分类的文字样式 */
+  .article-basic-info {
+    margin-bottom: 3vw;
+  }
+
+  span.tab-link.light-gray,
+  p.tab-link.light-gray,
+  a.tab-link.light-gray {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 3.5vw;
+    color: #86909c;
+  }
+
+  p.tab-link.light-gray.keep-rows {
+    display: -webkit-box;
+  }
+
+  a.tab-link.gray {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 3.5vw;
+    color: #4e5969;
+  }
+
+  /* 文章统计信息样式（阅读量、点赞数、评论数） */
+  .article-statistics-info {
+    margin-top: 1vw;
+  }
+
+  .article-statistics-info li {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5vw;
+  }
+
+  .article-statistics-info li img {
+    width: 4vw;
+    height: 4vw;
+    vertical-align: middle;
+  }
+
+  .article-statistics-info li span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 3.5vw;
+    color: #86909c;
+  }
+
+  /* 右侧部分样式 */
+  .right-side {
+    display: none;
+  }
+
+  .keep-rows {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+}

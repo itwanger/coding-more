@@ -1,0 +1,107 @@
+/* PC端样式 */
+@media screen and (min-width: 751px) {
+
+  /* 文章模块样式 */
+  .cloumn-item {
+    width: 360px;
+  }
+
+  .cloumn-item .column-img-container {
+    width: 360px;
+  }
+
+  .cloumn-item .column-img-container img {
+    max-width: 360px;
+  }
+
+  .cloumn-item .title {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .cloumn-item .link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-top: 1px solid #dadada;
+  }
+
+  /* 文章标题样式 */
+  .cloumn-item .link-item a.link,
+  .cloumn-item .link-item a.link:active,
+  .cloumn-item .link-item a.link:visited {
+    font-size: 18px;
+    color: #333;
+  }
+  .cloumn-item .link-item a.link.bold{
+    font-weight: bold;
+  }
+  .cloumn-item .link-item a.link.green{
+    color: #63b175;
+  }
+  .cloumn-item .link-item a.link.blue{
+    color: #4976cb;
+  }
+
+  .cloumn-item .link-item a.text:hover {
+    text-decoration: underline;
+  }
+}
+
+/* 移动端样式 */
+@media screen and (max-width: 750px) {
+  /* 文章模块样式 */
+  
+  .cloumn-item{
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+  }
+
+  .cloumn-item,
+  .cloumn-item .column-img-container {
+    width: auto;
+  }
+  
+  .cloumn-item .column-img-container img {
+    width: 100%;
+  }
+
+  .cloumn-item .title {
+    font-size: 6vw;
+    margin-bottom: 2vw;
+    font-weight: bold;
+    /* text-shadow: 0.5px 0.5px #000; */
+  }
+
+  .cloumn-item .link-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 3vw;
+    padding-bottom: 3vw;
+    border-top: 1px solid #dadada;
+  }
+
+  /* 文章标题样式 */
+  .cloumn-item .link-item a.link,
+  .cloumn-item .link-item a.link:active,
+  .cloumn-item .link-item a.link:visited {
+    font-size: 5vw;
+    color: #333;
+  }
+  .cloumn-item .link-item a.link.bold{
+    font-weight: bold;
+  }
+  .cloumn-item .link-item a.link.green{
+    color: #63b175;
+  }
+  .cloumn-item .link-item a.link.blue{
+    color: #4976cb;
+  }
+
+  .cloumn-item .link-item a.text:hover {
+    text-decoration: underline;
+  }
+}
