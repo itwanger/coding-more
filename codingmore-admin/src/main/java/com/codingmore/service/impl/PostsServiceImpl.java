@@ -223,6 +223,8 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         return this.getBaseMapper().findByPage(postsPage, queryWrapper);
     }
 
+    
+
     private boolean insertTermRelationships(PostsParam postsParam, Posts posts) {
         if (postsParam.getTermTaxonomyId() == null) {
             return false;
@@ -302,5 +304,33 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         }
         posts.setPostContent(content);
         posts.setHtmlContent(htmlContent);
+    }
+
+    @Override
+    public int insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds) {
+        if (postsIds == null || termTaxonomyIds == null) {
+            return 0;
+        }
+        int addCount = 0;
+        List<TermRelationships> list = new ArrayList<>();
+        for(Long postsId:postsIds){
+            for(Long termTaxonomyId:termTaxonomyIds){
+                QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("term_taxonomy_id", termTaxonomyId);
+                queryWrapper.eq("term_relationships_id", postsId);
+                int count = iTermRelationshipsService.count(queryWrapper);
+                if(count==0){
+                    TermRelationships termRelationships = new TermRelationships();
+                    termRelationships.setTermTaxonomyId(termTaxonomyId);
+                    termRelationships.setTermRelationshipsId(postsId);
+                    termRelationships.setType(TermRelationType.CONTENT.getType());
+                    list.add(termRelationships);
+                 
+                    addCount++;
+                }
+            }
+        }
+        iTermRelationshipsService.saveBatch(list);
+        return addCount;
     }
 }

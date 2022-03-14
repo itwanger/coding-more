@@ -1,7 +1,5 @@
 package com.codingmore.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 import com.github.jeffreyning.mybatisplus.anno.MppMultiId;

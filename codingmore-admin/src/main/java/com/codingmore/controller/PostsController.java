@@ -83,6 +83,13 @@ public class PostsController {
         return ResultObject.success(map);
     }
 
+    
+    @RequestMapping(value = "/insertPostTermTaxonomy", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("添加文章栏目关联关系")
+    public ResultObject<String> insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds) {
+        return ResultObject.success(postsService.insertPostTermTaxonomy(postsIds,termTaxonomyIds) > 0? "保存成功" : "保存失败");
+    }
 
 
 }
