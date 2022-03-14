@@ -3,18 +3,25 @@ package com.codingmore.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.dto.PostTagParam;
+import com.codingmore.dto.SiteParam;
 import com.codingmore.model.PostTag;
 import com.codingmore.model.PostTagRelation;
+import com.codingmore.model.Site;
 import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
 import com.codingmore.webapi.ResultObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +42,46 @@ public class PostTagController {
     private IPostTagService postTagService;
     @Autowired
     private IPostTagRelationService postTagRelationService;
+
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("添加标签")
+    public ResultObject<String> insert(@Valid PostTagParam postTagParam) {
+        QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("description", postTagParam.getDescription());
+        int count = postTagService.count(queryWrapper);
+        if(count>0){
+            return ResultObject.failed("标签已存在");
+        }
+        PostTag postTag = new PostTag();
+        BeanUtils.copyProperties(postTagParam, postTag);
+        return  ResultObject.success(postTagService.save(postTag)? "添加成功" : "添加失败");
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("修改标签")
+    public ResultObject<String> update(@Valid PostTagParam postTagParam)  {
+        if(postTagParam.getPostTagId()==null){
+            return ResultObject.failed("标签id不能为空");
+        }
+        PostTag postTag = postTagService.getById(postTagParam.getPostTagId());
+        if(postTag==null){
+            return ResultObject.failed("标签不存在");
+        }
+        QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("description", postTagParam.getDescription());
+        int count = postTagService.count(queryWrapper);
+        if(count>0){
+            return ResultObject.failed("标签名称已存在");
+        }
+        BeanUtils.copyProperties(postTagParam, postTag);
+        return  ResultObject.success(postTagService.updateById(postTag)? "修改成功" : "修改失败");
+    }
+
+
+
 
 
 
