@@ -1,6 +1,6 @@
 package com.codingmore.service;
 
-import com.codingmore.dto.PostTagParam;
+import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.model.PostTag;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IPostTagService extends IService<PostTag> {
 
-    boolean savePostTag(PostTagParam postTagParam);
+    boolean savePostTag(PostAddTagParam postAddTagParam);
 
     /**
      * 获取文章标签

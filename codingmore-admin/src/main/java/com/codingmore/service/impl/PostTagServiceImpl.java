@@ -1,7 +1,7 @@
 package com.codingmore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.codingmore.dto.PostTagParam;
+import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.model.PostTag;
 import com.codingmore.mapper.PostTagMapper;
 import com.codingmore.model.PostTagRelation;
@@ -29,15 +29,15 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
     private IPostTagRelationService postTagRelationService;
 
     @Override
-    public boolean savePostTag(PostTagParam postTagParam) {
+    public boolean savePostTag(PostAddTagParam postAddTagParam) {
         PostTag postTag = new PostTag();
-        BeanUtils.copyProperties(postTagParam,postTag);
+        BeanUtils.copyProperties(postAddTagParam,postTag);
         boolean result = this.save(postTag);
-        if(postTagParam.getPostId()!=null){
+        if(postAddTagParam.getPostId()!=null){
             PostTagRelation postTagRelation = new PostTagRelation();
             postTagRelation.setPostTagId(postTag.getPostTagId());
-            postTagRelation.setPostId(postTagParam.getPostId());
-            postTagRelation.setTermOrder(postTagParam.getTermOrder());
+            postTagRelation.setPostId(postAddTagParam.getPostId());
+            postTagRelation.setTermOrder(postAddTagParam.getTermOrder());
             postTagRelationService.save(postTagRelation);
         }
         return result;

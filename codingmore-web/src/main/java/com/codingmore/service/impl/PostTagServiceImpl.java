@@ -1,14 +1,12 @@
 package com.codingmore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.codingmore.dto.PostTagParam;
 import com.codingmore.model.PostTag;
 import com.codingmore.mapper.PostTagMapper;
 import com.codingmore.model.PostTagRelation;
 import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

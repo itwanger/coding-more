@@ -3,7 +3,7 @@ package com.codingmore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.codingmore.dto.PostTagParam;
+import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.dto.PostsParam;
 import com.codingmore.model.*;
@@ -114,11 +114,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             postTagQueryWrapper.eq("description", tag);
             List<PostTag> tagList = iPostTagService.list(postTagQueryWrapper);
             if (tagList.size() == 0) {
-                PostTagParam postTagParam = new PostTagParam();
-                postTagParam.setPostId(posts.getPostsId());
-                postTagParam.setDescription(tag);
-                postTagParam.setTermOrder(order);
-                iPostTagService.savePostTag(postTagParam);
+                PostAddTagParam postAddTagParam = new PostAddTagParam();
+                postAddTagParam.setPostId(posts.getPostsId());
+                postAddTagParam.setDescription(tag);
+                postAddTagParam.setTermOrder(order);
+                iPostTagService.savePostTag(postAddTagParam);
 
             } else {
                 PostTagRelation postTagRelation = new PostTagRelation();
