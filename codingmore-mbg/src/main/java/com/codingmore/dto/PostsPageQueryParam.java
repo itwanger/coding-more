@@ -5,8 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="文章分页对象", description="文章")

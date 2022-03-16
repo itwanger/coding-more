@@ -64,4 +64,7 @@ public class PostsVo {
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
     private Map<String,Object> attribute;
+
+    @ApiModelProperty("浏览量")
+    private int paveView;
 }

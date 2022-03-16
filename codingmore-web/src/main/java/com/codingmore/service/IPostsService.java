@@ -30,4 +30,6 @@ public interface IPostsService extends IService<Posts> {
 
     void increasePageView(Long id, HttpServletRequest  request);
 
+    int getPageView(Long id);
+
 }

@@ -76,6 +76,12 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }
+        if(StringUtils.isNotBlank(postsPageQueryParam.getPostTitleKeyword())){
+            queryWrapper.like("a.post_title", "%"+postsPageQueryParam.getPostTitleKeyword()+"%");
+        }
+        if (postsPageQueryParam.getTermTaxonomyId() != null) {
+            queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
+        }
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
         return this.getBaseMapper().findByPage(postsPage, queryWrapper);
@@ -101,5 +107,13 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         redisService.incr(key, 1);
         
     }
+
+    @Override
+    public int getPageView(Long id) {
+        String key = PAGE_VIEW_KEY +":"+ id+":*";
+        return redisService.countKey(key);
+        
+    }
+    
 
 }

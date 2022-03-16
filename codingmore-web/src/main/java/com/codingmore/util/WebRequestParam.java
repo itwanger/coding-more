@@ -14,6 +14,11 @@ public class WebRequestParam {
      * 分页参数 默认第一页
      */
     private Integer page = 1;
+
+    /**
+     * 页数
+     */
+    private Integer pageSize = 10;
    
     /**
      * 栏目id
