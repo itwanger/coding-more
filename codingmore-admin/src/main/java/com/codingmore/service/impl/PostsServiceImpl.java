@@ -53,6 +53,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private ThreadPoolTaskExecutor ossUploadImageExecutor;
     @Autowired
     private IOssService iOssService;
+    @Autowired
+    private RedisService redisService;
+    private static final String PAGE_VIEW_KEY = "pageView";
+    private static final String POST_LIKE_COUNT = "likeCount";
 
     // 匹配图片的 markdown 语法
     // ![](hhhx.png)
@@ -79,6 +83,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if (posts.getPostDate() == null) {
             posts.setPostDate(new Date());
         }
+
+        //默认设置发布时间，方便排序
+        posts.setPostModified(new Date());
 
         // 当然登录用户
         posts.setPostAuthor(iUsersService.getCurrentUserId());
@@ -162,6 +169,12 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("term_relationships_id", id);
 
+        //删除浏览量
+        redisService.del(PAGE_VIEW_KEY +":"+ id+":*");
+
+        //删除点赞
+        redisService.del( POST_LIKE_COUNT +":"+ id+":*");
+
         return iTermRelationshipsService.remove(queryWrapper);
     }
 
@@ -209,7 +222,8 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }
         if (postsPageQueryParam.getOrderBy() != null) {
-            queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), postsPageQueryParam.getOrderBy());
+            String[] cloums = postsPageQueryParam.getOrderBy().split(",");
+            queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), cloums);
         }
         if (StringUtils.isNotEmpty(postsPageQueryParam.getPostTitleKeyword())) {
             queryWrapper.like("post_title", "%" + postsPageQueryParam.getPostTitleKeyword() + "%");

@@ -1,22 +1,21 @@
 package com.codingmore.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.model.Site;
-import com.codingmore.model.TermTaxonomy;
 import com.codingmore.service.ILearnWebRequestStrategy;
 import com.codingmore.service.IPostsService;
 import com.codingmore.service.ISiteService;
 import com.codingmore.service.ITermTaxonomyService;
 import com.codingmore.state.PostStatus;
 import com.codingmore.util.WebRequestParam;
-import com.codingmore.vo.IndexTermTaxonomyPostVo;
 
 import com.codingmore.vo.PostsVo;
+import com.codingmore.vo.SiteVo;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +33,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
      * 站点信息
      */
     private static final String SITE_CONFIG = "siteConfig";
+    
     /**
      * 文章分页列表
      */
@@ -55,30 +55,26 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
         List<Site> siteList = siteService.list();
         //处理站点配置
         if(siteList.size() > 0) {
-            webRequestParam.getRequest().setAttribute(SITE_CONFIG, siteList.get(0));
+            Site site = siteList.get(0);
+            SiteVo siteVo = new SiteVo();
+            BeanUtils.copyProperties(site, siteVo);
+            webRequestParam.getRequest().setAttribute(SITE_CONFIG, siteVo);
         }
-      /*  List<IndexTermTaxonomyPostVo>  indexTermTaxonomyPostVos = new ArrayList<>();
-        List<TermTaxonomy> termTaxonomyList = termTaxonomyService.list();
-        termTaxonomyList.forEach(termTaxonomy -> {
-            IndexTermTaxonomyPostVo  indexTermTaxonomyPostVo = new IndexTermTaxonomyPostVo();
-            indexTermTaxonomyPostVo.setTermTaxonomy(termTaxonomy);
-           
-            indexTermTaxonomyPostVo.setPosts(postsService.listByTermTaxonomyId(termTaxonomy.getTermTaxonomyId()));
-        });*/
+
         PostsPageQueryParam pageQueryParam = new PostsPageQueryParam();
         pageQueryParam.setPage(webRequestParam.getPage());
-        pageQueryParam.setAsc(false);
+        pageQueryParam.setAsc(webRequestParam.isAsc());
+        pageQueryParam.setOrderBy(webRequestParam.getOrderBy());
         pageQueryParam.setOrderBy("post_date");
         pageQueryParam.setPageSize(webRequestParam.getPageSize());
         pageQueryParam.setPostStatus(PostStatus.PUBLISHED.toString());
         pageQueryParam.setTermTaxonomyId(webRequestParam.getChannelId());
 
-        IPage<PostsVo> pageVo = postsService.findByPage(pageQueryParam);
+        IPage<PostsVo> pageVo = postsService.findByPageWithTag(pageQueryParam);
         //设置浏览量
         pageVo.getRecords().forEach(postsVo -> {
-            postsVo.setPaveView(postsService.getPageView(postsVo.getPostsId()));
+            postsVo.setLikeCount(postsService.getLikeCount(postsVo.getPostsId()));
         });
-        webRequestParam.getRequest().setAttribute(SITE_CONFIG, siteService.list().get(0));
         webRequestParam.getRequest().setAttribute(POSTS_ITEMS,pageVo.getRecords());
         webRequestParam.getRequest().setAttribute(POSTS_TOTAL,pageVo.getTotal());
         return INDEX_PAGE;

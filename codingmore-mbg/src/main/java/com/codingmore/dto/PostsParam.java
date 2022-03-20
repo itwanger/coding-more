@@ -49,15 +49,8 @@ public class PostsParam implements Serializable {
     @NotBlank(message = "文章状态不能为空")
     private String postStatus;
 
-
     @ApiModelProperty(value = "排序ID")
     private Integer menuOrder;
-
-   
-
-
-
-
 
     @ApiModelProperty(value = "栏目ID")
     private Long termTaxonomyId;

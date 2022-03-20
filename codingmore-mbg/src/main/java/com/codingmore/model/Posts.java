@@ -68,6 +68,9 @@ public class Posts implements Serializable {
     @ApiModelProperty(value = "评论总数")
     private Long commentCount;
 
+    @ApiModelProperty(value = "浏览量")
+    private Long pageView;
+
     @ApiModelProperty(value = "正文html")
     private String htmlContent;
 

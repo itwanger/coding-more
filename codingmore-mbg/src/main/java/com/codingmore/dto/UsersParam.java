@@ -46,13 +46,8 @@ public class UsersParam implements Serializable {
     @ApiModelProperty("属性")
     private String attribute;
 
-
-
-
     @ApiModelProperty(value = "网址")
     private String userUrl;
-
-
 
     @ApiModelProperty(value = "图像")
     private String displayName;

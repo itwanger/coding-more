@@ -2,6 +2,9 @@ package com.codingmore.vo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -66,5 +69,23 @@ public class PostsVo {
     private Map<String,Object> attribute;
 
     @ApiModelProperty("浏览量")
-    private int paveView;
+    private int pageView;
+
+    @ApiModelProperty("点赞")
+    private int likeCount;
+
+    private String attributeStr;
+
+    private String getAttributeStr() {
+        if(attribute != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                return  objectMapper.writeValueAsString(attribute);
+            } catch (JsonProcessingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return attributeStr;
+    }
 }

@@ -13,16 +13,18 @@ public class PostsPageQueryParam {
     long pageSize;
     long page;
 
-    @ApiModelProperty(value = "排序字段,按数据库字段:menu_order,post_date,post_modified")
-    String orderBy;
+    @ApiModelProperty(value = "排序字段,按数据库字段:menu_order,post_date,post_modified;多个以逗号间隔")
+    private String orderBy;
     @ApiModelProperty(value = "是否升序，boolean类型")
-    boolean isAsc;
+    private boolean isAsc;
     @ApiModelProperty(value = "栏目id非必填")
-    Long termTaxonomyId;
+    private Long termTaxonomyId;
     @ApiModelProperty(value = "标题关键字")
-    String postTitleKeyword;
+    private String postTitleKeyword;
 
     @ApiModelProperty(value = "文章状态PUBLISHED,DELETED,DRAFT")
     private String postStatus;
+
+
 }
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

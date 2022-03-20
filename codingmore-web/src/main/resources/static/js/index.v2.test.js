@@ -6,7 +6,7 @@ $(() => {
     const tempHtml = getFakeArticleHtml(isHide)
     totalHtml += tempHtml
   }
-  $('.article-list').append(totalHtml)
+  // $('.article-list').append(totalHtml)
 })
 
 

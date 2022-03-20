@@ -11,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -57,6 +57,4 @@ public class Site implements Serializable {
     @TableField(typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty("属性")
     private Map<String,Object> attribute;
-
-
 }

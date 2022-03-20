@@ -28,8 +28,6 @@ public class SiteParam implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
-
     @ApiModelProperty("站点名称")
     @NotBlank(message = "站点名称不能为空")
     private String siteName;
@@ -41,10 +39,7 @@ public class SiteParam implements Serializable {
     @ApiModelProperty("关键字")
     private String keywords;
 
-
-
     @ApiModelProperty("属性")
     private String attribute;
-
 
 }

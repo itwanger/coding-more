@@ -20,4 +20,5 @@ import org.apache.ibatis.annotations.Param;
 public interface PostsMapper extends BaseMapper<Posts> {
 
     IPage<PostsVo> findByPage(IPage<PostsVo> page, @Param(Constants.WRAPPER) Wrapper<PostsPageQueryParam> wrapper);
+    IPage<PostsVo> findByPageWithTag(IPage<PostsVo> page, @Param(Constants.WRAPPER) Wrapper<PostsPageQueryParam> wrapper);
 }

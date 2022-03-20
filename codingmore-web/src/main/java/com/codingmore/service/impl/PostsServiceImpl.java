@@ -41,7 +41,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     @Autowired
     private RedisService redisService;
     private static final String PAGE_VIEW_KEY = "pageView";
-  
+    /**
+     * 点赞
+     */
+    private static final String POST_LIKE_COUNT = "likeCount";
 
     @Override
     public PostsVo getPostsById(Long id) {
@@ -71,7 +74,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     @Override
-    public IPage<PostsVo> findByPage(PostsPageQueryParam postsPageQueryParam) {
+    public IPage<PostsVo> findByPageWithTag(PostsPageQueryParam postsPageQueryParam) {
         QueryWrapper<PostsPageQueryParam> queryWrapper = new QueryWrapper<>();
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
@@ -84,7 +87,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         }
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
-        return this.getBaseMapper().findByPage(postsPage, queryWrapper);
+        return this.getBaseMapper().findByPageWithTag(postsPage, queryWrapper);
     }
 
     @Override
@@ -105,6 +108,13 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         String ip = CusAccessObjectUtil.getIpAddress(request);
         String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
         redisService.incr(key, 1);
+        Posts posts = this.getById(id);
+        Integer pageView = (Integer)redisService.get(key);
+        if(pageView == null || posts == null){
+            return;
+        }
+        posts.setPageView(Long.parseLong(String.valueOf(pageView)));
+        this.updateById(posts);
         
     }
 
@@ -114,6 +124,17 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         return redisService.countKey(key);
         
     }
-    
 
+    @Override
+    public void increaseLikeCount(Long id, HttpServletRequest request) {
+        String ip = CusAccessObjectUtil.getIpAddress(request);
+        String key = POST_LIKE_COUNT +":"+ id+":"+ip;
+        redisService.incr(key, 1);
+    }
+
+    @Override
+    public int getLikeCount(Long id) {
+        String key = POST_LIKE_COUNT +":"+ id+":*";
+        return redisService.countKey(key);
+    }
 }

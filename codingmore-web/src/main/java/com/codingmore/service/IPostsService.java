@@ -22,13 +22,17 @@ public interface IPostsService extends IService<Posts> {
  
 
 
-    IPage<PostsVo> findByPage(PostsPageQueryParam postsPageQueryParam);
+    IPage<PostsVo> findByPageWithTag(PostsPageQueryParam postsPageQueryParam);
 
     List<Posts> listByTermTaxonomyId(Long termTaxonomyId);
 
     PostsVo getPostsById(Long id);
 
     void increasePageView(Long id, HttpServletRequest  request);
+
+    void increaseLikeCount(Long id, HttpServletRequest  request);
+
+    int getLikeCount(Long id);
 
     int getPageView(Long id);
 
