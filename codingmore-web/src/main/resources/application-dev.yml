@@ -47,5 +47,17 @@ spring:
         #登录密码
         login-password: root
 
+  redis:
+    host: 118.190.99.232 # Redis服务器地址
+    database: 0 # Redis数据库索引（默认为0）
+    port: 6379 # Redis服务器连接端口
+    password: learnsuccess # Redis服务器连接密码（默认为空）
+    timeout: 5000ms # 连接超时时间（毫秒）
+    jedis:
+      pool:
+        max-active: 1000
+        min-idle: 2
+        max-idle: 3
+        max-wait: 3000
 
 
