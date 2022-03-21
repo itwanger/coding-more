@@ -82,6 +82,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         if(StringUtils.isNotBlank(postsPageQueryParam.getPostTitleKeyword())){
             queryWrapper.like("a.post_title", "%"+postsPageQueryParam.getPostTitleKeyword()+"%");
         }
+        if (postsPageQueryParam.getOrderBy() != null) {
+            String[] cloums = postsPageQueryParam.getOrderBy().split(",");
+            queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), cloums);
+        }
         if (postsPageQueryParam.getTermTaxonomyId() != null) {
             queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
         }

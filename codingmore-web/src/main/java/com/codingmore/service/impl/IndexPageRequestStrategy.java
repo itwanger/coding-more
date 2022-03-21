@@ -65,7 +65,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
         pageQueryParam.setPage(webRequestParam.getPage());
         pageQueryParam.setAsc(webRequestParam.isAsc());
         pageQueryParam.setOrderBy(webRequestParam.getOrderBy());
-        pageQueryParam.setOrderBy("post_date");
+        /* pageQueryParam.setOrderBy("post_date"); */
         pageQueryParam.setPageSize(webRequestParam.getPageSize());
         pageQueryParam.setPostStatus(PostStatus.PUBLISHED.toString());
         pageQueryParam.setTermTaxonomyId(webRequestParam.getChannelId());
