@@ -98,7 +98,7 @@
                   </li>-->
                 </ul>
               </div>
-              <img src="images/demo-pic1.png" class="article-img" th:src="${pageVo.attribute?.articleCoverUrl}" />
+              <img src="images/demo-pic1.png" class="article-img" th:src="${pageVo.attribute?.get('articleCoverUrl')?:'images/demo-pic1.png'}" />
             </div>
           </div>
 

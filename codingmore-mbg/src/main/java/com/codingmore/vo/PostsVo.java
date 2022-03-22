@@ -69,12 +69,12 @@ public class PostsVo {
     private Map<String,Object> attribute;
 
     @ApiModelProperty("浏览量")
-    private int pageView;
+    private Long pageView;
 
     @ApiModelProperty("点赞")
-    private int likeCount;
+    private Long likeCount;
 
-    private String attributeStr;
+  /*  private String attributeStr;
 
     private String getAttributeStr() {
         if(attribute != null) {
@@ -87,5 +87,5 @@ public class PostsVo {
             }
         }
         return attributeStr;
-    }
+    }*/
 }

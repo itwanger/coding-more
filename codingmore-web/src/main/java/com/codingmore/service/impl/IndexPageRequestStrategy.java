@@ -73,7 +73,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
         IPage<PostsVo> pageVo = postsService.findByPageWithTag(pageQueryParam);
         //设置浏览量
         pageVo.getRecords().forEach(postsVo -> {
-            postsVo.setLikeCount(postsService.getLikeCount(postsVo.getPostsId()));
+            postsVo.setLikeCount(Long.parseLong(String.valueOf(postsService.getLikeCount(postsVo.getPostsId()))));
         });
         webRequestParam.getRequest().setAttribute(POSTS_ITEMS,pageVo.getRecords());
         webRequestParam.getRequest().setAttribute(POSTS_TOTAL,pageVo.getTotal());
