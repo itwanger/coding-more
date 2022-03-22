@@ -1,6 +1,7 @@
 package top;
 
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.util.IdUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -20,15 +21,18 @@ import java.util.regex.Pattern;
  */
 public class Convert {
 
-    final static String directory = "sidebar/sanfene/";
-    final static String key = "javase";
+    final static String directory = "springboot/";
+    final static String key = "oss";
 
-    final static String docPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/docs/" + directory;
-    final static String imgPath = "/Users/maweiqing/Documents/GitHub/TechSisterLearnJava/images/" + directory;
+    final static String docPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/" + directory;
+    final static String imgPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/images/" + directory;
 
     final static String fileName = key + ".md";
     private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
     private static final String imgCdnPre = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/";
+    private static final String[] imgCdnPres = {imgCdnPre,
+            "cdn.tobebetterjavaer.com/tobebetterjavaer/images/",
+            "https://itwanger-oss.oss-cn-beijing.aliyuncs.com/"};
     final static String imgCdn = "https://cdn.jsdelivr.net/gh/itwanger/toBeBetterJavaer/images/" + directory + key + "-";
     // 匹配图片的 markdown 语法
     // ![](hhhx.png)
@@ -66,15 +70,23 @@ public class Convert {
         FileWriter writer = new FileWriter(docPath + fileName);
         Pattern pattern = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
 
-        int num = 1;
         for (String line : list) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
                 // 处理图片
-
-                if (line.indexOf(imgCdnPre) != -1) {
+                boolean needConvert = true;
+                for (String extItem : imgCdnPres) {
+                    if (line.indexOf(extItem) != -1) {
+                        needConvert = false;
+                        break;
+                    }
+                }
+                // 已经转换过的，就不需要再转了
+                if (!needConvert) {
+                    writer.append(line + "\n");
                     continue;
                 }
+
 
                 // png 还是 gif 还是 jpg
                 String ext = "";
@@ -89,6 +101,7 @@ public class Convert {
                 String imagePath = matcher.group(2);
                 System.out.println("使用分组进行替换名" + imageName + "路径"+ imagePath);
 
+                String num = IdUtil.fastUUID();
                 String destinationImgPath = imgPath + key + "-" + num + ext;
 
                 // 1、下载到本地
@@ -96,7 +109,6 @@ public class Convert {
 
                 // 2、修改 MD 文档
                 writer.append("![" +imageName+ "](" + imgCdn + num + ext + ")\n");
-                num++;
 
 
             } else {
