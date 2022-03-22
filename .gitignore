@@ -39,3 +39,7 @@ hs_err_pid*
 target/
 .idea/
 package-lock.json
+
+application.yml
+application-dev.yml
+application-prod.yml
