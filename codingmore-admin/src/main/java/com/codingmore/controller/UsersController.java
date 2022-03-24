@@ -2,6 +2,8 @@ package com.codingmore.controller;
 
 
 import cn.hutool.core.collection.CollUtil;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.UpdateAdminPasswordParam;
@@ -16,6 +18,7 @@ import com.codingmore.service.IUsersService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,10 +93,17 @@ public class UsersController {
     @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String, Object>> queryPageable(long pageSize, long page) {
+    public ResultObject<Map<String, Object>> queryPageable(long pageSize, long page,String userLogin, String userNicename) {
         Map<String, Object> map = new HashMap<>();
+        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(userLogin)){
+            queryWrapper.like("user_login",userLogin);
+        }
+        if(StringUtils.isNotEmpty(userNicename)){
+            queryWrapper.like("user_nicename",userNicename);
+        }
         Page<Users> usersPage = new Page<>(page, pageSize);
-        IPage<Users> usersIPage = usersService.page(usersPage);
+        IPage<Users> usersIPage = usersService.page(usersPage,queryWrapper);
         map.put("items", usersIPage.getRecords());
         map.put("total", usersIPage.getTotal());
         return ResultObject.success(map);
@@ -109,6 +119,21 @@ public class UsersController {
         return ResultObject.success(usersService.register(userDto) ? "保存成功" : "保存失败");
     }
 
+    @ApiOperation(value = "启用/禁用 0 启用 1 禁用")
+    @RequestMapping(value = "/enableOrDisable", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultObject<String> enableOrDisable(Long usersId,int status) {
+        if(usersId==null){
+            return ResultObject.failed("id不能为空");
+        }
+        if(status!=0&&status!=1){
+            return ResultObject.failed("status不能为空");
+        }
+        Users users = usersService.getById(usersId);
+        users.setUserStatus(status);
+        return ResultObject.success(usersService.updateById(users) ? "保存成功" : "保存失败");
+    }
+
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -116,7 +141,7 @@ public class UsersController {
         String token = usersService.login(users.getUserLogin(), users.getUserPass());
 
         if (token == null) {
-            return ResultObject.validateFailed("用户名或密码错误");
+            return ResultObject.validateFailed("用户名或密码错误或状态被禁用");
         }
 
         // 将 JWT 传递回客户端
