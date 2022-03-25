@@ -86,9 +86,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             String[] cloums = postsPageQueryParam.getOrderBy().split(",");
             queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), cloums);
         }
-        if (postsPageQueryParam.getTermTaxonomyId() != null) {
-            queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
-        }
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
         return this.getBaseMapper().findByPageWithTag(postsPage, queryWrapper);

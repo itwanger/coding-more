@@ -13,7 +13,7 @@ public class PostsPageQueryParam {
     long pageSize;
     long page;
 
-    @ApiModelProperty(value = "排序字段,按数据库字段:menu_order,post_date,post_modified;多个以逗号间隔")
+    @ApiModelProperty(value = "排序字段,按数据库字段:menu_order,post_date,post_modified,page_view;多个以逗号间隔")
     private String orderBy;
     @ApiModelProperty(value = "是否升序，boolean类型")
     private boolean isAsc;
