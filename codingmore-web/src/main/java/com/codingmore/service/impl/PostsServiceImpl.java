@@ -50,6 +50,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public PostsVo getPostsById(Long id) {
         Posts posts = this.getById(id);
         PostsVo postsVo = new PostsVo();
+        if (posts == null) {
+            return postsVo;
+        }
         BeanUtils.copyProperties(posts, postsVo);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("term_relationships_id", posts.getPostsId());
@@ -59,15 +62,22 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         }
         QueryWrapper<PostTagRelation> tagRelationWrapper = new QueryWrapper<>();
         tagRelationWrapper.eq("post_id", posts.getPostsId());
+        tagRelationWrapper.orderBy(true,true,"term_order");
         List<PostTagRelation> postTagRelationList = iPostTagRelationService.list(tagRelationWrapper);
         if (postTagRelationList.size() > 0) {
             List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
             QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
             tagQuery.in("post_tag_id", tagIds);
             List<PostTag> postTags = iPostTagService.list(tagQuery);
-            postsVo.setTagsName( StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+            Collections.sort(postTags, new Comparator<PostTag>() {
+                @Override
+                public int compare(PostTag o1, PostTag o2) {
+                    return tagIds.indexOf(o1.getPostTagId())-tagIds.indexOf(o2.getPostTagId());
+                }
+            });
+            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
         }
-        
+
         Users users = iUsersService.getById(posts.getPostAuthor());
         postsVo.setUserNiceName(users.getUserNicename());
         return postsVo;

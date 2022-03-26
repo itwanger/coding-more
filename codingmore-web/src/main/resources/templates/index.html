@@ -37,7 +37,7 @@
       <div class="top-wrapper">
         <div class="logo-area fl">
           <img src="images/logo-ontop.png" alt="logo" class="logo-top">
-          编程进阶网
+          <span th:text="${siteConfig.siteName}"></span>
         </div>
         <div class="search-area fr">
           <input type="text" class="txt-search" autocomplete="off" placeholder="请输入感兴趣的内容进行搜索">
@@ -63,7 +63,7 @@
             <div class="article-basic-info">
               <a class="tab-link gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
               <span class="wide-border small-margin"></span>
-              <span class="tab-link light-gray" th:text="${#dates.format(pageVo.postModified, 'yyyy-MM-dd HH:mm')}">10天前</span>
+              <span class="tab-link light-gray" th:text="${#dates.format(pageVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">10天前</span>
               <span class="wide-border small-margin"></span>
               <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>
             </div>
@@ -74,7 +74,7 @@
             <div class="flex-row">
               <div class="flex-item-grow1">
                 <!-- PC端文章标题 -->
-                <a target="_blank" href="http://www.bai1du.com" class="article-title" th:text="${pageVo.postTitle}">
+                <a target="_blank" th:href="${pageVo.postsId}+'.html'" class="article-title" th:text="${pageVo.postTitle}">
                   Vite+Vue3.2+TS 相关API归纳总结
                 </a>
                 <!-- 文章摘要 -->

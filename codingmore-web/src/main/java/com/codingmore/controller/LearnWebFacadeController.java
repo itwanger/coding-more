@@ -35,6 +35,14 @@ public class LearnWebFacadeController {
         return indexPageRequestStrategy.handleRequest(webRequestParam);
     }
 
+    @ApiOperation("内容动态页入口")
+    @RequestMapping(value = {"/{postId:[0-9]+}.html"}, method = RequestMethod.GET)
+    public String post( @PathVariable Long postId, HttpServletRequest request,
+                          HttpServletResponse response, ModelMap model) {
+        WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).postId(postId).model(model).build();
+        return contentPageRequestStrategy.handleRequest(webRequestParam);
+    }
+
 
     @ApiOperation("内容动态页入口")
     @RequestMapping(value = {"/{channelId:[0-9]+}/{postId:[0-9]+}.html"}, method = RequestMethod.GET)
@@ -56,13 +64,13 @@ public class LearnWebFacadeController {
     /**
      * 栏目动态页入口(外网)
      */
-    @ApiOperation("栏目动态页入口")
+    /*@ApiOperation("栏目动态页入口")
     @RequestMapping(value = {"/{channelId:[0-9]+}.html"}, method = RequestMethod.GET)
     public String channel(@PathVariable Long channelId, HttpServletRequest request, HttpServletResponse response,
                           ModelMap model){
         WebRequestParam webRequestParam = new WebRequestParam.Builder().request(request).response(response).channelId(channelId).model(model).build();
         return channelPageRequestStrategy.handleRequest(webRequestParam);
-    }
+    }*/
 
 
     /**
