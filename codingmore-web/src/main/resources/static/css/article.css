@@ -67,6 +67,7 @@
     background-color: #63B175;
     padding-left: 10px;
     padding-right: 10px;
+    margin-left: 8px;
   }
   .article-area .author-and-flags a.label:hover{
     background-color: #2E8041;
