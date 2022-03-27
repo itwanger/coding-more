@@ -166,7 +166,6 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
             return new AdminUserDetails(admin,resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
-
     }
 
     @Override
