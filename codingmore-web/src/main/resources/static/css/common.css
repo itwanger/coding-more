@@ -54,17 +54,10 @@
 
   }
 
-/*  .txt-search::-webkit-input-placeholder {
-    font-style: italic;
-  }
-
-  .txt-search::-moz-placeholder {
-    font-style: italic;
-  }
-
-  .txt-search:-ms-input-placeholder {
-    font-style: italic;
-  }*/
+  input.txt-search::-webkit-input-placeholder{color: rgba(255, 255, 255, 100%)} /* 使用webkit内核的浏览器 */
+  input.txt-search:-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本4-18 */
+  input.txt-search::-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本19+ */
+  input.txt-search:-ms-input-placeholder{color: rgba(255, 255, 255, 70%)}
 
   .search-area img {
     width: 24px;
