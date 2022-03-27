@@ -73,8 +73,13 @@ OSS                  | 对象存储            | https://github.com/aliyun/aliyu
 
 技术 |说明 |官网
 ---|---|---
-Vue |前端框架|https://vuejs.org/  
-elemet |前端 UI 框架|https://element.eleme.io 
+Vue |前端框架| https://vuejs.org/ 
+Vue-router |路由框架| https://router.vuejs.org/ 
+Vuex |全局状态管理框架| https://vuex.vuejs.org/ 
+Element |前端UI框架| https://element.eleme.io 
+Axios |前端HTTP框架| https://github.com/axios/axios 
+Js-cookie |cookie管理工具| https://github.com/js-cookie/js-cookie 
+nprogress |进度条控件| https://github.com/rstacruz/nprogress 
 
 #### 架构图
 
