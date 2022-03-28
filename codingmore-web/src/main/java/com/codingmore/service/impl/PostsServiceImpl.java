@@ -7,6 +7,7 @@ import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
+import com.codingmore.state.PostStatus;
 import com.codingmore.util.CusAccessObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.vo.PostsVo;
@@ -96,6 +97,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             String[] cloums = postsPageQueryParam.getOrderBy().split(",");
             queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), cloums);
         }
+        queryWrapper.eq("a.post_status", PostStatus.PUBLISHED.toString());
         Page<PostsVo> postsPage = new Page<>(postsPageQueryParam.getPage(), postsPageQueryParam.getPageSize());
 
         return this.getBaseMapper().findByPageWithTag(postsPage, queryWrapper);
