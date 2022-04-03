@@ -2,9 +2,11 @@ package com.codingmore.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import cn.hutool.core.collection.CollectionUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +77,8 @@ public class RoleController {
     @ApiOperation("批量删除角色")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public ResultObject<String> delete(@RequestParam("ids") List<Long> ids) {
-        return ResultObject.success( roleService.removeByIds(ids) ? "删除成功" : "删除失败");
+    public ResultObject<String> delete(@RequestParam("ids") Long[] ids) {
+        return ResultObject.success( roleService.removeByIds(CollectionUtil.toList(ids)) ? "删除成功" : "删除失败");
     }
 
   
@@ -97,7 +99,7 @@ public class RoleController {
         Page<Role> rolePage = new Page<>(page,pageSize);
         QueryWrapper<Role> roleQueryWrapper = new QueryWrapper();
         if (StringUtils.isNotBlank(keyword)) {
-            roleQueryWrapper.like("role_name", "%"+keyword+"%");
+            roleQueryWrapper.like("name", "%"+keyword+"%");
         }
       
         IPage<Role> postTagIPage = roleService.page(rolePage,roleQueryWrapper);
