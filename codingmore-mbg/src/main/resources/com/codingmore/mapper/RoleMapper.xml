@@ -19,7 +19,7 @@
 
     <select id="getMenuList" resultType="com.codingmore.model.Menu">
         SELECT
-            m.menu_id id,
+            m.menu_id menuId,
             m.parent_id parentId,
             m.create_time createTime,
             m.title title,
@@ -41,7 +41,7 @@
     </select>
     <select id="getMenuListByRoleId" resultType="com.codingmore.model.Menu">
         SELECT
-            m.menu_id id,
+            m.menu_id menuId,
             m.parent_id parentId,
             m.create_time createTime,
             m.title title,
@@ -61,7 +61,7 @@
     </select>
     <select id="getResourceListByRoleId" resultType="com.codingmore.model.Resource">
         SELECT
-            r.resource_id id,
+            r.resource_id resourceId,
             r.create_time createTime,
             r.`name` `name`,
             r.url url,
