@@ -58,7 +58,7 @@ public class RoleController {
     }
 
     @ApiOperation("修改角色")
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public ResultObject<String> update(@Valid RoleParam roleParam) {
         if (roleParam.getStatus() != 0 && roleParam.getStatus() != 1) {
@@ -123,7 +123,7 @@ public class RoleController {
     }
 
     @ApiOperation("获取角色相关菜单")
-    @RequestMapping(value = "/listMenu/{roleId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/listMenu", method = RequestMethod.GET)
     @ResponseBody
     public ResultObject<List<Menu>> listMenu(@RequestParam Long roleId) {
         List<Menu> roleList = roleService.listMenu(roleId);
