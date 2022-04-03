@@ -2,10 +2,7 @@ package com.codingmore.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import cn.hutool.core.lang.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -30,6 +26,9 @@ public class OssServiceImpl implements IOssService {
 
     @Value("${aliyun.oss.dir.prefix}")
     private String dirPrefix;
+
+    @Value("${aliyun.cdn}")
+    private String cdn;
 
     @Autowired
     private OSSClient ossClient;
@@ -66,7 +65,7 @@ public class OssServiceImpl implements IOssService {
     }
 
     private String formatOSSPath(String objectName) {
-        return "https://" + bucketName + "." + ossClient.getEndpoint().getHost() + "/" + objectName;
+        return "https://" + cdn  + "/" + objectName;
     }
 
     @Override
