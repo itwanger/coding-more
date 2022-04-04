@@ -125,8 +125,8 @@ public class ResourceController {
     @ApiOperation("查询所有后台资源")
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
     @ResponseBody
-    public List<Resource> listAll() {
-        return resourceService.list();
+    public ResultObject<List<Resource>> listAll() {
+        return ResultObject.success(resourceService.list());
     }
 
 }
