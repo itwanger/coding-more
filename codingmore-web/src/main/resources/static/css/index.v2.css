@@ -46,7 +46,7 @@
   }
 
   span.wide-border.small-margin {
-    margin: 0 10px;
+    margin: 4px 10px;
   }
 
   /* 文章摘要容器样式 */
@@ -161,21 +161,22 @@
   }
 
   /* 右侧整张图片广告样式 */
-  .ad-link img {
+  .right-item img {
     display: block;
     width: 240px;
-    height: 200px;
+    /*height: 200px;*/
   }
 
-  .ad-link {
+  .right-item {
     display: block;
     margin-bottom: 16px;
   }
 
   /* 右侧二维码加标题和说明文字样式 */
+  .right-text-item,
   .qrcode-item {
     width: 240px;
-    padding: 12px;
+    padding: 16px;
     box-sizing: border-box;
     background-color: #fff;
     cursor: pointer;
@@ -186,7 +187,23 @@
     height: 50px;
     margin-right: 16px;
   }
+  .right-text-item img.img-itwanger{
+    width: 30px;
+    height: 30px;
+    margin-right: 16px;
+    margin-top: 10px;
+  }
 
+  .mt-2{
+    margin-top: 2px;
+  }
+
+  .right-text-item hr{
+    height: 2px;
+    color: #F4F5F5;
+  }
+
+  .right-text-item .title,
   .qrcode-headline {
     font-weight: 500;
     font-size: 14px;
@@ -194,11 +211,20 @@
     color: #1d2129;
   }
 
+  .right-text-item .title img{
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 3px;
+    display: inline-block;
+  }
+  .right-text-item .desc,
   .qrcode-desc {
     margin-top: 6px;
     font-size: 12px;
-    line-height: 20px;
+    line-height: 22px;
     color: #86909c;
+    text-align: justify;
   }
 
   /* 网站备案信息样式 */
@@ -207,6 +233,10 @@
     color: #909090;
     font-size: 12px;
     line-height: 19px;
+  }
+
+  .site-info > p{
+    margin-bottom: 5px;
   }
 
   .site-info a,
