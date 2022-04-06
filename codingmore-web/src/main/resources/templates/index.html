@@ -36,22 +36,24 @@
   <div class="flex-col">
     <!-- 顶部固定条 -->
     <div class="top-fixed">
-      <div class="top-wrapper">
-        <div class="logo-area fl">
+      <div class="top-wrapper flex-row">
+        <div class="menu-icon flex-row h-center v-center flex-fixed-item">
+          <img src="images/menu-icon.png" />
+          <img class="small noshow" src="images/menu-close-icon.png" />
+        </div>
+        <div class="logo-area flex-auto-item flex-row v-center">
           <img src="images/logo-ontop.png" alt="logo" class="logo-top">
           <span th:text="${siteConfig.siteName}"></span>
         </div>
-        <div class="search-area fr">
-          <input type="text" class="txt-search" autocomplete="off" placeholder="请输入感兴趣的内容进行搜索">
-          <a href="javascript:void(0)"><img src="images/search.png" /></a>
+        <div class="search-area flex-fixed-item">
+          <a id="searchBtn" href="javascript:void(0)"><img src="images/search.png" /></a>
         </div>
-        <div class="clear"></div>
       </div>
     </div>
     <!-- 主题内容区域 -->
-    <div class="main-area flex-item-grow1">
+    <div class="main-area flex-auto-item">
       <!-- 左侧部分：文章列表区域 -->
-      <div class="article-list-area flex-item-grow1">
+      <div class="article-list-area flex-auto-item">
         <div class="article-list-head">
           <a class="tab-link active" href="javascript:void(0)">推荐</a>
           <span></span>
@@ -74,7 +76,7 @@
               Vite+Vue3.2+TS 相关API归纳总结
             </a>
             <div class="flex-row">
-              <div class="flex-item-grow1">
+              <div class="flex-auto-item">
                 <!-- PC端文章标题 -->
                 <a target="_blank" th:href="${pageVo.postsId}+'.html'" class="article-title" th:text="${pageVo.postTitle}">
                   Vite+Vue3.2+TS 相关API归纳总结
@@ -175,6 +177,11 @@
         <p class="info">Copyright © 2004 - 2022 青苗工作室 .com 版权所有</p>
       </div>
     </div> -->
+  </div>
+  <div class="search-layer">
+    <div class="content">
+
+    </div>
   </div>
 </body>
 

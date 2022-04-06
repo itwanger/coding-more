@@ -13,9 +13,9 @@
     position: sticky;
   }
 
-  .top-fixed * {
+  /*.top-fixed * {
     vertical-align: middle;
-  }
+  }*/
 
   .top-fixed .logo-area {
     font-size: 26px;
@@ -26,15 +26,37 @@
   }
 
   .top-wrapper {
-    width: 1200px;
+    width: 1100px;
     margin: 0 auto;
     height: 50px;
-    line-height: 50px;
+  }
+
+  /* 菜单图标相关样式 */
+  .menu-icon {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #4E9359;
+  }
+
+  .menu-icon.opened,
+  .menu-icon:hover{
+    background-color: #546076;
+  }
+
+  .menu-icon img{
+    width: 32px;
+    height: 32px;
+  }
+  .menu-icon img.small{
+    width: 24px;
+    height: 24px;
   }
 
   .logo-top {
     width: 30px;
     height: 30px;
+    margin: 0 15px;
   }
 
   input {
@@ -51,13 +73,35 @@
     color: #fff;
     background-color: #63b175;
     width: 250px;
+  }
 
+  .search-layer{
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background-color: #525E74;
+  }
+
+  .search-layer .content{
+    margin:0 auto;
+    width: 1100px;
+    background-color: #546076;
   }
 
   input.txt-search::-webkit-input-placeholder{color: rgba(255, 255, 255, 100%)} /* 使用webkit内核的浏览器 */
   input.txt-search:-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本4-18 */
   input.txt-search::-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本19+ */
   input.txt-search:-ms-input-placeholder{color: rgba(255, 255, 255, 70%)}
+
+  .search-area {
+    height: 50px;
+    box-sizing: border-box;
+    padding-top: 13px;
+  }
 
   .search-area img {
     width: 24px;
@@ -145,6 +189,12 @@ body {
 .flex-row {
   display: flex;
 }
+.flex-row.h-center{
+  justify-content: center;
+}
+.flex-row.v-center {
+  align-items: center;
+}
 
 /* 关于flex */
 .flex-col {
@@ -157,11 +207,7 @@ body {
   flex-shrink: 0;
 }
 
-.flex-fixed-item.v-center {
-  align-items: center;
-}
-
-.flex-item-grow1 {
+.flex-auto-item {
   flex-grow: 1;
 }
 
@@ -224,6 +270,18 @@ div {
 
 .clear{
   clear: both;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
 }
 
 /* PC、手机共用样式结束 */
