@@ -63,18 +63,7 @@
     outline: 0px;
   }
 
-  .txt-search,
-  .txt-search:focus {
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 1px solid #fff;
-    font-size: 16px;
-    color: #fff;
-    background-color: #63b175;
-    width: 250px;
-  }
-
+  /*搜索层样式*/
   .search-layer{
     display: none;
     position: fixed;
@@ -86,16 +75,80 @@
     background-color: #525E74;
   }
 
+  /*搜索层内容容器*/
   .search-layer .content{
     margin:0 auto;
     width: 1100px;
     background-color: #546076;
   }
 
-  input.txt-search::-webkit-input-placeholder{color: rgba(255, 255, 255, 100%)} /* 使用webkit内核的浏览器 */
-  input.txt-search:-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本4-18 */
-  input.txt-search::-moz-placeholder{color: rgba(255, 255, 255, 70%)} /* Firefox版本19+ */
-  input.txt-search:-ms-input-placeholder{color: rgba(255, 255, 255, 70%)}
+  .search-layer .content > .top{
+    height: 95px;
+  }
+
+  /*搜索框左侧的小图标*/
+  a.search-input-icon,
+  a.search-input-icon:active,
+  a.search-input-icon:link,
+  a.search-input-icon:visited {
+    width: 35px;
+    height: 34px;
+    border-right: 1px solid #546076;
+    background-color: #ffffff;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  a.search-input-icon:hover {
+    background-color: #dddddd;
+  }
+
+  .search-input-icon > img {
+    width: 17.5px;
+    height: 17.5px;
+  }
+
+  /*搜索框容器*/
+  .search-input-area{
+    width: 350px;
+    height: 34px;
+    background-color: #ffffff;
+  }
+
+  /*搜索框后的搜索按钮*/
+  a.search-input-btn,
+  a.search-input-btn:active,
+  a.search-input-btn:link,
+  a.search-input-btn:visited{
+    display: block;
+    box-sizing: border-box;
+    width: 34px;
+    height: 34px;
+    line-height: 32px;
+    border: 1px solid #63B175;
+    background-color: #546076;
+    color: #ffffff;
+    font-weight: 500;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  a.search-input-btn:hover{
+    text-decoration: none;
+    background-color: #63B175;
+  }
+
+  /*搜索框样式*/
+  .txt-search,
+  .txt-search:focus {
+    border: 0;
+    font-size: 18px;
+    color: #333;
+    width: 326px;
+  }
+
+  input.txt-search::-webkit-input-placeholder{color: rgba(204, 204, 204, 70%)} /* 使用webkit内核的浏览器 */
+  input.txt-search:-moz-placeholder{color: rgba(204, 204, 204, 70%)} /* Firefox版本4-18 */
+  input.txt-search::-moz-placeholder{color: rgba(204, 204, 204, 70%)} /* Firefox版本19+ */
+  input.txt-search:-ms-input-placeholder{color: rgba(204, 204, 204, 70%)}
 
   .search-area {
     height: 50px;
