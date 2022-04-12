@@ -12,6 +12,8 @@ import com.codingmore.service.IPostTagService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,8 +96,8 @@ public class PostTagController {
     @RequestMapping(value = "/getByName",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("模糊匹配")
-    public ResultObject<List<PostTag>> getByObjectId(String  keyWord) {
-        QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
+    public ResultObject<List<PostTag>> getByName(String  keyWord) {
+        QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
         postTagQueryWrapper.like("description",keyWord+"%");
         return ResultObject.success(postTagService.list(postTagQueryWrapper));
     }
@@ -104,23 +106,21 @@ public class PostTagController {
     @RequestMapping(value = "/delete",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("删除")
-    public ResultObject<String> delete(long postTagId) {
-        QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper();
-        postTagRelationQueryWrapper.eq("post_tag_id",postTagId);
-        int count = postTagRelationService.count(postTagRelationQueryWrapper);
-        if(count>0){
-            return ResultObject.failed("该标签已被使用，不能删除");
-        }
-        return ResultObject.success(postTagService.removeById(postTagId) ? "删除成功" : "删除失败");
+    public ResultObject<String> delete(Long postTagId) {
+        return ResultObject.success(postTagService.removeTag(postTagId) ? "删除成功" : "删除失败");
     }
 
     @RequestMapping(value = "/queryPageable",method=RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page){
+    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page,String tagName){
         Map<String,Object> map = new HashMap<>();
         Page<PostTag> postTagPage = new Page<>(page,pageSize);
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
+        if(StringUtils.isNotBlank(tagName)){
+            postTagQueryWrapper.like("description", "%"+tagName+"%");
+        }
+     
         IPage<PostTag> postTagIPage = postTagService.page(postTagPage,postTagQueryWrapper);
         map.put("items",postTagIPage.getRecords());
         map.put("total",postTagIPage.getTotal());

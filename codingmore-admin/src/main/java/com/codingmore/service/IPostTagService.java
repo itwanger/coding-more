@@ -24,4 +24,10 @@ public interface IPostTagService extends IService<PostTag> {
      * @return
      */
     List<PostTag> getByPostId(Long postId);
+    /**
+     * 删除标签
+     * @param postTagId
+     * @return
+     */
+    boolean removeTag(long postTagId);
 }

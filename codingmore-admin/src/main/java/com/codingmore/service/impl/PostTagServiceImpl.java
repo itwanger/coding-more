@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
  * @since 2021-09-12
  */
 @Service
+@Transactional
 public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> implements IPostTagService {
     @Autowired
     private IPostTagRelationService postTagRelationService;
+    
 
     @Override
     public boolean savePostTag(PostAddTagParam postAddTagParam) {
@@ -52,5 +55,17 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
         postTagQueryWrapper.in("post_tag_id",postTagIdList);
         return this.list(postTagQueryWrapper);
+    }
+
+    @Override
+    public boolean removeTag(long postTagId) {
+        QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper();
+        postTagRelationQueryWrapper.eq("post_tag_id",postTagId);
+        postTagRelationService.remove(postTagRelationQueryWrapper)
+        int count = postTagRelationService.count(postTagRelationQueryWrapper);
+        if(count>0){
+            return false;
+        }
+        this.removeById(postTagId);
     }
 }
