@@ -3,12 +3,11 @@ package com.codingmore.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.dto.PostTagParam;
 import com.codingmore.model.PostTag;
-import com.codingmore.model.PostTagRelation;
 import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
+import com.codingmore.service.RedisService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +42,8 @@ public class PostTagController {
     @Autowired
     private IPostTagRelationService postTagRelationService;
 
+    @Autowired
+    private RedisService redisService;
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody
@@ -51,79 +52,103 @@ public class PostTagController {
         QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("description", postATagParam.getDescription());
         int count = postTagService.count(queryWrapper);
-        if(count>0){
+        if (count > 0) {
             return ResultObject.failed("标签已存在");
         }
         PostTag postTag = new PostTag();
         BeanUtils.copyProperties(postATagParam, postTag);
-        return  ResultObject.success(postTagService.save(postTag)? "添加成功" : "添加失败");
+        return ResultObject.success(postTagService.save(postTag) ? "添加成功" : "添加失败");
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("修改标签")
-    public ResultObject<String> update(@Valid PostTagParam postAddTagParam)  {
-        if(postAddTagParam.getPostTagId()==null){
+    public ResultObject<String> update(@Valid PostTagParam postAddTagParam) {
+        if (postAddTagParam.getPostTagId() == null) {
             return ResultObject.failed("标签id不能为空");
         }
         PostTag postTag = postTagService.getById(postAddTagParam.getPostTagId());
-        if(postTag==null){
+        if (postTag == null) {
             return ResultObject.failed("标签不存在");
         }
         QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("description", postAddTagParam.getDescription());
         int count = postTagService.count(queryWrapper);
-        if(count>0){
+        if (count > 0) {
             return ResultObject.failed("标签名称已存在");
         }
         BeanUtils.copyProperties(postAddTagParam, postTag);
-        return  ResultObject.success(postTagService.updateById(postTag)? "修改成功" : "修改失败");
+        return ResultObject.success(postTagService.updateById(postTag) ? "修改成功" : "修改失败");
     }
 
+    @RequestMapping(value = "/simpleTest", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("修改标签/Redis 测试用")
+    // Spring Cache 测试代码
+//  @CachePut(value = "codingmore", key = "'codingmore:postags:'+#postAddTagParam.postTagId")
+    public ResultObject<PostTag> simpleTest(@Valid PostTagParam postAddTagParam) {
+        if (postAddTagParam.getPostTagId() == null) {
+            return ResultObject.failed("标签id不能为空");
+        }
+        PostTag postTag = postTagService.getById(postAddTagParam.getPostTagId());
+        if (postTag == null) {
+            return ResultObject.failed("标签不存在");
+        }
+        QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("description", postAddTagParam.getDescription());
+        int count = postTagService.count(queryWrapper);
+        if (count > 0) {
+            return ResultObject.failed("标签名称已存在");
+        }
+        BeanUtils.copyProperties(postAddTagParam, postTag);
 
+        boolean successFlag = postTagService.updateById(postTag);
 
+        String key = "redis:simple:" + postTag.getPostTagId();
+        redisService.set(key, postTag);
 
+        PostTag cachePostTag = (PostTag) redisService.get(key);
+        return ResultObject.success(cachePostTag);
+    }
 
-
-    @RequestMapping(value = "/getByPostId",method=RequestMethod.GET)
+    @RequestMapping(value = "/getByPostId", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("根据文章内容获取标签")
     public ResultObject<List<PostTag>> getByPostId(long objectId) {
-
         return ResultObject.success(postTagService.getByPostId(objectId));
     }
 
-    @RequestMapping(value = "/getByName",method=RequestMethod.GET)
+    @RequestMapping(value = "/getByName", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("模糊匹配")
-    public ResultObject<List<PostTag>> getByName(String  keyWord) {
+    public ResultObject<List<PostTag>> getByName(String keyWord) {
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
-        postTagQueryWrapper.like("description",keyWord+"%");
+        postTagQueryWrapper.like("description", keyWord + "%");
         return ResultObject.success(postTagService.list(postTagQueryWrapper));
     }
 
 
-    @RequestMapping(value = "/delete",method=RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(Long postTagId) {
         return ResultObject.success(postTagService.removeTag(postTagId) ? "删除成功" : "删除失败");
     }
 
-    @RequestMapping(value = "/queryPageable",method=RequestMethod.GET)
+    @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String,Object>> queryPageable(long pageSize, long page,String tagName){
-        Map<String,Object> map = new HashMap<>();
-        Page<PostTag> postTagPage = new Page<>(page,pageSize);
+    public ResultObject<Map<String, Object>> queryPageable(long pageSize, long page, String tagName) {
+        Map<String, Object> map = new HashMap<>();
+        Page<PostTag> postTagPage = new Page<>(page, pageSize);
         QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper();
-        if(StringUtils.isNotBlank(tagName)){
-            postTagQueryWrapper.like("description", "%"+tagName+"%");
+        if (StringUtils.isNotBlank(tagName)) {
+            postTagQueryWrapper.like("description", "%" + tagName + "%");
         }
-     
-        IPage<PostTag> postTagIPage = postTagService.page(postTagPage,postTagQueryWrapper);
-        map.put("items",postTagIPage.getRecords());
-        map.put("total",postTagIPage.getTotal());
+
+        IPage<PostTag> postTagIPage = postTagService.page(postTagPage, postTagQueryWrapper);
+        map.put("items", postTagIPage.getRecords());
+        map.put("total", postTagIPage.getTotal());
         return ResultObject.success(map);
     }
 }
