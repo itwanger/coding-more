@@ -39,7 +39,7 @@
     </sql>
 
 
-    <select id="findByPage" resultType="com.codingmore.vo.PostsVo">
+    <select id="findByPage" resultMap="PostsVoResultMap">
         select  <include refid="Base_Column_List_No_Content" />, b.term_taxonomy_id,c.user_nicename
         from posts a
                  left join term_relationships b
