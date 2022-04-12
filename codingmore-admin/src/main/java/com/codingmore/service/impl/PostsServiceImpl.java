@@ -141,6 +141,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public boolean updatePosts(PostsParam postsParam) {
         Posts posts = this.getById(postsParam.getPostsId());
         Date publishDate = posts.getPostDate();
@@ -164,6 +165,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public boolean removePostsById(Long id) {
         this.removeById(id);
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
@@ -321,6 +323,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public int insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds) {
         if (postsIds == null || termTaxonomyIds == null) {
             return 0;

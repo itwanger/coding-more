@@ -35,6 +35,7 @@ public class ContentPageRequestStrategy implements ILearnWebRequestStrategy {
     private IPostsService iPostsService;
     @Override
     public String handleRequest(WebRequestParam webRequestParam) {
+        iPostsService.increasePageView(webRequestParam.getPostId(),webRequestParam.getRequest());
         PostsVo postsVo = iPostsService.getPostsById(webRequestParam.getPostId());
         webRequestParam.getRequest().setAttribute(POSTS_VO, postsVo);
         if(StringUtils.isNotBlank(postsVo.getTagsName())){

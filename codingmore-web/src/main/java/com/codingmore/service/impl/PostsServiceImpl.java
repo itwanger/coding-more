@@ -120,6 +120,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public void increasePageView(Long id, HttpServletRequest  request) {
         String ip = CusAccessObjectUtil.getIpAddress(request);
         String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
+        if(redisService.get(key) !=null){
+            return;
+        }
         redisService.incr(key, 1);
         Posts posts = this.getById(id);
         Integer pageView = (Integer)redisService.get(key);
