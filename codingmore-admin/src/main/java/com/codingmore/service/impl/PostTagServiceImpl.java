@@ -61,11 +61,7 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
     public boolean removeTag(long postTagId) {
         QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper();
         postTagRelationQueryWrapper.eq("post_tag_id",postTagId);
-        postTagRelationService.remove(postTagRelationQueryWrapper)
-        int count = postTagRelationService.count(postTagRelationQueryWrapper);
-        if(count>0){
-            return false;
-        }
-        this.removeById(postTagId);
+        postTagRelationService.remove(postTagRelationQueryWrapper);
+        return this.removeById(postTagId);
     }
 }
