@@ -5,7 +5,7 @@
   .article-list-area {
     background-color: #fff;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     max-width: 700px;
   }
 
@@ -255,6 +255,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /*底部加载相关样式*/
+  .loading-over{
+    height: 20px;
+  }
+
+  .loading-more{
+    line-height: 32px;
+    color:#333333;
+  }
+  .loading-more img{
+    vertical-align: center;
   }
 }
 

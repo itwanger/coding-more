@@ -38,6 +38,47 @@ const setSearchLayerVisible = val => {
   $('.menu-icon > img, .main-area, #searchBtn').toggleClass('noshow') //.removeClass('noshow').siblings().addClass('none')
 }
 
+// 简单封装ajax get请求
+const ajax_get = (url, data, fnSuccess, fnFailed, otherOptions) => {
+  otherOptions['type'] = 'GET'
+  ajax_fn(url, data, fnSuccess, fnFailed, otherOptions)
+}
+
+// 简单封装ajax post请求
+const ajax_post = (url, data, fnSuccess, fnFailed, otherOptions) => {
+  otherOptions['type'] = 'POST'
+  ajax_fn(url, data, fnSuccess, fnFailed, otherOptions)
+}
+// 实际执行的ajax方法
+const ajax_fn = (url, data, fnSuccess, fnFailed, otherOptions) => {
+  let ajaxOptions = {
+    url,
+    data,
+    cache: false,
+    success: res => {
+      if(typeof res === 'string') {
+        res = JSON.parse(res)
+      }
+      if($.isFunction(fnSuccess)) {
+        fnSuccess(res)
+      }
+    },
+    error: (e1, e2, e3) => {
+      console.log('ajax_post::handled exception')
+      console.log('e1=', e1)
+      console.log('e2=', e2)
+      console.log('e3=', e3)
+      if($.isFunction(fnFailed)) {
+        fnFailed({e1, e2, e3})
+      }
+    }
+  }
+
+  ajaxOptions = $.extend(ajaxOptions, otherOptions)
+
+  $.ajax(ajaxOptions)
+}
+
 // 打开新页面方法
 function openNewPage(url) {
   window.open(url)

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-ontab.png">
+    <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-ontop.jpg">
     <title th:text="${siteConfig.siteName}"></title>
     <meta name="keywords" th:content="${siteConfig.keywords}">
     <meta name="description" th:content="${siteConfig.siteDesc}">
@@ -73,7 +73,7 @@
                         <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>
                     </div>
                     <!-- 移动端文章标题 -->
-                    <a target="_blank" href="http://www.bai1du.com" class="article-title-cellphone"
+                    <a target="_blank" th:href="${pageVo.postsId}+'.html'" class="article-title-cellphone"
                        th:text="${pageVo.postTitle}">
                         Vite+Vue3.2+TS 相关API归纳总结
                     </a>
@@ -112,7 +112,12 @@
                 </div>
 
             </div>
-
+            <div class="bottom-loading">
+                <div class="loading-over"></div>
+                <div class="loading-more text-center noshow">
+                    <img src="images/loading-more.gif" /> 加载中...
+                </div>
+            </div>
         </div>
         <!-- 右侧部分 -->
         <div class="right-side">
