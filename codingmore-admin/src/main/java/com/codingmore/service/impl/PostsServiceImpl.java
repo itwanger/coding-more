@@ -14,6 +14,7 @@ import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -278,9 +279,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         String htmlContent = posts.getHtmlContent();
 
         // 没有内容不处理
-        if (StringUtils.isBlank(content)) {
+        if (StringUtils.isBlank(content)||StringUtils.isBlank(htmlContent)) {
             return;
         }
+
+        htmlContent = StringEscapeUtils.unescapeHtml4(htmlContent);
 
         Pattern p = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(content);
