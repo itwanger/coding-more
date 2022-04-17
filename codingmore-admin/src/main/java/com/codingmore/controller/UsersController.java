@@ -215,8 +215,8 @@ public class UsersController {
     @ApiOperation("获取指定用户的角色")
     @RequestMapping(value = "/role", method = RequestMethod.GET)
     @ResponseBody
-    public ResultObject<List<Role>> getRoleList(@RequestParam Long adminId) {
-        List<Role> roleList = usersService.getRoleList(adminId);
+    public ResultObject<List<Role>> getRoleList(@RequestParam Long userId) {
+        List<Role> roleList = usersService.getRoleList(userId);
         return ResultObject.success(roleList);
     }
 
