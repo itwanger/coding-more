@@ -1,11 +1,15 @@
 package com.codingmore.mapper;
 
+import com.codingmore.dto.RolePageQueryParam;
 import com.codingmore.model.Menu;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Role;
+import com.codingmore.vo.RoleVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
-
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import java.util.List;
 
 /**
@@ -29,4 +33,11 @@ public interface RoleMapper extends BaseMapper<Role> {
      * 根据角色ID获取资源
      */
     List<Resource> getResourceListByRoleId(@Param("roleId") Long roleId);
+    /**
+     * 
+     * @param page
+     * @param wrapper
+     * @return
+     */
+    IPage<RoleVo> findByPage(IPage<RoleVo> page, @Param(Constants.WRAPPER) Wrapper<RolePageQueryParam> wrapper);
 }

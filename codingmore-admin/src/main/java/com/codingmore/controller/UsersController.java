@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.codingmore.dto.UpdateAdminPasswordParam;
 import com.codingmore.dto.UsersLoginParam;
+import com.codingmore.dto.UsersPageQueryParam;
 import com.codingmore.dto.UsersParam;
 import com.codingmore.dto.UsersParamUpdate;
 import com.codingmore.model.AdminUserDetails;
@@ -93,17 +94,9 @@ public class UsersController {
     @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("分页查询")
-    public ResultObject<Map<String, Object>> queryPageable(long pageSize, long page,String userLogin, String userNicename) {
+    public ResultObject<Map<String, Object>> queryPageable(UsersPageQueryParam usersPageQuery) {
         Map<String, Object> map = new HashMap<>();
-        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isNotEmpty(userLogin)){
-            queryWrapper.like("user_login",userLogin);
-        }
-        if(StringUtils.isNotEmpty(userNicename)){
-            queryWrapper.like("user_nicename",userNicename);
-        }
-        Page<Users> usersPage = new Page<>(page, pageSize);
-        IPage<Users> usersIPage = usersService.page(usersPage,queryWrapper);
+        IPage<Users> usersIPage = usersService.findByPage(usersPageQuery);
         map.put("items", usersIPage.getRecords());
         map.put("total", usersIPage.getTotal());
         return ResultObject.success(map);

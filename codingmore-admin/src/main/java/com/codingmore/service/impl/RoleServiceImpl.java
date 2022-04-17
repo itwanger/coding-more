@@ -1,18 +1,25 @@
 package com.codingmore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.mapper.RoleResourceRelationMapper;
 import com.codingmore.model.Menu;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Role;
+import com.codingmore.dto.RolePageQueryParam;
 import com.codingmore.mapper.RoleMapper;
 import com.codingmore.model.RoleMenuRelation;
 import com.codingmore.model.RoleResourceRelation;
 import com.codingmore.service.IRoleMenuRelationService;
 import com.codingmore.service.IRoleResourceRelationService;
 import com.codingmore.service.IRoleService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.service.IUsersCacheService;
+import com.codingmore.vo.RoleVo;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -41,11 +48,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Autowired
     private IUsersCacheService usersCacheService;
-    
-
-
-
-
 
     @Override
     public List<Menu> getMenuList(Long userId) {
@@ -101,6 +103,16 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
            roleResourceRelationService.saveBatch(relationList);
            usersCacheService.delResourceListByRole(roleId);
            return resourceIds.size();
+    }
+
+    @Override
+    public IPage<RoleVo> findByPage(RolePageQueryParam param) {
+        QueryWrapper<RolePageQueryParam> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotBlank(param.getKeyword())){
+            queryWrapper.like("name",param.getKeyword());
+        }
+        Page<RoleVo> postsPage = new Page<>(param.getPage(), param.getPageSize());
+        return roleMapper.findByPage(postsPage,queryWrapper);
     }
 
    

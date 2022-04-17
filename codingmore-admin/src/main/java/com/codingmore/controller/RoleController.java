@@ -1,5 +1,6 @@
 package com.codingmore.controller;
 
+import com.codingmore.vo.RoleVo;
 import org.springframework.web.bind.annotation.*;
 
 import cn.hutool.core.collection.CollectionUtil;
@@ -18,6 +19,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.dto.RolePageQueryParam;
 import com.codingmore.dto.RoleParam;
 import com.codingmore.model.Menu;
 import com.codingmore.model.Resource;
@@ -94,15 +96,9 @@ public class RoleController {
     @ApiOperation("根据角色名称分页获取角色列表")
     @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)
     @ResponseBody
-    public ResultObject<Map<String,Object>> queryPageable(String keyword, Integer pageSize, Integer page) {
+    public ResultObject<Map<String,Object>> queryPageable(RolePageQueryParam rolePageQueryParam) {
         Map<String,Object> map = new HashMap<>();
-        Page<Role> rolePage = new Page<>(page,pageSize);
-        QueryWrapper<Role> roleQueryWrapper = new QueryWrapper();
-        if (StringUtils.isNotBlank(keyword)) {
-            roleQueryWrapper.like("name", "%"+keyword+"%");
-        }
-      
-        IPage<Role> postTagIPage = roleService.page(rolePage,roleQueryWrapper);
+        IPage<RoleVo> postTagIPage = roleService.findByPage(rolePageQueryParam);
         map.put("items",postTagIPage.getRecords());
         map.put("total",postTagIPage.getTotal());
         return ResultObject.success(map);

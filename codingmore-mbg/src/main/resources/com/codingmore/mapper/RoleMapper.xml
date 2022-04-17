@@ -7,14 +7,13 @@
         <id column="role_id" property="roleId" />
         <result column="name" property="name" />
         <result column="description" property="description" />
-        <result column="admin_count" property="adminCount" />
         <result column="create_time" property="createTime" />
         <result column="status" property="status" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        role_id, name, description, admin_count, create_time, status
+        role_id, name, description, create_time, status
     </sql>
 
     <select id="getMenuList" resultType="com.codingmore.model.Menu">
@@ -75,6 +74,11 @@
           AND r.resource_id IS NOT NULL
         GROUP BY
             r.resource_id
+    </select>
+    <select id="findByPage" resultType="com.codingmore.vo.RoleVo">
+        select  <include refid="Base_Column_List" />,( select  count(a.role_id) admin_count
+        from role a  left join admin_role_relation b on a.role_id = b.role_id where c.role_id = a.role_id GROUP BY a.role_id  ) admin_count
+        from role c  ${ew.customSqlSegment}
     </select>
 
 </mapper>

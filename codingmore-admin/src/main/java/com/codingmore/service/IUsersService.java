@@ -3,8 +3,11 @@ package com.codingmore.service;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Role;
 import com.codingmore.model.Users;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codingmore.dto.UpdateAdminPasswordParam;
+import com.codingmore.dto.UsersPageQueryParam;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,4 +82,10 @@ public interface IUsersService extends IService<Users> {
     @Transactional
     int updateRole(Long adminId, List<Long> roleIds);
 
+
+    /**
+     * 自定义分页查询
+     *
+     */
+    IPage<Users> findByPage(UsersPageQueryParam param);
 }

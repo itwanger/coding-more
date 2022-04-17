@@ -24,4 +24,11 @@
         users_id, user_login, user_pass, user_nicename, user_email, user_url, user_registered, user_activation_key, user_status, display_name, user_type,open_id,attribute
     </sql>
 
+    <sql id="Base_Column_List_No_Password">
+        c.users_id, user_login, user_nicename, user_email, user_url, user_registered, user_activation_key, user_status, display_name, user_type,open_id,attribute
+    </sql>
+
+    <select id="findByPage" resultType="com.codingmore.model.Users">
+        select  DISTINCT <include refid="Base_Column_List_No_Password" />    from users c left join admin_role_relation b  on c.users_id = b.users_id ${ew.customSqlSegment}
+    </select>
 </mapper>

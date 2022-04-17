@@ -2,17 +2,22 @@ package com.codingmore.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.mapper.AdminRoleRelationMapper;
 import com.codingmore.model.*;
 import com.codingmore.exception.Asserts;
 import com.codingmore.mapper.UsersMapper;
 import com.codingmore.service.IUsersCacheService;
 import com.codingmore.service.IUsersService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.state.UserStatus;
 import com.codingmore.state.UserType;
 import com.codingmore.util.JwtTokenUtil;
 import com.codingmore.dto.UpdateAdminPasswordParam;
+import com.codingmore.dto.UsersPageQueryParam;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +56,8 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private IUsersCacheService usersCacheService;
     @Autowired
     private AdminRoleRelationMapper adminRoleRelationMapper;
+    @Autowired
+    private UsersMapper usersMapper;
 
     /**
      * 实际查询数据库
@@ -222,6 +229,25 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public Long getCurrentUserId() {
         return getCurrentLoginUser().getId();
     }
+
+    @Override
+    public IPage<Users> findByPage(UsersPageQueryParam param) {
+        QueryWrapper<UsersPageQueryParam> queryWrapper = new QueryWrapper<>();
+        if(StringUtils.isNotEmpty(param.getUserLogin())){
+            queryWrapper.like("user_login",param.getUserLogin());
+        }
+        if(StringUtils.isNotEmpty(param.getUserNicename())){
+            queryWrapper.like("user_nicename",param.getUserNicename());
+        }
+        if(param.getRoleId()!=null){
+            queryWrapper.like("b.role_id",param.getRoleId());
+        }
+        Page<Users> usersPage = new Page<>(param.getPage(), param.getPageSize());
+        IPage<Users> usersIPage = usersMapper.findByPage(usersPage,queryWrapper);
+        return usersIPage;
+    }
+
+    
 
 
 
