@@ -1,6 +1,8 @@
 package com.codingmore.config;
 
 import com.codingmore.component.DynamicSecurityService;
+import com.codingmore.model.Resource;
+import com.codingmore.service.IResourceService;
 import com.codingmore.service.IUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,6 +27,8 @@ public class CodingmoreSecurityConfig extends SecurityConfig {
 
     @Autowired
     private IUsersService usersService;
+    @Autowired
+    private IResourceService resourceService;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -37,6 +42,10 @@ public class CodingmoreSecurityConfig extends SecurityConfig {
             @Override
             public Map<String, ConfigAttribute> loadDataSource() {
                 Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
+                List<Resource> resources = resourceService.list();
+                resources.forEach(item->{
+                    map.put(item.getUrl(), new org.springframework.security.access.SecurityConfig(item.getResourceId() + ":" + item.getName()));
+                });
                 return map;
             }
         };
