@@ -80,7 +80,7 @@ public class RoleController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public ResultObject<String> delete(@RequestParam("ids") Long[] ids) {
-        return ResultObject.success( roleService.removeByIds(CollectionUtil.toList(ids)) ? "删除成功" : "删除失败");
+        return ResultObject.success( roleService.batchRemove(CollectionUtil.toList(ids)) ? "删除成功" : "删除失败");
     }
 
   

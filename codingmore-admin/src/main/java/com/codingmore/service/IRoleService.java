@@ -56,5 +56,6 @@ public interface IRoleService extends IService<Role> {
      */
     IPage<RoleVo> findByPage(RolePageQueryParam param);
 
+    boolean batchRemove(List<Long> roleIds);
   
 }

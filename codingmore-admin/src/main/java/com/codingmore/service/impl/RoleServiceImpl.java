@@ -1,5 +1,6 @@
 package com.codingmore.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.dto.PostsPageQueryParam;
@@ -115,5 +116,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         return roleMapper.findByPage(postsPage,queryWrapper);
     }
 
-   
+    @Override
+    public boolean batchRemove(List<Long> roleIds) {
+        usersCacheService.delResourceListByRoleIds(roleIds);
+        return  this.removeByIds(roleIds);
+    }
 }

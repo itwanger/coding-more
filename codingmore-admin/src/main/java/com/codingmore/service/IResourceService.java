@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-03-03
  */
 public interface IResourceService extends IService<Resource> {
-
+    boolean remove(Long resourceId);
 }

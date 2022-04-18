@@ -96,7 +96,7 @@ public class ResourceController {
         if (count > 0) {
             return ResultObject.failed("该资源已被使用，不能删除");
         }
-        return ResultObject.success(resourceService.removeById(id) ? "删除成功" : "删除失败");
+        return ResultObject.success(resourceService.remove(id) ? "删除成功" : "删除失败");
     }
 
     @ApiOperation("分页模糊查询后台资源")
