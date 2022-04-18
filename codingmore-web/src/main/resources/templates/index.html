@@ -61,26 +61,26 @@
                 <span></span>
                 <a class="tab-link" href="javascript:void(0)">热榜</a>
             </div>
-            <div class="article-list" th:each="pageVo : ${postsItems}">
+            <div class="article-list" id="article_list">
                 <!-- 具体文章列表 每个article-item是一篇文章 -->
-                <div class="article-item">
+                <div class="article-item" th:each="pageVo : ${postsItems}" th:onclick="|javascript:openNewPage('${pageVo.postsId}.html')|">
                     <div class="article-basic-info">
-                        <a class="tab-link gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
+                        <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
                         <span class="wide-border small-margin"></span>
                         <span class="tab-link light-gray"
                               th:text="${#dates.format(pageVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">10天前</span>
-                        <span class="wide-border small-margin"></span>
-                        <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>
+                        <span th:if="!${#strings.isEmpty(pageVo.tagsName)}" class="wide-border small-margin"></span>
+                        <a th:if="!${#strings.isEmpty(pageVo.tagsName)}" class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>
                     </div>
-                    <!-- 移动端文章标题 -->
-                    <a target="_blank" th:href="${pageVo.postsId}+'.html'" class="article-title-cellphone"
+                    <!-- 移动端文章标题 th:href="${pageVo.postsId}+'.html'" -->
+                    <a target="_blank" href="javascript:void(0)" class="article-title-cellphone"
                        th:text="${pageVo.postTitle}">
                         Vite+Vue3.2+TS 相关API归纳总结
                     </a>
                     <div class="flex-row">
                         <div class="flex-auto-item">
                             <!-- PC端文章标题 -->
-                            <a target="_blank" th:href="${pageVo.postsId}+'.html'" class="article-title"
+                            <a target="_blank" href="javascript:void(0)" class="article-title"
                                th:text="${pageVo.postTitle}">
                                 Vite+Vue3.2+TS 相关API归纳总结
                             </a>
@@ -113,7 +113,7 @@
 
             </div>
             <div class="bottom-loading">
-                <div class="loading-over"></div>
+                <div id="loading_over" class="loading-over text-center"></div>
                 <div class="loading-more text-center noshow">
                     <img src="images/loading-more.gif" /> 加载中...
                 </div>
