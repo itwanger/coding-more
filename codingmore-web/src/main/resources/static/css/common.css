@@ -2,6 +2,7 @@
 @media screen and (min-width: 751px) {
   body {
     min-width: 1200px;
+    color: #333333;
   }
 
   /* 顶部固定条样式 */
