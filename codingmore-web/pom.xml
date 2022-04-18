@@ -14,9 +14,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
     <dependencies>
-
         <dependency>
             <groupId>top.codingmore</groupId>
             <artifactId>codingmore-mbg</artifactId>
@@ -26,9 +24,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-
-
-
 
         <dependency>
             <groupId>org.apache.commons</groupId>
