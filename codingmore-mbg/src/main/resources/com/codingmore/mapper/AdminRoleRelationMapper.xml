@@ -30,7 +30,7 @@
   
     <select id="getResourceList" resultType="com.codingmore.model.Resource">
         SELECT
-            ur.resource_id id,
+            ur.resource_id resourceId,
             ur.create_time createTime,
             ur.`name` `name`,
             ur.url url,
