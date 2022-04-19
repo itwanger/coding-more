@@ -176,10 +176,10 @@ public class UsersController {
 
         data.put("userDetail", adminUserDetails.getUsers());
         data.put("username", user.getUserLogin());
-        data.put("menus", roleService.getMenuList(user.getId()));
+        data.put("menus", roleService.getMenuList(user.getUsersId()));
         data.put("icon", user.getDisplayName());
 
-        List<Role> roleList = usersService.getRoleList(user.getId());
+        List<Role> roleList = usersService.getRoleList(user.getUsersId());
         if (CollUtil.isNotEmpty(roleList)) {
             List<String> roles = roleList.stream().map(Role::getName).collect(Collectors.toList());
             data.put("roles", roles);

@@ -33,7 +33,7 @@ public class Users implements Serializable {
 
     @ApiModelProperty(value = "ID")
     @TableId(value = "users_id", type = IdType.AUTO)
-    private Long id;
+    private Long usersId;
 
     @ApiModelProperty(value = "登录名")
     @NotBlank(message="登录名不能为空")

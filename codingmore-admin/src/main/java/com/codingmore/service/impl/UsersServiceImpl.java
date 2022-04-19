@@ -157,7 +157,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
         user.setUserPass(passwordEncoder.encode(updatePasswordParam.getNewPassword()));
         baseMapper.updateById(user);
-        usersCacheService.delAdmin(user.getId());
+        usersCacheService.delAdmin(user.getUsersId());
         return 1;
     }
 
@@ -169,7 +169,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         // 根据用户名查询用户
         Users admin = getAdminByUsername(username);
         if (admin != null) {
-            List<Resource> resourceList = getResourceList(admin.getId());
+            List<Resource> resourceList = getResourceList(admin.getUsersId());
             return new AdminUserDetails(admin,resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
@@ -227,7 +227,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public Long getCurrentUserId() {
-        return getCurrentLoginUser().getId();
+        return getCurrentLoginUser().getUsersId();
     }
 
     @Override
