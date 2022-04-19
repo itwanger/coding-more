@@ -88,7 +88,7 @@ public class UsersController {
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(long usersId) {
-        return ResultObject.success(usersService.removeById(usersId) ? "删除成功" : "删除失败");
+        return ResultObject.success(usersService.removeUser(usersId) ? "删除成功" : "删除失败");
     }
 
     @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)

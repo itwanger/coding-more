@@ -30,6 +30,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -194,6 +196,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public int updateRole(Long adminId, List<Long> roleIds) {
         int count = roleIds == null ? 0 : roleIds.size();
         //先删除原来的关系
@@ -247,8 +250,12 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         return usersIPage;
     }
 
-    
-
-
-
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public boolean removeUser(Long usersId) {
+        QueryWrapper<AdminRoleRelation> query = new QueryWrapper<AdminRoleRelation>();
+        query.eq("users_id",usersId);
+        adminRoleRelationMapper.delete(query);
+        return this.removeById(usersId);
+    }
 }

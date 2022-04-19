@@ -88,4 +88,6 @@ public interface IUsersService extends IService<Users> {
      *
      */
     IPage<Users> findByPage(UsersPageQueryParam param);
+
+    boolean removeUser(Long usersId);
 }
