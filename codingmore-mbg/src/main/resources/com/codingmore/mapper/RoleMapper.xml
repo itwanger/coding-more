@@ -75,10 +75,15 @@
         GROUP BY
             r.resource_id
     </select>
+
+    <sql id="Base_Column_List_Count">
+        a.role_id, name, description, create_time, status
+    </sql>
+
     <select id="findByPage" resultType="com.codingmore.vo.RoleVo">
-        select  <include refid="Base_Column_List" />,( select  count(a.role_id) admin_count
-        from role a  left join admin_role_relation b on a.role_id = b.role_id where c.role_id = a.role_id GROUP BY a.role_id  ) admin_count
-        from role c  ${ew.customSqlSegment}
+        select  <include refid="Base_Column_List_Count" />, IFNULL(c.admin_count,0) admin_count
+        from role a left join (select  count(b.role_id) admin_count,b.role_id
+        from  admin_role_relation b  GROUP BY b.role_id )  c on a.role_id = c.role_id  ${ew.customSqlSegment}
     </select>
 
 </mapper>
