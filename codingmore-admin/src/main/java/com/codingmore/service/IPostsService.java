@@ -21,7 +21,7 @@ public interface IPostsService extends IService<Posts> {
      * @param postsParam
      * @return
      */
-    boolean savePosts(PostsParam postsParam);
+    void savePosts(PostsParam postsParam);
 
     /**
      * 修改内容

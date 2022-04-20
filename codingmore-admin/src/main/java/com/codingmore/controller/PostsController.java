@@ -44,8 +44,8 @@ public class PostsController {
     @ResponseBody
     @ApiOperation("添加文章")
     public ResultObject<String> insert(@Valid PostsParam postsParam) {
-        PostStatus postStatus = PostStatus.valueOf(postsParam.getPostStatus());
-        return ResultObject.success(postsService.savePosts(postsParam) ? "保存成功" : "保存失败");
+        postsService.savePosts(postsParam);
+        return ResultObject.success("保存成功");
     }
 
     @RequestMapping(value = "/getById", method = RequestMethod.GET)

@@ -70,7 +70,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public boolean savePosts(PostsParam postsParam) {
+    public void savePosts(PostsParam postsParam) {
         Posts posts = new Posts();
         BeanUtils.copyProperties(postsParam, posts);
 
@@ -102,7 +102,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
         // 处理栏目
         insertTermRelationships(postsParam, posts);
-        return true;
 
     }
 
