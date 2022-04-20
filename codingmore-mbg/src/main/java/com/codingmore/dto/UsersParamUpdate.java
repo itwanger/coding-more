@@ -21,7 +21,7 @@ public class UsersParamUpdate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private Long usersId;
 
     @ApiModelProperty(value = "昵称")
     @NotBlank(message="昵称不能为空")
@@ -30,8 +30,7 @@ public class UsersParamUpdate implements Serializable {
     @ApiModelProperty(value = "Email")
     private String userEmail;
 
-  /*  @ApiModelProperty("属性")
-    private String attribute;*/
+
 
     @ApiModelProperty(value = "网址")
     private String userUrl;
