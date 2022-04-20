@@ -76,7 +76,7 @@ public class UsersController {
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Validated UsersParamUpdate usersParam) {
-        if (usersParam.getId() == null) {
+        if (usersParam.getUsersId() == null) {
             return ResultObject.failed("id不能为空");
         }
         Users users = new Users();
