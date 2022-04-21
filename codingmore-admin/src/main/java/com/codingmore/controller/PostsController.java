@@ -1,6 +1,7 @@
 package com.codingmore.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.dto.PostsParam;
@@ -11,8 +12,10 @@ import com.codingmore.vo.PostsVo;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -40,10 +43,16 @@ public class PostsController {
     @Autowired
     private IUsersService iUsersService;
 
+    /**
+     *
+     * @param postsParam
+     * @param result 将通知注入到 BindingResult 对象，否则 Hibernate Validator不起效
+     * @return
+     */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("添加文章")
-    public ResultObject<String> insert(@Valid PostsParam postsParam) {
+    public ResultObject<String> insert(@Valid PostsParam postsParam, BindingResult result) {
         postsService.savePosts(postsParam);
         return ResultObject.success("保存成功");
     }
@@ -91,7 +100,5 @@ public class PostsController {
     public ResultObject<String> insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds) {
         return ResultObject.success(postsService.insertPostTermTaxonomy(postsIds,termTaxonomyIds) > 0? "保存成功" : "保存失败");
     }
-
-
 }
 

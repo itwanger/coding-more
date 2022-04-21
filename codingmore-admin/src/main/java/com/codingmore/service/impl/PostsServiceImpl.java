@@ -1,5 +1,6 @@
 package com.codingmore.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,6 +11,7 @@ import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.codingmore.state.PostStatus;
 import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -77,16 +79,14 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 处理扩展字段
         handleAttribute(postsParam, posts);
 
+        // TODO 定时发布
+        handleScheduled(posts);
+
         // TODO 评论数
         posts.setCommentCount(0L);
 
-        // TODO 定时发布
-        if (posts.getPostDate() == null) {
-            posts.setPostDate(new Date());
-        }
-
         //默认设置发布时间，方便排序
-        posts.setPostModified(new Date());
+        posts.setPostModified(DateUtil.date());
 
         // 当然登录用户
         posts.setPostAuthor(iUsersService.getCurrentUserId());
@@ -98,14 +98,27 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         save(posts);
 
         // 处理标签
-        insertorUpdateTag(postsParam, posts);
+        insertOrUpdateTag(postsParam, posts);
 
         // 处理栏目
         insertTermRelationships(postsParam, posts);
-
     }
 
-    private boolean insertorUpdateTag(PostsParam postsParam, Posts posts) {
+    private void handleScheduled(Posts posts) {
+
+        // 条件是指定了发布时间，并且状态为发布
+        // 如果指定了发布时间，那么以草稿的形式先保存起来，然后再加入到定时任务中
+        // 定时任务到了，执行，从定时任务中删除任务
+        // 修改文章的状态为已发布
+        if (posts.getPostDate() != null && PostStatus.PUBLISHED.equals(posts.getPostStatus())) {
+            LOGGER.debug("定时发布，时间{}，文章状态", DateUtil.formatDateTime(posts.getPostDate()),
+                    posts.getPostStatus());
+            posts.setPostStatus(PostStatus.DRAFT.name());
+            // 开启定时任务
+        }
+    }
+
+    private boolean insertOrUpdateTag(PostsParam postsParam, Posts posts) {
         if (StringUtils.isBlank(postsParam.getTags())) {
             return false;
         }
@@ -158,7 +171,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         queryWrapper.eq("term_relationships_id", postsParam.getPostsId());
         // 删除旧的栏目内容管理
         iTermRelationshipsService.remove(queryWrapper);
-        this.insertorUpdateTag(postsParam, posts);
+        this.insertOrUpdateTag(postsParam, posts);
         insertTermRelationships(postsParam, posts);
         return true;
 

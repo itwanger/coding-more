@@ -32,7 +32,7 @@ public class PostsParam implements Serializable {
     private Date postDate;
 
     @ApiModelProperty(value = "正文")
-    @NotBlank(message = "正文不能为空")
+    @NotBlank(message = "文章内容不能为空")
     private String postContent;
 
     @ApiModelProperty(value = "正文html")
@@ -42,10 +42,10 @@ public class PostsParam implements Serializable {
     @NotBlank(message = "标题不能为空")
     private String postTitle;
 
-    @ApiModelProperty(value = "摘录")
+    @ApiModelProperty(value = "摘要")
     private String postExcerpt;
 
-    @ApiModelProperty(value = "文章状态PUBLISHED,DELETED,DRAFT")
+    @ApiModelProperty(value = "文章状态：PUBLISHED,DELETED,DRAFT")
     @NotBlank(message = "文章状态不能为空")
     private String postStatus;
 
