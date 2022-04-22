@@ -8,6 +8,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSSClient;
 import com.codingmore.service.IOssService;
+import com.codingmore.util.FileNameUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class OssServiceImpl implements IOssService {
     @Autowired
     private OSSClient ossClient;
 
-    private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
@@ -44,7 +45,7 @@ public class OssServiceImpl implements IOssService {
      */
     @Override
     public String upload(String url) {
-        String objectName = getFileName(url);
+        String objectName = FileNameUtil.getFileName(dirPrefix, url);
         try (InputStream inputStream = new URL(url).openStream()) {
             ossClient.putObject(bucketName, objectName, inputStream);
         } catch (IOException e) {
@@ -53,16 +54,7 @@ public class OssServiceImpl implements IOssService {
         return formatOSSPath(objectName);
     }
 
-    private String getFileName(String url) {
-        String ext = "";
-        for (String extItem : imageExtension) {
-            if (url.indexOf(extItem) != -1) {
-                ext = extItem;
-                break;
-            }
-        }
-        return dirPrefix + DateUtil.today() + "/" + IdUtil.randomUUID() + ext;
-    }
+
 
     private String formatOSSPath(String objectName) {
         return "https://" + cdn  + "/" + objectName;
@@ -70,7 +62,7 @@ public class OssServiceImpl implements IOssService {
 
     @Override
     public String upload(InputStream inputStream, String name) {
-        String objectName = getFileName(name);
+        String objectName = FileNameUtil.getFileName(dirPrefix, name);
         // 创建PutObject请求。
         ossClient.putObject(bucketName, objectName, inputStream);
         return formatOSSPath(objectName);

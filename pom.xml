@@ -215,6 +215,13 @@
             <version>2.3.0</version>
         </dependency>
 
+        <!-- minio -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.2.1</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
  */
 public class Convert {
 
-    final static String directory = "gongju/";
-    final static String key = "warp";
+    final static String directory = "sidebar/herongwei/";
+    final static String key = "mysql";
 
     final static String docPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/" + directory;
     final static String imgPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/images/" + directory;
