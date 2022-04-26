@@ -1,12 +1,16 @@
 package com.codingmore.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.component.PublishPostJob;
 import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.dto.PostsParam;
+import com.codingmore.exception.Asserts;
 import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
 import com.codingmore.service.*;
@@ -14,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.state.PostStatus;
 import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
+import com.codingmore.webapi.ResultObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -58,6 +63,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private IOssService iOssService;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private IScheduleService scheduleService;
+
+
     private static final String PAGE_VIEW_KEY = "pageView";
     private static final String POST_LIKE_COUNT = "likeCount";
 
@@ -79,14 +88,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 处理扩展字段
         handleAttribute(postsParam, posts);
 
-        // TODO 定时发布
-        handleScheduled(posts);
+        // 定时发布要更改文章的状态
+        boolean needShcduleAfter = handleScheduledBefore(posts);
 
         // TODO 评论数
         posts.setCommentCount(0L);
-
-        //默认设置发布时间，方便排序
-        posts.setPostModified(DateUtil.date());
 
         // 当然登录用户
         posts.setPostAuthor(iUsersService.getCurrentUserId());
@@ -102,30 +108,120 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
         // 处理栏目
         insertTermRelationships(postsParam, posts);
-    }
 
-    private void handleScheduled(Posts posts) {
-
-        // 条件是指定了发布时间，并且状态为发布
-        // 如果指定了发布时间，那么以草稿的形式先保存起来，然后再加入到定时任务中
-        // 定时任务到了，执行，从定时任务中删除任务
-        // 修改文章的状态为已发布
-        if (posts.getPostDate() != null && PostStatus.PUBLISHED.equals(posts.getPostStatus())) {
-            LOGGER.debug("定时发布，时间{}，文章状态", DateUtil.formatDateTime(posts.getPostDate()),
-                    posts.getPostStatus());
-            posts.setPostStatus(PostStatus.DRAFT.name());
-            // 开启定时任务
+        if (needShcduleAfter) {
+            handleScheduledAfter(posts);
         }
     }
 
-    private boolean insertOrUpdateTag(PostsParam postsParam, Posts posts) {
-        if (StringUtils.isBlank(postsParam.getTags())) {
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void updatePosts(PostsParam postsParam) {
+        if (postsParam.getPostsId() == null) {
+            LOGGER.error("更新文章时，文章 ID 为空");
+            Asserts.fail("文章 ID 不能为空");
+        }
+
+        // 根据文章 ID 获取文章
+        Posts posts = getById(postsParam.getPostsId());
+        if (posts == null) {
+            Asserts.fail("更新文章时，文章不存在");
+            LOGGER.error("文章不存在，文章ID{}",postsParam.getPostsId());
+        }
+        BeanUtils.copyProperties(postsParam, posts);
+
+        handleAttribute(postsParam, posts);
+
+        // 定时发布要更改文章的状态
+        boolean needShcduleAfter = handleScheduledBefore(posts);
+
+        // 更新文章的图片
+        handleContentImg(posts);
+        updateById(posts);
+
+        // 更新标签
+        insertOrUpdateTag(postsParam, posts);
+
+        // 删除原来的栏目
+        deleteTermRelationships(postsParam);
+        // 插入新的栏目
+        insertTermRelationships(postsParam, posts);
+
+        // 重新调整定时发布的时间
+        if (needShcduleAfter) {
+            handleScheduledAfter(posts);
+        }
+
+    }
+
+    @Override
+    public boolean updatePostByScheduler(Long postId) {
+        LOGGER.info("更新文章{}状态", postId);
+        // 根据文章 ID 获取文章
+        Posts posts = getById(postId);
+        if (posts == null) {
+            LOGGER.error("文章定时发布出错，文章 ID 不存在");
             return false;
+        }
+
+        // 文章设置的发布时间
+        posts.setPostModified(DateTime.now());
+        // 更新发布状态
+        posts.setPostStatus(PostStatus.PUBLISHED.name());
+
+        return updateById(posts);
+
+    }
+
+    private void deleteTermRelationships(PostsParam postsParam) {
+        QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("term_relationships_id", postsParam.getPostsId());
+        // 删除旧的栏目内容管理
+        iTermRelationshipsService.remove(queryWrapper);
+    }
+
+    private void handleScheduledAfter(Posts posts) {
+        // 文章已经保存为草稿了，并且拿到了文章 ID
+        // 调用定时任务
+        String jobName = scheduleService.scheduleFixTimeJob(PublishPostJob.class, posts.getPostDate(), posts.getPostsId().toString());
+        LOGGER.debug("定时任务{}开始执行", jobName);
+    }
+
+    private boolean handleScheduledBefore(Posts posts) {
+
+        // 条件是指定了发布时间，并且状态为发布
+        // 如果指定了发布时间，那么以草稿的形式先保存起来，把文章的 ID传递给定时任务，然后再加入到定时任务中
+        // 定时任务到了，执行，从定时任务中删除任务
+        // 修改文章的状态为已发布
+        // 定时发布一定是草稿状态
+        if (posts.getPostDate() != null) {
+            LOGGER.debug("定时发布，时间{}", DateUtil.formatDateTime(posts.getPostDate()));
+
+            // 定时任务的时间必须大于当前时间 10 分钟
+            if (DateUtil.between(DateTime.now(), posts.getPostDate(), DateUnit.MINUTE, false) <= 10) {
+                Asserts.fail("定时发布的时间必须在 10 分钟后");
+            }
+
+            posts.setPostStatus(PostStatus.DRAFT.name());
+            // 开启定时任务
+            return true;
+        } else {
+            // 默认设置发布时间，方便排序
+            posts.setPostModified(DateTime.now());
+        }
+        return false;
+    }
+
+    private void insertOrUpdateTag(PostsParam postsParam, Posts posts) {
+        // 标签可为空
+        if (StringUtils.isBlank(postsParam.getTags())) {
+            return;
         }
         //删除旧的内容标签关联
         QueryWrapper<PostTagRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("post_id", posts.getPostsId());
         iPostTagRelationService.remove(queryWrapper);
+
         String[] tags = postsParam.getTags().split(",");
         // TODO: 2021/11/14 先默认 循环添加
         int order = 0;
@@ -149,32 +245,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             }
             order++;
         }
-
-        return true;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public boolean updatePosts(PostsParam postsParam) {
-        Posts posts = this.getById(postsParam.getPostsId());
-        Date publishDate = posts.getPostDate();
-        BeanUtils.copyProperties(postsParam, posts);
-
-        handleAttribute(postsParam, posts);
-        // 防止修改发布时间
-        posts.setPostDate(publishDate);
-        posts.setPostModified(new Date());
-        handleContentImg(posts);
-        this.updateById(posts);
-
-        QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("term_relationships_id", postsParam.getPostsId());
-        // 删除旧的栏目内容管理
-        iTermRelationshipsService.remove(queryWrapper);
-        this.insertOrUpdateTag(postsParam, posts);
-        insertTermRelationships(postsParam, posts);
-        return true;
-
     }
 
     @Override
@@ -275,9 +345,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
                 posts.setAttribute(attribute);
             } catch (JsonProcessingException e) {
-                LOGGER.error("扩展字段处理出错：{}", e.getMessage());
+                LOGGER.error("扩展字段处理出错：{}", e);
+                Asserts.fail("扩展字段处理出错");
             }
-
         }
     }
 
@@ -291,7 +361,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         String htmlContent = posts.getHtmlContent();
 
         // 没有内容不处理
-        if (StringUtils.isBlank(content)||StringUtils.isBlank(htmlContent)) {
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(htmlContent)) {
             return;
         }
 
@@ -322,16 +392,18 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         for (String oldUrl : map.keySet()) {
             Future<String> future = map.get(oldUrl);
 
+            String imageUrl = null;
             try {
-                String imageUrl = future.get();
-                content = content.replace(oldUrl, imageUrl);
+                imageUrl = future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                LOGGER.error("图片地址获取出错{}", e);
+                Asserts.fail("图片转链失败");
+            }
+            content = content.replace(oldUrl, imageUrl);
 
                 if (StringUtils.isNotBlank(htmlContent)) {
                     htmlContent = htmlContent.replace(oldUrl, imageUrl);
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                LOGGER.error("获取图片链接出错{}", e.getMessage());
-            }
         }
         posts.setPostContent(content);
         posts.setHtmlContent(htmlContent);

@@ -28,7 +28,14 @@ public interface IPostsService extends IService<Posts> {
      * @param postsParam
      * @return
      */
-    boolean updatePosts(PostsParam postsParam);
+    void updatePosts(PostsParam postsParam);
+
+    /**
+     * 定时发布文章后调用
+     *
+     * @param postId
+     */
+    boolean updatePostByScheduler(Long postId);
 
     boolean removePostsById(Long id);
 

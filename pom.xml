@@ -222,6 +222,12 @@
             <version>8.2.1</version>
         </dependency>
 
+        <!-- 实现对 Quartz 的自动化配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

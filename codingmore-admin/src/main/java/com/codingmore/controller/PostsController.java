@@ -68,10 +68,8 @@ public class PostsController {
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Valid PostsParam postsParam) {
-        if (postsParam.getPostsId() == null) {
-            return ResultObject.failed("id不能为空");
-        }
-        return ResultObject.success(postsService.updatePosts(postsParam) ? "更新成功" : "更新失败");
+        postsService.updatePosts(postsParam);
+        return ResultObject.success("更新成功");
     }
 
 
