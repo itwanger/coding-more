@@ -12,13 +12,13 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  * 沉默王二 2022年04月20日
  */
 @Configuration
-//@EnableScheduling
+@EnableScheduling
 public class SpringTaskConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
 
-        threadPoolTaskScheduler.setPoolSize(10);
+        threadPoolTaskScheduler.setPoolSize(1);
         threadPoolTaskScheduler.setThreadNamePrefix("my-scheduled-task-pool-");
         threadPoolTaskScheduler.initialize();
 
