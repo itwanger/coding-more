@@ -1,0 +1,95 @@
+# Spring Boot 配置
+spring:
+  profiles:
+    active: dev #默认为开发环境
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+server:
+  port: 9002
+
+# MyBatis plus 的配置查询后写注释
+mybatis-plus:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+  global-config:
+    db-config:
+      table-underline: true
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 自定义类 ignoreConfig，URL 的白名单
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /doc.html
+      - /swagger-ui/**
+      - /swagger/**
+      - /swagger-resources/**
+      - /**/v3/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /users/login
+      - /users/register
+      - /users/info
+      - /users/logout
+      - /minio/upload
+
+# 登录认证 token filter
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: codingmore-admin-secret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer '  #JWT负载中拿到开头
+
+  # oss
+aliyun:
+  oss:
+      # oss对外服务的访问域名
+    endpoint: oss-cn-beijing.aliyuncs.com
+      # 访问身份验证中用到用户标识
+    accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
+      # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
+      # oss的存储空间
+    bucketName: itwanger-oss
+      # 上传文件大小(M)
+    maxSize: 3
+      # 上传文件夹路径前缀
+    dir:
+      prefix: codingmore/images/
+  cdn: cdn.tobebetterjavaer.com
+
+redis:
+  database: codingmore
+  key:
+    admin: 'codingmore:users'
+    resourceList: 'codingmore:resourceList'
+  expire:
+    common: 86400 # 24小时
+
+#异步线程配置
+async:
+  executor:
+    #设置核心线程数
+    corePoolSize: 10
+    #设置最大线程数
+    maxPoolSize: 100
+    #设置队列容量
+    queueCapacity: 500
+    #设置线程活跃时间（秒）
+    keepAliveSeconds: 360
+    #设置默认线程名称
+    threadNamePrefix: sync-thread-
