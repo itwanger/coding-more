@@ -2,10 +2,12 @@ package com.codingmore.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.service.IPostsService;
+import com.codingmore.util.DateUtil;
 import com.codingmore.vo.PostsVo;
 import com.codingmore.webapi.ResultObject;
 
@@ -32,7 +34,10 @@ public class RestController {
     public ResultObject<Map<String, Object>> queryPageable(PostsPageQueryParam postsPageQueryParam) {
         Map<String, Object> map = new HashMap<>();
         IPage<PostsVo> postsIPage = postsService.findByPageWithTag(postsPageQueryParam);
-        map.put("items", postsIPage.getRecords());
+        map.put("items", postsIPage.getRecords().stream().map(postsVo -> {
+            postsVo.put("post-modified-short-time",DateUtil.getShortTime(postsVo.getPostModified()));
+            return postsVo;
+        }).collect(Collectors.toList()));
         map.put("total", postsIPage.getTotal());
         return ResultObject.success(map);
     }

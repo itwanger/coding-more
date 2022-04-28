@@ -15,7 +15,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "PostsVo", description = "文章Vo")
 @TableName(autoResultMap = true)
-public class PostsVo {
+public class PostsVo extends BaseVO {
     @ApiModelProperty(value = "postsId")
     private Long postsId;
 
@@ -71,19 +71,4 @@ public class PostsVo {
 
     @ApiModelProperty("点赞")
     private Long likeCount;
-
-  /*  private String attributeStr;
-
-    private String getAttributeStr() {
-        if(attribute != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                return  objectMapper.writeValueAsString(attribute);
-            } catch (JsonProcessingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return attributeStr;
-    }*/
 }
