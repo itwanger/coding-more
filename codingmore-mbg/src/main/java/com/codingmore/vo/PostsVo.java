@@ -3,12 +3,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 
+import com.codingmore.model.PostTag;
+import com.codingmore.util.DateUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -59,6 +62,9 @@ public class PostsVo extends BaseVO {
     @ApiModelProperty(value = "标签")
     private String tagsName;
 
+    @ApiModelProperty(value = "标签带 ID 带名字")
+    private List<PostTag> tags;
+
     @ApiModelProperty(value = "正文html")
     private String htmlContent;
 
@@ -71,4 +77,11 @@ public class PostsVo extends BaseVO {
 
     @ApiModelProperty("点赞")
     private Long likeCount;
+
+    @ApiModelProperty("格式化修改时间")
+    private String postModifiedShortTime;
+
+    public String getPostModifiedShortTime() {
+        return DateUtil.getShortTime(getPostModified());
+    }
 }

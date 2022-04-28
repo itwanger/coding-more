@@ -26,6 +26,15 @@
         <result column="term_taxonomy_id" property="termTaxonomyId"/>
     </resultMap>
 
+    <resultMap id="PostsVoResultMapWithTagList" type="com.codingmore.vo.PostsVo" extends="BaseResultMap">
+        <result column="user_nicename" property="userNiceName"/>
+        <result column="term_taxonomy_id" property="termTaxonomyId"/>
+        <collection property="tags" ofType="com.codingmore.model.PostTag">
+            <result column="description" property="description"/>
+            <result column="post_tag_id" property="postTagId"/>
+        </collection>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         posts_id
@@ -34,8 +43,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List_No_Content">
-        posts_id
-        , post_author, post_date, post_title, post_excerpt, post_status, comment_status, post_modified, menu_order, comment_count,a.attribute,page_view
+        posts_id, post_author, post_date, post_title, post_excerpt, post_status, comment_status, post_modified,
+        menu_order, comment_count,a.attribute,page_view
     </sql>
 
 
@@ -47,14 +56,13 @@
                  left join users c on a.post_author = c.users_id ${ew.customSqlSegment}
     </select>
 
-    <select id="findByPageWithTag" resultMap="PostsVoResultMap">
-        select  <include refid="Base_Column_List_No_Content" />, b.term_taxonomy_id,c.user_nicename,d.tags_name
-        from posts a
-        left join term_relationships b
-        on a.posts_id = b.term_relationships_id
+    <select id="findByPageWithTag" resultMap="PostsVoResultMapWithTagList">
+        select  <include refid="Base_Column_List_No_Content" />, b.term_taxonomy_id,c.user_nicename,pt.description,pt.post_tag_id
+        FROM post_tag_relation ptr, post_tag pt, posts a
+        left join term_relationships b on a.posts_id = b.term_relationships_id
         left join users c on a.post_author = c.users_id
-        left join (SELECT	c.post_id,	GROUP_CONCAT( d.description) tags_name FROM	post_tag_relation c LEFT JOIN post_tag d ON c.post_tag_id = d.post_tag_id GROUP BY	c.post_id
-        ) d on a.posts_id = d.post_id   ${ew.customSqlSegment}
+        ${ew.customSqlSegment}
+        AND a.posts_id = ptr.post_id AND pt.post_tag_id = ptr.post_tag_id
     </select>
 
 

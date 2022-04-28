@@ -34,10 +34,7 @@ public class RestController {
     public ResultObject<Map<String, Object>> queryPageable(PostsPageQueryParam postsPageQueryParam) {
         Map<String, Object> map = new HashMap<>();
         IPage<PostsVo> postsIPage = postsService.findByPageWithTag(postsPageQueryParam);
-        map.put("items", postsIPage.getRecords().stream().map(postsVo -> {
-            postsVo.put("post-modified-short-time",DateUtil.getShortTime(postsVo.getPostModified()));
-            return postsVo;
-        }).collect(Collectors.toList()));
+        map.put("items", postsIPage.getRecords());
         map.put("total", postsIPage.getTotal());
         return ResultObject.success(map);
     }
