@@ -1,4 +1,3 @@
-# Spring Boot 配置
 spring:
   profiles:
     active: dev #默认为开发环境
@@ -11,9 +10,8 @@ spring:
     time-zone: GMT+8
 
 server:
-  port: 9002
+  port: 8080
 
-# MyBatis plus 的配置查询后写注释
 mybatis-plus:
   mapper-locations:
     - classpath:dao/*.xml
@@ -25,34 +23,33 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-# 自定义类 ignoreConfig，URL 的白名单
-secure:
-  ignored:
-    urls: #安全路径白名单
-      - /doc.html
-      - /swagger-ui/**
-      - /swagger/**
-      - /swagger-resources/**
-      - /**/v3/api-docs
-      - /**/*.js
-      - /**/*.css
-      - /**/*.png
-      - /**/*.ico
-      - /webjars/springfox-swagger-ui/**
-      - /actuator/**
-      - /druid/**
-      - /users/login
-      - /users/register
-      - /users/info
-      - /users/logout
-      - /minio/upload
+ignored:
+  urls: #安全路径白名单
+    - /doc.html
+    - /swagger-ui/**
+    - /swagger/**
+    - /swagger-resources/**
+    - /**/v3/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
+    - /webjars/springfox-swagger-ui/**
+    - /actuator/**
+    - /druid/**
+    - /users/login
+    - /users/register
+    - /users/info
+    - /users/logout
+    - /minio/upload
 
 # 登录认证 token filter
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
-  secret: codingmore-admin-secret #JWT加解密使用的密钥
+  secret: learn-admin-secret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
+
 
   # oss
 aliyun:
@@ -70,15 +67,7 @@ aliyun:
       # 上传文件夹路径前缀
     dir:
       prefix: codingmore/images/
-  cdn: cdn.tobebetterjavaer.com
 
-redis:
-  database: codingmore
-  key:
-    admin: 'codingmore:users'
-    resourceList: 'codingmore:resourceList'
-  expire:
-    common: 86400 # 24小时
 
 #异步线程配置
 async:
@@ -92,9 +81,4 @@ async:
     #设置线程活跃时间（秒）
     keepAliveSeconds: 360
     #设置默认线程名称
-    threadNamePrefix: sync-thread-
-
-# 文章定时发布的最小间隔
-post:
-  schedule:
-    minInterval: 10
+    threadNamePrefix: upload-image-thread-

@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -65,6 +66,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private RedisService redisService;
     @Autowired
     private IScheduleService scheduleService;
+
+    @Value("${post.schedule.minInterval}")
+    private int postScheduleMinInterval;
 
 
     private static final String PAGE_VIEW_KEY = "pageView";
@@ -198,7 +202,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             LOGGER.debug("定时发布，时间{}", DateUtil.formatDateTime(posts.getPostDate()));
 
             // 定时任务的时间必须大于当前时间 10 分钟
-            if (DateUtil.between(DateTime.now(), posts.getPostDate(), DateUnit.MINUTE, false) <= 10) {
+            if (DateUtil.between(DateTime.now(), posts.getPostDate(), DateUnit.MINUTE, false) <= postScheduleMinInterval) {
                 Asserts.fail("定时发布的时间必须在 10 分钟后");
             }
 
