@@ -43,12 +43,13 @@
 ### 组织结构：
 
 ```lua
-codingmore
---codingmore-admin 后台管理系统接口
---codingmore-common 工具类以及通用代码
---codingmore-demo 框架搭建时的测试代码
---codingmore-mbg MyBatisGenerator生成的数据库操作代码
---condingmore-security SpringSecurity封装公用模块
+- codingmore-admin，后台管理系统接口
+- codingmore-common，工具类及通用代码
+- codingmore-demo，示例代码
+- codingmore-mbg， MyBatis-Plus 生成的数据库操作代码
+- codingmore-security：SpringSecurity封装公用模块
+- codingmore-web：前台展示系统接口
+- doc：项目文档
 ```
 
 ### 技术选型
