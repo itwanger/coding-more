@@ -61,8 +61,8 @@
         FROM post_tag_relation ptr, post_tag pt, posts a
         left join term_relationships b on a.posts_id = b.term_relationships_id
         left join users c on a.post_author = c.users_id
-        ${ew.customSqlSegment}
-        AND a.posts_id = ptr.post_id AND pt.post_tag_id = ptr.post_tag_id
+        where a.posts_id = ptr.post_id AND pt.post_tag_id = ptr.post_tag_id
+        AND ${ew.sqlSegment}
     </select>
 
 
