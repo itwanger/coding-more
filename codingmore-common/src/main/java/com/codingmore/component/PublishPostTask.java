@@ -63,7 +63,7 @@ public class PublishPostTask {
         log.info("Fixed Rate Task with Initial Delay : The time is now {}", DateUtil.now());
     }
 
-    @Scheduled(fixedRate = 5000)
+    // @Scheduled(fixedRate = 5000)
     public void reportCurrentTimeWithFixedRateTest() {
         if (i == 0) {
             log.info("Start time is {}", DateUtil.now());
