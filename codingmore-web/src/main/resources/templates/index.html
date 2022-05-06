@@ -55,22 +55,49 @@
         <!-- 左侧部分：文章列表区域 -->
         <div class="article-list-area flex-auto-item">
             <div class="article-list-head">
-                <a class="tab-link active" href="javascript:void(0)">推荐</a>
+                <a class="tab-link active" href="javascript:tabChanged(0)">推荐</a>
                 <span></span>
-                <a class="tab-link" href="javascript:void(0)">最新</a>
+                <a class="tab-link" href="javascript:tabChanged(1)">最新</a>
                 <span></span>
-                <a class="tab-link" href="javascript:void(0)">热榜</a>
+                <a class="tab-link" href="javascript:tabChanged(2)">热榜</a>
             </div>
-            <div class="article-list" id="article_list">
+            <!-- 骨架屏 -->
+            <div class="el-skeleton is-animated" id="skeleton_container">
+                <div class="el-skeleton__item el-skeleton__p is-first">
+                    <!---->
+                    &nbsp;
+                </div>
+                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
+                    <!---->
+                </div>
+                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
+                    <!---->
+                </div>
+                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
+                    <!---->
+                </div>
+                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
+                    <!---->
+                </div>
+                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph is-last">
+                    <!---->
+                </div>
+            </div>
+            <div class="article-list noshow" id="article_list">
                 <!-- 具体文章列表 每个article-item是一篇文章 -->
                 <div class="article-item" th:each="pageVo : ${postsItems}" th:onclick="|javascript:openNewPage('${pageVo.postsId}.html')|">
                     <div class="article-basic-info">
                         <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
                         <span class="wide-border small-margin"></span>
                         <span class="tab-link light-gray"
-                              th:text="${#dates.format(pageVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">10天前</span>
-                        <span th:if="!${#strings.isEmpty(pageVo.tagsName)}" class="wide-border small-margin"></span>
-                        <a th:if="!${#strings.isEmpty(pageVo.tagsName)}" class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>
+                              th:text="${pageVo.postModifiedShortTime}">10天前</span>
+                        <span th:if="${not#lists.isEmpty(pageVo.tags)}" class="wide-border small-margin"></span>
+                        <th:block th:each="tagItem,tagItemStat : ${pageVo.tags}">
+                            <span th:if="${tagItemStat.index!=0}" class="tab-link light-gray">·</span>
+                            <a class="tab-link light-gray" href="javascript:void(0)" th:onclick="|javascript:openNewPageByTag('${tagItem.postTagId}')|" th:text="${tagItem.description}">文章标签</a>
+                        </th:block>
+
+<!--                        <a th:if="!${#strings.isEmpty(pageVo.tagsName)}" class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.tagsName}">文章标签1</a>-->
                     </div>
                     <!-- 移动端文章标题 th:href="${pageVo.postsId}+'.html'" -->
                     <a target="_blank" href="javascript:void(0)" class="article-title-cellphone"

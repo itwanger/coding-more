@@ -104,6 +104,26 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     @Override
+    public List<PostsVo> findByPageWithTagPaged(PostsPageQueryParam postsPageQueryParam) {
+        QueryWrapper<PostsPageQueryParam> queryWrapper = new QueryWrapper<>();
+        if (postsPageQueryParam.getTermTaxonomyId() != null) {
+            queryWrapper.eq("b.term_taxonomy_id", postsPageQueryParam.getTermTaxonomyId());
+        }
+        if(StringUtils.isNotBlank(postsPageQueryParam.getPostTitleKeyword())){
+            queryWrapper.like("a.post_title", "%"+postsPageQueryParam.getPostTitleKeyword()+"%");
+        }
+        if (postsPageQueryParam.getOrderBy() != null) {
+            String[] cloums = postsPageQueryParam.getOrderBy().split(",");
+            queryWrapper.orderBy(true, postsPageQueryParam.isAsc(), cloums);
+        }
+        queryWrapper.eq("a.post_status", PostStatus.PUBLISHED.toString());
+        long pageSize = postsPageQueryParam.getPageSize();
+        long pageStart = (postsPageQueryParam.getPage() - 1) * pageSize;
+
+        return this.getBaseMapper().findByPageWithTagPaged(queryWrapper, pageStart, pageSize);
+    }
+
+    @Override
     public List<Posts> listByTermTaxonomyId(Long termTaxonomyId) {
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("term_taxonomy_id", termTaxonomyId);

@@ -65,6 +65,33 @@
         AND ${ew.sqlSegment}
     </select>
 
-
+    <select id="findByPageWithTagPaged" resultMap="PostsVoResultMapWithTagList">
+        SELECT a.*, pt.description, ptr.post_tag_id
+        FROM (
+                 SELECT
+                     posts_id,
+                     post_author,
+                     post_date,
+                     post_title,
+                     post_excerpt,
+                     post_status,
+                     comment_status,
+                     post_modified,
+                     menu_order,
+                     comment_count,
+                     a.attribute,
+                     page_view,
+                     b.term_taxonomy_id,
+                     c.user_nicename
+                 FROM
+                     posts a
+                         LEFT JOIN term_relationships b ON a.posts_id = b.term_relationships_id
+                         LEFT JOIN users c ON a.post_author = c.users_id
+                 WHERE 1=1 and ${ew.sqlSegment}
+                     LIMIT #{pageStart}, #{pageSize}
+             ) a
+                 LEFT JOIN post_tag_relation ptr on a.posts_id = ptr.post_id
+                 LEFT JOIN post_tag pt on pt.post_tag_id = ptr.post_tag_id
+    </select>
 
 </mapper>

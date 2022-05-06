@@ -300,9 +300,13 @@
 html,
 body {
   height: 100%;
-  overflow: auto;
+  overflow-x: auto;
   /* v2版本样式 */
   background-color: #F4F5F5;
+}
+
+body {
+  overflow-y: scroll;
 }
 
 .flex-row {
@@ -402,6 +406,41 @@ div {
 .text-center {
   text-align: center;
 }
+
+/* 骨架屏样式开始 */
+@keyframes el-skeleton-loading {
+  0% {
+    background-position:100% 50%
+  }
+  to {
+    background-position:0 50%
+  }
+}
+.el-skeleton__p{
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.el-skeleton.is-animated .el-skeleton__item {
+  background: linear-gradient(90deg, #e6e6e6 25%, #ccc 37%, #e6e6e6 63%);
+  background-size: auto;
+  background-size: 400% 100%;
+  animation: el-skeleton-loading 1.4s ease infinite;
+}
+.el-skeleton__p.is-first {
+  width: 33%;
+}
+.el-skeleton__p.is-last {
+  width: 61%;
+}
+.el-skeleton__item {
+  background: #e6e6e6;
+  /*display: inline-block;*/
+  height: 16px;
+  margin-top: 16px;
+  border-radius: 4px;
+  /*width: 100%;*/
+}
+/* 骨架屏样式结束 */
 
 /* PC、手机共用样式结束 */
 

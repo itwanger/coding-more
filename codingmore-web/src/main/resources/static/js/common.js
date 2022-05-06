@@ -20,6 +20,7 @@ const bindCommonEvents = () => {
   $('.menu-icon').one('click', () => { setSearchLayerVisible(true) })
 }
 
+// 搜索层展开与隐藏的效果
 const setSearchLayerVisible = val => {
   console.log('setSearchLayerVisible=', val)
   if (val) {
@@ -82,4 +83,9 @@ const ajax_fn = (url, data, fnSuccess, fnFailed, otherOptions) => {
 // 打开新页面方法
 function openNewPage(url) {
   window.open(url)
+}
+
+// 打开某个指定标签的列表页方法
+function openNewPageByTag(tagId) {
+
 }

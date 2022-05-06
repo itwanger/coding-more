@@ -1,6 +1,7 @@
 package com.codingmore.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -33,9 +34,11 @@ public class RestController {
     @ApiOperation("内容分页查询")
     public ResultObject<Map<String, Object>> queryPageable(PostsPageQueryParam postsPageQueryParam) {
         Map<String, Object> map = new HashMap<>();
-        IPage<PostsVo> postsIPage = postsService.findByPageWithTag(postsPageQueryParam);
-        map.put("items", postsIPage.getRecords());
-        map.put("total", postsIPage.getTotal());
+        // IPage<PostsVo> postsIPage = postsService.findByPageWithTag(postsPageQueryParam);
+        List<PostsVo> postsIPage = postsService.findByPageWithTagPaged(postsPageQueryParam);
+        // map.put("items", postsIPage.getRecords());
+        map.put("items", postsIPage);
+        // map.put("total", postsIPage.getTotal());
         return ResultObject.success(map);
     }
 }

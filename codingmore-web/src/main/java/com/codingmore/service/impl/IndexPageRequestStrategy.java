@@ -39,7 +39,7 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
      */
     private static final String POSTS_ITEMS = "postsItems";
     /**
-     * 、文章条数
+     * 、文章条数（前端列表暂时没用上）
      */
     private static final String POSTS_TOTAL= "postsTotal";
     @Autowired
@@ -70,13 +70,16 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
         pageQueryParam.setPostStatus(PostStatus.PUBLISHED.toString());
         pageQueryParam.setTermTaxonomyId(webRequestParam.getChannelId());
 
-        IPage<PostsVo> pageVo = postsService.findByPageWithTag(pageQueryParam);
+        // IPage<PostsVo> pageVo = postsService.findByPageWithTag(pageQueryParam);
+
+        List<PostsVo> pageVoList = postsService.findByPageWithTagPaged(pageQueryParam);
+
         //设置浏览量
-        pageVo.getRecords().forEach(postsVo -> {
+        pageVoList.forEach(postsVo -> {
             postsVo.setLikeCount(Long.parseLong(String.valueOf(postsService.getLikeCount(postsVo.getPostsId()))));
         });
-        webRequestParam.getRequest().setAttribute(POSTS_ITEMS,pageVo.getRecords());
-        webRequestParam.getRequest().setAttribute(POSTS_TOTAL,pageVo.getTotal());
+        webRequestParam.getRequest().setAttribute(POSTS_ITEMS, pageVoList);
+        // webRequestParam.getRequest().setAttribute(POSTS_TOTAL,pageVo.getTotal());
         return INDEX_PAGE;
     }
 }

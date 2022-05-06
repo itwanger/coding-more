@@ -24,6 +24,8 @@ public interface IPostsService extends IService<Posts> {
 
     IPage<PostsVo> findByPageWithTag(PostsPageQueryParam postsPageQueryParam);
 
+    List<PostsVo> findByPageWithTagPaged(PostsPageQueryParam postsPageQueryParam);
+
     List<Posts> listByTermTaxonomyId(Long termTaxonomyId);
 
     PostsVo getPostsById(Long id);
