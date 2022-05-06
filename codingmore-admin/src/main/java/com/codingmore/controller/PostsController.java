@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +100,17 @@ public class PostsController {
     @ApiOperation("添加文章栏目关联关系")
     public ResultObject<String> insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds) {
         return ResultObject.success(postsService.insertPostTermTaxonomy(postsIds,termTaxonomyIds) > 0? "保存成功" : "保存失败");
+    }
+
+    @RequestMapping(value = "/uploadMd",method=RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("上传")
+    public ResultObject<Map<String, Object>> uploadMd(@RequestParam("file") MultipartFile file, HttpServletRequest req)  {
+        Map<String, Object> map = new HashMap<>();
+        String content = postsService.uploadMd(file);
+        map.put("content", content);
+        map.put("postTitle",file.getOriginalFilename());
+        return ResultObject.success(map);
     }
 }
 

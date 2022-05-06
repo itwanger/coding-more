@@ -7,6 +7,8 @@ import com.codingmore.model.Posts;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codingmore.vo.PostsVo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * <p>
  * 文章 服务类
@@ -45,4 +47,6 @@ public interface IPostsService extends IService<Posts> {
     PostsVo getPostsById(Long id);
 
     int  insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds);
+
+    String uploadMd(MultipartFile file);
 }
