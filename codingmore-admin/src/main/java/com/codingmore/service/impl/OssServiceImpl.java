@@ -7,6 +7,7 @@ import java.net.URL;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSSClient;
+import com.codingmore.exception.Asserts;
 import com.codingmore.service.IOssService;
 import com.codingmore.util.FileNameUtil;
 import org.slf4j.Logger;
@@ -49,7 +50,8 @@ public class OssServiceImpl implements IOssService {
         try (InputStream inputStream = new URL(url).openStream()) {
             ossClient.putObject(bucketName, objectName, inputStream);
         } catch (IOException e) {
-            LOGGER.error("根据外链上传图片到 OSS 出错了：", e.getMessage());
+            LOGGER.error("根据外链上传图片到 OSS 出错了：", e);
+            Asserts.fail("上传图片到 OSS 出错了");
         }
         return formatOSSPath(objectName);
     }

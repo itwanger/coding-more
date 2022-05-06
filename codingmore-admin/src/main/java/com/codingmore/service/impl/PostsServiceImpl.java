@@ -405,9 +405,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             }
             content = content.replace(oldUrl, imageUrl);
 
-                if (StringUtils.isNotBlank(htmlContent)) {
-                    htmlContent = htmlContent.replace(oldUrl, imageUrl);
-                }
+            if (StringUtils.isNotBlank(htmlContent)) {
+                htmlContent = htmlContent.replace(oldUrl, imageUrl);
+            }
         }
         posts.setPostContent(content);
         posts.setHtmlContent(htmlContent);

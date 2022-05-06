@@ -1,4 +1,4 @@
-package top;
+package top.image;
 
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.util.IdUtil;
