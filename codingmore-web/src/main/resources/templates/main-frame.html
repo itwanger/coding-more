@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<input id="site_attr_info" type="hidden" th:value="${siteConfig.attributeStr}" />
+<input id="site_attr_info" type="hidden" th:value="${siteConfig.attributeStr}"/>
 <div class="flex-col">
     <!-- 顶部固定条 -->
     <div class="top-fixed">
@@ -90,7 +90,8 @@
             </div>
             <div class="article-list noshow" id="article_list">
                 <!-- 具体文章列表 每个article-item是一篇文章 -->
-                <div class="article-item" th:each="pageVo : ${postsItems}" th:onclick="|javascript:openNewPage('${pageVo.postsId}.html')|">
+                <div class="article-item" th:each="pageVo : ${postsItems}"
+                     th:onclick="|javascript:openNewPage('${pageVo.postsId}.html')|">
                     <div class="article-basic-info">
                         <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
                         <span class="wide-border small-margin"></span>
@@ -99,7 +100,9 @@
                         <span th:if="${not#lists.isEmpty(pageVo.tags)}" class="wide-border small-margin"></span>
                         <th:block th:each="tagItem,tagItemStat : ${pageVo.tags}">
                             <span th:if="${tagItemStat.index!=0}" class="tab-link light-gray">·</span>
-                            <a class="tab-link light-gray" href="javascript:void(0)" th:onclick="searchByTag([[${tagItem.postTagId}]],[[${tagItem.description}]])" th:text="${tagItem.description}">文章标签</a>
+                            <a class="tab-link light-gray" href="javascript:void(0)"
+                               th:onclick="searchByTag([[${tagItem.postTagId}]],[[${tagItem.description}]])"
+                               th:text="${tagItem.description}">文章标签</a>
                         </th:block>
                     </div>
                     <!-- 移动端文章标题 th:href="${pageVo.postsId}+'.html'" -->
@@ -145,7 +148,7 @@
             <div class="bottom-loading">
                 <div id="loading_over" class="loading-over text-center"></div>
                 <div class="loading-more text-center noshow">
-                    <img src="images/loading-more.gif" /> 加载中...
+                    <img src="images/loading-more.gif"/> 加载中...
                 </div>
             </div>
         </div>

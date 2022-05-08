@@ -21,6 +21,8 @@ public class PostsPageQueryParam {
     private Long termTaxonomyId;
     @ApiModelProperty(value = "标题关键字")
     private String postTitleKeyword;
+    @ApiModelProperty(value = "要查询的标签id")
+    private Long searchTagId;
 
     @ApiModelProperty(value = "文章状态PUBLISHED,DELETED,DRAFT")
     private String postStatus;

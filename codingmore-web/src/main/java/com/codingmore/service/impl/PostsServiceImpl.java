@@ -119,8 +119,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         queryWrapper.eq("a.post_status", PostStatus.PUBLISHED.toString());
         long pageSize = postsPageQueryParam.getPageSize();
         long pageStart = (postsPageQueryParam.getPage() - 1) * pageSize;
+        Long searchTagId = postsPageQueryParam.getSearchTagId();
 
-        return this.getBaseMapper().findByPageWithTagPaged(queryWrapper, pageStart, pageSize);
+        return this.getBaseMapper().findByPageWithTagPaged(queryWrapper, searchTagId, pageStart, pageSize);
     }
 
     @Override

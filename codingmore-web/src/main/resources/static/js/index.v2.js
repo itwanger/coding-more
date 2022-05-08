@@ -3,6 +3,8 @@ let pageIndex = 1
 let pageSize = 10
 let currentTabIndex = 0
 let searchText = ''
+let searchTagId = null
+let searchTagName = null
 
 // document ready 事件
 $(() => {
@@ -26,9 +28,12 @@ const reloadArticleListEffect = () => {
 
 // 切换tab列表页方法
 const tabChanged = (tabIndex) => {
-    if(currentTabIndex === tabIndex) {
-        return
-    }
+
+    // 初始化加载中和加载完毕的元素状态
+    $('#loading_over').text('').removeClass('noshow')
+    $('#loading-more').addClass('noshow')
+    bindBodyEndScroll(false)
+
     // 切换效果
     $('.article-list-head > a.active').removeClass('active')
     $('.article-list-head > a').eq(tabIndex).addClass('active')
@@ -36,12 +41,10 @@ const tabChanged = (tabIndex) => {
     // 设置数据
     currentTabIndex = tabIndex
     pageIndex = 0
-    // 加载效果
-    reloadArticleListEffect()
     // 清空列表
     $('#article_list').html('')
     // 重新请求数据
-    loadingMoreArticles(searchText, currentTabIndex, {})
+    loadData(firstPageLoadingEffect)
 }
 
 // 重新加载列表的骨架屏效果方法
@@ -68,14 +71,16 @@ const showSkeleton = (isToShow) => {
 // 绑定滚动条事件
 const bindBodyEndScroll = (isBind) => {
     if (isBind) {
+        let bodyElement = $('body')
+        bodyElement.unbind()
         // 监听滚动条位置是否到最下面了
-        $('body').scroll(function () {
+        bodyElement.scroll(function () {
             let scrollTop = $(this).scrollTop();
             let scrollHeight = $(document).height();
             let windowHeight = $(this).height();
             // 滚动条到最底部判断
             if (scrollTop + windowHeight === scrollHeight) {
-                loadingMoreArticles(searchText, currentTabIndex)
+                loadData()
             }
         });
     } else {
@@ -83,13 +88,83 @@ const bindBodyEndScroll = (isBind) => {
     }
 }
 
+// 展示某标签的列表搜索方法
+const searchByTag = (tagId, tagName) => {
+    let e = window.event || arguments.callee.caller.arguments[0];
+    e.stopPropagation()
+
+    if(searchTagId === tagId) {
+        return
+    }
+
+    searchTagId = tagId
+    searchTagName = tagName
+    tabChanged(0)
+}
+
+const searchByText = () => {
+    let inputText = $('#txtSearch').val().trim()
+    if(!inputText) {
+        alert('请输入搜索内容再搜索')
+        return
+    }
+    if(searchText === inputText) {
+        return
+    }
+
+    setSearchLayerVisible(false)
+    searchText = inputText
+    tabChanged(0)
+}
+
+// 关闭查询条件
+const closeCondition = (conditionType) => {
+    if(conditionType === 'tag') {
+        searchTagId = null
+        searchTagName = null
+        tabChanged(0)
+    } else if(conditionType === 'text') {
+        searchText = ''
+        tabChanged(0)
+    }
+}
+
+// 修改顶部条件布局
+const makeTopConditionChange = () => {
+    let conditionHtml = ''
+    if(searchText) {
+        const tagConditionHtml =
+            '<div class="condition-item flex-row h-center v-center flex-fixed-item">' +
+            '搜索：' + searchText +
+            '<i class="close-icon" onclick="closeCondition(\'text\')">' +
+            '<img src="images/close-white.png" />' +
+            '</i>' +
+            '</div>';
+        conditionHtml += tagConditionHtml
+    }
+    if(searchTagId && searchTagName) {
+        const tagConditionHtml =
+            '<div class="condition-item flex-row h-center v-center flex-fixed-item">' +
+            '标签：' + searchTagName +
+            '<i class="close-icon" onclick="closeCondition(\'tag\')">' +
+            '<img src="images/close-white.png" />' +
+            '</i>' +
+            '</div>';
+        conditionHtml += tagConditionHtml
+    }
+    $('#condition_container').html(conditionHtml)
+}
+
 // 加载更多文章的方法（搜索关键词，当前tab页签索引）
-const loadingMoreArticles = (postTitleKeyword, tabIndex, otherAjaxOptions) => {
+const loadData = (otherAjaxOptions) => {
+    // 更新页面查询条件的效果
+    makeTopConditionChange();
+    // 生成查询条件
     pageIndex++
     let orderBy = 'menu_order'
-    if (tabIndex === 1) {
+    if (currentTabIndex === 1) {
         orderBy = 'post_date'
-    } else if (tabIndex === 2) {
+    } else if (currentTabIndex === 2) {
         orderBy = 'page_view'
     }
     let reqData = {
@@ -98,8 +173,13 @@ const loadingMoreArticles = (postTitleKeyword, tabIndex, otherAjaxOptions) => {
         page: pageIndex,
         pageSize
     }
-    if (postTitleKeyword) {
-        reqData['postTitleKeyword'] = postTitleKeyword
+    // 搜索条件：标题
+    if (searchText) {
+        reqData['postTitleKeyword'] = searchText // encodeURIComponent(searchText)
+    }
+    // 搜索条件：标签
+    if (searchTagId){
+        reqData['searchTagId'] = searchTagId
     }
     if (otherAjaxOptions === undefined) {
         otherAjaxOptions = loadingArticlesEffect
@@ -115,11 +195,11 @@ const loadingMoreArticles = (postTitleKeyword, tabIndex, otherAjaxOptions) => {
                     let tagsHtml = ''
                     if(pageVo.tags && pageVo.tags.length > 0) {
                         for (let i = 0; i < pageVo.tags.length; i++) {
-                            var item = pageVo.tags[i]
-                            if(i != 0) {
+                            let item = pageVo.tags[i]
+                            if(i !== 0) {
                                 tagsHtml += '<span class="tab-link light-gray">·</span>'
                             }
-                            tagsHtml += '<a class="tab-link light-gray" href="javascript:void(0)" onclick="javascript:openNewPageByTag(\'${tagItem.postTagId}\')">'+ item.description +'</a>'
+                            tagsHtml += '<a class="tab-link light-gray" href="javascript:void(0)" onclick="searchByTag('+ item.postTagId +',\''+ item.description +'\');cancelBubble=true;">'+ item.description +'</a>'
                         }
                     }
                     let articleItemHtml =
@@ -155,7 +235,9 @@ const loadingMoreArticles = (postTitleKeyword, tabIndex, otherAjaxOptions) => {
                     totalHtml += articleItemHtml
                 })
                 $('#article_list').append(totalHtml)
-                bindBodyEndScroll(true)
+                if(dataArr.length === pageSize) {
+                    bindBodyEndScroll(true)
+                }
             } else {
                 $('#loading_over').text('没有更多内容了')
                 bindBodyEndScroll(false)
@@ -171,6 +253,18 @@ const loadingArticlesEffect = {
     },
     complete: (xhr, status) => {
         bottomLoadingFn(false)
+    }
+}
+
+// 异步加载列表首页时候的效果
+const firstPageLoadingEffect = {
+    beforeSend: (xhr) => {
+        showSkeleton(true)
+    },
+    complete: (xhr, status) => {
+        setTimeout(() => {
+            showSkeleton(false)
+        }, 1200)
     }
 }
 

@@ -69,25 +69,18 @@
         SELECT a.*, pt.description, ptr.post_tag_id
         FROM (
                  SELECT
-                     posts_id,
-                     post_author,
-                     post_date,
-                     post_title,
-                     post_excerpt,
-                     post_status,
-                     comment_status,
-                     post_modified,
-                     menu_order,
-                     comment_count,
-                     a.attribute,
-                     page_view,
+                    <include refid="Base_Column_List_No_Content" />,
                      b.term_taxonomy_id,
                      c.user_nicename
                  FROM
                      posts a
                          LEFT JOIN term_relationships b ON a.posts_id = b.term_relationships_id
                          LEFT JOIN users c ON a.post_author = c.users_id
-                 WHERE 1=1 and ${ew.sqlSegment}
+                 WHERE 1=1
+                 <if test="searchTagId != null">
+                    and a.posts_id in (select post_id from post_tag_relation where post_tag_id=#{searchTagId})
+                 </if>
+                 and ${ew.sqlSegment}
                      LIMIT #{pageStart}, #{pageSize}
              ) a
                  LEFT JOIN post_tag_relation ptr on a.posts_id = ptr.post_id

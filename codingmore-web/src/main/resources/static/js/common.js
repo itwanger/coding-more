@@ -1,13 +1,23 @@
 // 页面公共ready事件
 $(function() {
-  // NProgress.start()
+  NProgress.start()
   window.addEventListener('load',() => {
     // setTimeout(()=>{
     //   NProgress.done()
     // })
   })
   bindCommonEvents()
+  bindSiteInfo()
+  NProgress.done()
 })
+
+const bindSiteInfo = () => {
+  let siteAttr = $('#site_attr_info').val()
+  let siteAttrObject = JSON.parse(siteAttr);
+  for (let key in siteAttrObject) {
+    $("#" + key).text(siteAttrObject[key]);
+  }
+}
 
 // 页面通用事件
 const bindCommonEvents = () => {
@@ -85,7 +95,3 @@ function openNewPage(url) {
   window.open(url)
 }
 
-// 打开某个指定标签的列表页方法
-function openNewPageByTag(tagId) {
-
-}

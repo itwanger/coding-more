@@ -1,7 +1,7 @@
 /* PC端样式 */
 @media screen and (min-width: 751px) {
   body {
-    min-width: 1200px;
+    min-width: 1100px;
     color: #333333;
   }
 
@@ -12,6 +12,7 @@
     background-color: #63b175;
     top: 0;
     position: sticky;
+    z-index: 99;
   }
 
   /*.top-fixed * {

@@ -4,9 +4,56 @@
   /* 左侧文章列表容器样式 */
   .article-list-area {
     background-color: #fff;
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     margin-bottom: 0px;
     max-width: 700px;
+  }
+
+  .top-gap{
+    height: 20px;
+    position: sticky;
+    top: 50px;
+    background-color: #F4F5F5;
+  }
+
+  /* 文章头部的条件区域样式 */
+  .other-condition-area{
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .condition-container{
+    background-color: #fff;
+  }
+  .condition-item{
+    color: #fff;
+    background-color: #63b175;
+    height: 30px;
+    line-height: 30px;
+    font-weight: normal;
+    font-size: 14px;
+    padding-left: 10px;
+    margin-left: 1px;
+    cursor: pointer;
+  }
+  .condition-item .close-icon{
+    box-sizing: border-box;
+    /*width: 20px;*/
+    /*height: 20px;*/
+    background-color: #666666;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  .condition-item .close-icon:hover{
+    background-color: #ff0000;
+  }
+  .condition-item .close-icon img{
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
   }
 
   /* 文章列表容器样式 */
@@ -32,6 +79,9 @@
     font-size: 14px;
     line-height: 14px;
     border-bottom: 1px solid hsla(0, 0%, 59.2%, .1);
+    position: sticky;
+    top: 70px;
+    background-color: #fff;
   }
 
   /* 推荐、最新、热榜的文字链接之间的间隔符样式 */
