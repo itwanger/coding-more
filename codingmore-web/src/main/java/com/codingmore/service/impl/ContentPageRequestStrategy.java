@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 public class ContentPageRequestStrategy implements ILearnWebRequestStrategy {
     private static final String CONTENT_PAGE = "article.html";
     private static final String POSTS_VO = "postsVo";
+    private static final String CLICKED_LIKE = "hasClickedLike";
      /**
      * 站点信息
      */
@@ -36,6 +37,8 @@ public class ContentPageRequestStrategy implements ILearnWebRequestStrategy {
     @Override
     public String handleRequest(WebRequestParam webRequestParam) {
         iPostsService.increasePageView(webRequestParam.getPostId(),webRequestParam.getRequest());
+        Boolean hasClickedLike = iPostsService.hasClickedLike(webRequestParam.getPostId(),webRequestParam.getRequest());
+        webRequestParam.getRequest().setAttribute(CLICKED_LIKE, hasClickedLike);
         PostsVo postsVo = iPostsService.getPostsById(webRequestParam.getPostId());
         webRequestParam.getRequest().setAttribute(POSTS_VO, postsVo);
         if(StringUtils.isNotBlank(postsVo.getTagsName())){

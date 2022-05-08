@@ -19,8 +19,6 @@ import com.codingmore.vo.PostsVo;
  * @since 2021-09-12
  */
 public interface IPostsService extends IService<Posts> {
- 
-
 
     IPage<PostsVo> findByPageWithTag(PostsPageQueryParam postsPageQueryParam);
 
@@ -34,8 +32,10 @@ public interface IPostsService extends IService<Posts> {
 
     void increaseLikeCount(Long id, HttpServletRequest  request);
 
+    int getPageView(Long id);
+
     int getLikeCount(Long id);
 
-    int getPageView(Long id);
+    Boolean hasClickedLike(Long id, HttpServletRequest request);
 
 }

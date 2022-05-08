@@ -155,11 +155,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         
     }
 
+
     @Override
     public int getPageView(Long id) {
         String key = PAGE_VIEW_KEY +":"+ id+":*";
         return redisService.countKey(key);
-        
     }
 
     @Override
@@ -167,6 +167,17 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         String ip = CusAccessObjectUtil.getIpAddress(request);
         String key = POST_LIKE_COUNT +":"+ id+":"+ip;
         redisService.incr(key, 1);
+    }
+
+    @Override
+    public Boolean hasClickedLike(Long id, HttpServletRequest request) {
+        String ip = CusAccessObjectUtil.getIpAddress(request);
+        String key = POST_LIKE_COUNT +":"+ id+":"+ip;
+        if(redisService.get(key) !=null){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
