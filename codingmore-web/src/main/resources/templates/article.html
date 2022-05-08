@@ -1,39 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html th:replace="~{main-frame :: layout (~{::link}, ~{}, ~{::#main_part})}" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-ontab.png">
-  <title th:text="${postsVo.postTitle}+'-'+${siteConfig.siteName}"></title>
-  <meta name="keywords"  th:content="${postsVo.tagsName}">
-  <meta name="description" th:content="${postsVo.postExcerpt}">
-  <link href="css/reset.css" type="text/css" rel="stylesheet" />
-  <link href="css/common.css" type="text/css" rel="stylesheet" />
+  <title>内容页</title>
   <link href="css/article.css" type="text/css" rel="stylesheet" />
-  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="js/common.js"></script>
 </head>
 
 <body>
 
-  <div class="flex-col">
-    <!-- 顶部固定条 -->
-    <div class="top-fixed">
-      <div class="top-wrapper">
-        <div class="logo-area fl" >
-          <img src="images/logo-ontop.jpg" alt="logo" class="logo-top">
-          <span th:text="${siteConfig.siteName}"></span>
-        </div>
-        <div class="search-area fr">
-          <input type="text" class="txt-search" autocomplete="off" placeholder="请输入感兴趣的内容进行搜索">
-          <img src="images/search.png" />
-        </div>
-        <div class="clear"></div>
-      </div>
-    </div>
-    <!-- 主题内容区域 -->
-    <div class="article-main flex-auto-item">
+    <!-- 主体内容区域 -->
+    <div id="main_part" class="article-main flex-auto-item">
       <!-- 文章内容区域 -->
       <div class="article-area">
         <p class="title" th:text="${postsVo.postTitle}">干掉 PowerDesigner！这款国人开源的数据库设计工具真香！</p>
@@ -56,13 +31,13 @@
         </div>
       </div>
       <!-- 广告占位列 -->
-      <div class="fiex-ad">
+      <div th:replace="index :: index_right" class="fiex-ad">
         <a target="_blank" href="http://www.baidu.com">
           <img src="images/demo-ad.png" />
         </a>
       </div>
     </div>
-  </div>
+
 </body>
 
 </html>

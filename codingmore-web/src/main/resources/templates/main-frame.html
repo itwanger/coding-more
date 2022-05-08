@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:fragment="layout (top_css_source, top_js_source, main_content)" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -10,12 +10,12 @@
     <meta name="description" th:content="${siteConfig.siteDesc}">
     <link href="css/reset.css" type="text/css" rel="stylesheet"/>
     <link href="css/common.css" type="text/css" rel="stylesheet"/>
-    <link href="css/index.v2.css" type="text/css" rel="stylesheet"/>
+    <th:block th:replace="${top_css_source}" />
     <!--<link href="plugins/nprogress/nprogress.css" type="text/css" rel="stylesheet"/>-->
     <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
     <!--<script type="text/javascript" src="plugins/nprogress/nprogress.js"></script>-->
     <script type="text/javascript" src="js/common.js"></script>
-    <script type="text/javascript" src="js/index.v2.js"></script>
+    <th:block th:replace="${top_js_source}" />
 </head>
 
 <body>
@@ -37,184 +37,7 @@
             </div>
         </div>
     </div>
-    <!-- 主题内容区域 -->
-    <div class="main-area flex-auto-item">
-        <!-- 左侧部分：文章列表区域 -->
-        <div class="article-list-area flex-auto-item">
-            <div class="top-gap">&nbsp;</div>
-            <div class="article-list-head">
-                <a class="tab-link active" href="javascript:tabChanged(0)">推荐</a>
-                <span></span>
-                <a class="tab-link" href="javascript:tabChanged(1)">最新</a>
-                <span></span>
-                <a class="tab-link" href="javascript:tabChanged(2)">热榜</a>
-                <!-- 其他条件区域 -->
-                <div class="other-condition-area">
-                    <div id="condition_container" class="condition-container flex-row">
-                        <!-- <div class="condition-item flex-row h-center v-center flex-fixed-item">
-                            搜索：论程序员的自我修养如何养成
-                            <i class="close-icon">
-                                <img src="images/close-white.png">
-                            </i>
-                        </div>
-                        <div class="condition-item flex-row h-center v-center flex-fixed-item">
-                            已选标签：hadoop
-                            <i class="close-icon">
-                                <img src="images/close-white.png">
-                            </i>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-            <!-- 骨架屏 -->
-            <div class="el-skeleton is-animated" id="skeleton_container">
-                <div class="el-skeleton__item el-skeleton__p is-first">
-                    <!---->
-                    &nbsp;
-                </div>
-                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
-                    <!---->
-                </div>
-                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
-                    <!---->
-                </div>
-                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
-                    <!---->
-                </div>
-                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph">
-                    <!---->
-                </div>
-                <div class="el-skeleton__item el-skeleton__p el-skeleton__paragraph is-last">
-                    <!---->
-                </div>
-            </div>
-            <div class="article-list noshow" id="article_list">
-                <!-- 具体文章列表 每个article-item是一篇文章 -->
-                <div class="article-item" th:each="pageVo : ${postsItems}"
-                     th:onclick="|javascript:openNewPage('${pageVo.postsId}.html')|">
-                    <div class="article-basic-info">
-                        <a class="tab-link light-gray" href="javascript:void(0)" th:text="${pageVo.userNiceName}">yonghu1</a>
-                        <span class="wide-border small-margin"></span>
-                        <span class="tab-link light-gray"
-                              th:text="${pageVo.postModifiedShortTime}">10天前</span>
-                        <span th:if="${not#lists.isEmpty(pageVo.tags)}" class="wide-border small-margin"></span>
-                        <th:block th:each="tagItem,tagItemStat : ${pageVo.tags}">
-                            <span th:if="${tagItemStat.index!=0}" class="tab-link light-gray">·</span>
-                            <a class="tab-link light-gray" href="javascript:void(0)"
-                               th:onclick="searchByTag([[${tagItem.postTagId}]],[[${tagItem.description}]])"
-                               th:text="${tagItem.description}">文章标签</a>
-                        </th:block>
-                    </div>
-                    <!-- 移动端文章标题 th:href="${pageVo.postsId}+'.html'" -->
-                    <a target="_blank" href="javascript:void(0)" class="article-title-cellphone"
-                       th:text="${pageVo.postTitle}">
-                        Vite+Vue3.2+TS 相关API归纳总结
-                    </a>
-                    <div class="flex-row">
-                        <div class="flex-auto-item">
-                            <!-- PC端文章标题 -->
-                            <a target="_blank" href="javascript:void(0)" class="article-title"
-                               th:text="${pageVo.postTitle}">
-                                Vite+Vue3.2+TS 相关API归纳总结
-                            </a>
-                            <!-- 文章摘要 -->
-                            <p class="article-summary tab-link light-gray keep-rows" th:text="${pageVo.postExcerpt}">
-                                我们基于 IntelliJ 技术栈，通过设计新语言、编写 IDE 插件、Gradle / Dokka 插件，形成一套完整的文档辅助解。我们基于 IntelliJ
-                                技术栈，通过设计新语言、编写 IDE 插件、Gradle / Dokka 插件，形成一套完整的文档辅助解
-                            </p>
-                            <div class="clear"></div>
-                            <!-- 文章阅读量、点赞、评论数 -->
-                            <ul class="article-statistics-info">
-                                <li>
-                                    <img src="images/read-count.png"/>
-                                    <span th:text="${pageVo.pageView}">1.6w</span>
-                                </li>
-                                <li>
-                                    <img src="images/zan.png"/>
-                                    <span th:text="${pageVo.likeCount}">2300</span>
-                                </li>
-                                <!-- <li>
-                                   <img src="images/comment.png" />
-                                   <span>56</span>
-                                 </li>-->
-                            </ul>
-                        </div>
-                        <img src="images/demo-pic1.png" class="article-img"
-                             th:src="${pageVo.attribute?.get('articleCoverUrl')?:'images/demo-pic1.png'}"/>
-                    </div>
-                </div>
-
-            </div>
-            <div class="bottom-loading">
-                <div id="loading_over" class="loading-over text-center"></div>
-                <div class="loading-more text-center noshow">
-                    <img src="images/loading-more.gif"/> 加载中...
-                </div>
-            </div>
-        </div>
-        <!-- 右侧部分 -->
-        <div class="right-side">
-            <div class="right-container">
-                <!-- 第一个广告 -->
-                <!--<a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/" class="right-item">
-                  <img src="images/right-pic1.png" />
-                </a>-->
-                <div class="right-text-item right-item">
-                    <p class="title"><img src="images/planet-icon.png"/>二哥的编程知识星球开放啦！</p>
-                    <p class="desc">
-                        一个氛围超好的编程学习圈子，实战项目手把手教，海量学习资源免费送、疑难杂症1V1 指导、还有星球用户才能读到的VIP专栏哟（点击了解详情）
-                    </p>
-                </div>
-                <div class="right-text-item">
-                    <p class="title">关于站长</p>
-                </div>
-                <div class="right-text-item mt-2">
-                    <div class="flex-row">
-                        <img src="images/itwanger.png" class="img-itwanger"/>
-                        <p class="desc">
-                            站长二哥，CSDN 两届博客之星，原创公号沉默王二主理人。点击了解他、交朋友、编程交流答疑、领取学习资料。
-                        </p>
-                    </div>
-                </div>
-                <!-- 二维码 -->
-                <!--<div class="qrcode-item flex-row">
-                  <img src="images/wanger-qrcode.png" class="img-qrcode" />
-                  <div>
-                    <p class="qrcode-headline">关注沉默王二公众号</p>
-                    <p class="qrcode-desc">
-                      一个帮助初学者的公众号
-                    </p>
-                  </div>
-                </div>-->
-                <!-- 网站信息区域 -->
-                <div class="site-info">
-                    <!-- 备案信息 -->
-                    <p>
-                        <a target="_blank" href="https://beian.miit.gov.cn" id="icpInfo">京ICP备XXXXXXXX号</a>
-                    </p>
-                    <p>
-                        <img src="images/gonganbeian.png"/>
-                        <a target="_blank"
-                           href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=XXXXXXXXXXXXXX"
-                           id="psInfo">京公网安备 XXXXXXXXXXXXXX号</a>
-                    </p>
-
-                    <p id="address">
-                        通信地址：河南省洛阳市xxx路xxx号 青苗工作室（收） 邮编：467000
-                    </p>
-                    <p id="contactNumber">
-                        联系电话：010-88888888
-                    </p>
-                    <p id="email">
-                        联系邮箱：mforqingmiao@126.com
-                    </p>
-                    <p>
-                        <a href="javascript:void(0)" id="copyrightInfo">Copyright © 2004 - 2022 青苗工作室</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="${main_content}"></div>
 </div>
 <!--搜索层布局-->
 <div class="search-layer">

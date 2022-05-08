@@ -1,6 +1,6 @@
 // 页面公共ready事件
 $(function() {
-  NProgress.start()
+  // NProgress.start()
   window.addEventListener('load',() => {
     // setTimeout(()=>{
     //   NProgress.done()
@@ -8,7 +8,7 @@ $(function() {
   })
   bindCommonEvents()
   bindSiteInfo()
-  NProgress.done()
+  // NProgress.done()
 })
 
 const bindSiteInfo = () => {
