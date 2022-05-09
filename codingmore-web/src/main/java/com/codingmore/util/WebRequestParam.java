@@ -36,7 +36,7 @@ public class WebRequestParam {
     /**
      * 排序字段,按数据库字段:menu_order,page_view,post_modified;多个以逗号间隔
      */
-    private String orderBy = "menu_order";
+    private String orderBy = "menu_order,post_modified";
     /**
      * 是否升序，boolean类型
      */

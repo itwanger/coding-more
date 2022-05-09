@@ -49,4 +49,11 @@ public interface IPostsService extends IService<Posts> {
     int  insertPostTermTaxonomy(Long[] postsIds, Long[] termTaxonomyIds);
 
     String uploadMd(MultipartFile file);
+
+    /**
+     * 置顶/取消置顶方法
+     * @param postsId 文章id
+     * @param flag 标志位：0-不置顶；1-置顶
+     */
+    void setOnTop(Long postsId, Integer flag);
 }

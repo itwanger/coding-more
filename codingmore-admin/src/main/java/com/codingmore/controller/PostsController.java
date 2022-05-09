@@ -102,6 +102,22 @@ public class PostsController {
         return ResultObject.success(postsService.insertPostTermTaxonomy(postsIds,termTaxonomyIds) > 0? "保存成功" : "保存失败");
     }
 
+    @RequestMapping(value = "/setOnTop", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("置顶方法")
+    public ResultObject<String> setOnTop(Long postsId) {
+        postsService.setOnTop(postsId, 1);
+        return ResultObject.success("操作成功");
+    }
+
+    @RequestMapping(value = "/cancelOnTop", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation("取消置顶方法")
+    public ResultObject<String> cancelOnTop(Long postsId) {
+        postsService.setOnTop(postsId, 0);
+        return ResultObject.success("操作成功");
+    }
+
     @RequestMapping(value = "/uploadMd",method=RequestMethod.POST)
     @ResponseBody
     @ApiOperation("上传")

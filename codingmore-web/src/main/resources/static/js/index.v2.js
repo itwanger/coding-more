@@ -181,11 +181,11 @@ const loadData = (otherAjaxOptions) => {
     makeTopConditionChange();
     // 生成查询条件
     pageIndex++
-    let orderBy = 'menu_order'
+    let orderBy = 'menu_order,post_modified'
     if (currentTabIndex === 1) {
-        orderBy = 'post_date'
+        orderBy = 'post_modified'
     } else if (currentTabIndex === 2) {
-        orderBy = 'page_view'
+        orderBy = 'page_view,post_modified'
     }
     let reqData = {
         asc: false,

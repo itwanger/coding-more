@@ -142,7 +142,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         handleAttribute(postsParam, posts);
 
         // 定时发布要更改文章的状态
-        boolean needShcduleAfter = handleScheduledBefore(posts);
+        // boolean needShcduleAfter = handleScheduledBefore(posts);
 
         // 更新文章的图片
         handleContentImg(posts);
@@ -157,9 +157,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         insertTermRelationships(postsParam, posts);
 
         // 重新调整定时发布的时间
-        if (needShcduleAfter) {
+        /*if (needShcduleAfter) {
             handleScheduledAfter(posts);
-        }
+        }*/
 
     }
 
@@ -461,5 +461,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         return null;
     }
 
-    
+    @Override
+    public void setOnTop(Long postsId, Integer flag) {
+        Posts article = getById(postsId);
+        article.setMenuOrder(flag);
+        updateById(article);
+    }
 }
