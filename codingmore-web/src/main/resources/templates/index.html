@@ -74,14 +74,14 @@
                         </th:block>
                     </div>
                     <!-- 移动端文章标题 th:href="${pageVo.postsId}+'.html'" -->
-                    <a target="_blank" href="javascript:void(0)" class="article-title-cellphone"
+                    <a href="javascript:void(0)" class="article-title-cellphone"
                        th:text="${pageVo.postTitle}">
                         Vite+Vue3.2+TS 相关API归纳总结
                     </a>
                     <div class="flex-row">
                         <div class="flex-auto-item">
                             <!-- PC端文章标题 -->
-                            <a target="_blank" href="javascript:void(0)" class="article-title"
+                            <a href="javascript:void(0)" class="article-title"
                                th:text="${pageVo.postTitle}">
                                 Vite+Vue3.2+TS 相关API归纳总结
                             </a>
@@ -155,7 +155,7 @@
                   </div>
                 </div>-->
                 <!-- 网站信息区域 -->
-                <div class="site-info">
+                <div class="site-info right-item">
                     <!-- 备案信息 -->
                     <p>
                         <a target="_blank" href="https://beian.miit.gov.cn" id="icpInfo">京ICP备XXXXXXXX号</a>
@@ -179,6 +179,11 @@
                     <p>
                         <a href="javascript:void(0)" id="copyrightInfo">Copyright © 2004 - 2022 青苗工作室</a>
                     </p>
+                </div>
+
+                <!-- 返回顶部按钮 -->
+                <div class="btn-back-top noshow" onclick="backToTop()">
+                    <img src="images/back-to-top.png" />
                 </div>
             </div>
         </div>

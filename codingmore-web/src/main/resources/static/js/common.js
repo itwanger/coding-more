@@ -51,12 +51,18 @@ const setSearchLayerVisible = val => {
 
 // 简单封装ajax get请求
 const ajax_get = (url, data, fnSuccess, fnFailed, otherOptions) => {
+  if(!otherOptions) {
+    otherOptions = {}
+  }
   otherOptions['type'] = 'GET'
   ajax_fn(url, data, fnSuccess, fnFailed, otherOptions)
 }
 
 // 简单封装ajax post请求
 const ajax_post = (url, data, fnSuccess, fnFailed, otherOptions) => {
+  if(!otherOptions) {
+    otherOptions = {}
+  }
   otherOptions['type'] = 'POST'
   ajax_fn(url, data, fnSuccess, fnFailed, otherOptions)
 }
@@ -91,7 +97,12 @@ const ajax_fn = (url, data, fnSuccess, fnFailed, otherOptions) => {
 }
 
 // 打开新页面方法
-function openNewPage(url) {
+const openNewPage = (url) => {
   window.open(url)
+}
+
+// 返回顶部方法
+const backToTop = () => {
+  $('body').scrollTop(0);
 }
 

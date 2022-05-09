@@ -310,14 +310,24 @@
 
   /* 右侧整张图片广告样式 */
   .right-item img {
-    display: block;
-    width: 240px;
+    /*display: block;*/
+    /*width: 240px;*/
     /*height: 200px;*/
   }
 
   .right-item {
     display: block;
     margin-bottom: 16px;
+  }
+
+  .btn-back-top{
+    display: inline-block;
+    cursor: pointer;
+    background-color: #63b175;
+    padding: 5px;
+  }
+  .btn-back-top:hover {
+    background-color: #2E8041;
   }
 
   /* 右侧二维码加标题和说明文字样式 */
