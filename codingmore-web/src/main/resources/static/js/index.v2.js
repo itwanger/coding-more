@@ -8,10 +8,24 @@ let searchTagName = null
 
 // document ready 事件
 $(() => {
-    // 显示骨架屏
-    reloadArticleListEffect()
-    bindEvents()
+    initPage()
 })
+
+const initPage = () => {
+    let transTagId = localStorage.getItem('search_tag_id')
+    let transTagName = localStorage.getItem('search_tag_name')
+    if(!transTagId) {
+        // 显示骨架屏
+        reloadArticleListEffect()
+        bindEvents()
+    } else {
+        searchTagId = transTagId
+        searchTagName = transTagName
+        localStorage.removeItem('search_tag_id')
+        localStorage.removeItem('search_tag_name')
+        tabChanged(0)
+    }
+}
 
 // 绑定页面事件
 const bindEvents = () => {
@@ -32,6 +46,7 @@ const tabChanged = (tabIndex) => {
     // 初始化加载中和加载完毕的元素状态
     $('#loading_over').text('').removeClass('noshow')
     $('#loading-more').addClass('noshow')
+    $('.btn-back-top').addClass('noshow')
     bindBodyEndScroll(false)
 
     // 切换效果
@@ -81,6 +96,11 @@ const bindBodyEndScroll = (isBind) => {
             // 滚动条到最底部判断
             if (scrollTop + windowHeight === scrollHeight) {
                 loadData()
+            }
+            if (scrollTop > 900) {
+                $('.btn-back-top').removeClass('noshow')
+            } else {
+                $('.btn-back-top').addClass('noshow')
             }
         });
     } else {
@@ -212,10 +232,10 @@ const loadData = (otherAjaxOptions) => {
                         + tagsHtml
                         //+ (pageVo.tagsName ? '<a class="tab-link light-gray" href="javascript:void(0)">' + pageVo.tagsName + '</a>' : '')
                         + '</div>'
-                        + '<a target="_blank" href="javascript:void(0)" class="article-title-cellphone">' + pageVo.postTitle + '</a>'
+                        + '<a href="javascript:void(0)" class="article-title-cellphone">' + pageVo.postTitle + '</a>'
                         + '<div class="flex-row">'
                         + '<div class="flex-auto-item">'
-                        + '<a target="_blank" href="javascript:void(0)" class="article-title">' + pageVo.postTitle + '</a>'
+                        + '<a href="javascript:void(0)" class="article-title">' + pageVo.postTitle + '</a>'
                         + '<p class="article-summary tab-link light-gray keep-rows">' + pageVo.postExcerpt + '</p>'
                         + '<div class="clear"></div>'
                         + '<ul class="article-statistics-info">'

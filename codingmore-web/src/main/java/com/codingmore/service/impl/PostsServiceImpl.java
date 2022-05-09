@@ -77,6 +77,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 }
             });
             postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+            postsVo.setTags(postTags);
         }
 
         Users users = iUsersService.getById(posts.getPostAuthor());
