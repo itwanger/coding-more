@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class Convert2OSS {
-    final static String directory = "springboot/";
-    final static String key = "mysql-druid";
+    final static String directory = "gongju/";
+    final static String key = "Chocolatey-Homebrew";
 
     private final static String img_url_pre_afters [] = {
             "http://cdn.tobebetterjavaer.com/tobebetterjavaer/images/",
@@ -85,7 +85,7 @@ public class Convert2OSS {
                 // directory + key + "-" + UUID.fastUUID() + ext
                 String objectName = getFileName(imageUrl);
                 // oss
-                ossClient.putObject(bucketName, objectName, inputStream);
+                ossClient.putObject(bucketName, "tobebetterjavaer/images/"+objectName, inputStream);
                 // bak
                 saveLocation(imageUrl, imgPath+objectName);
 
