@@ -98,7 +98,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         handleAttribute(postsParam, posts);
 
         // 定时发布要更改文章的状态
-        boolean needShcduleAfter = handleScheduledBefore(posts);
+        boolean needScheduleAfter = handleScheduledBefore(postsParam, posts);
 
         // TODO 评论数
         posts.setCommentCount(0L);
@@ -118,7 +118,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 处理栏目
         insertTermRelationships(postsParam, posts);
 
-        if (needShcduleAfter) {
+        if (needScheduleAfter) {
             handleScheduledAfter(posts);
         }
     }
@@ -142,7 +142,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         handleAttribute(postsParam, posts);
 
         // 定时发布要更改文章的状态
-        // boolean needShcduleAfter = handleScheduledBefore(posts);
+        boolean needScheduleAfter = handleScheduledBefore(postsParam, posts);
 
         // 更新文章的图片
         handleContentImg(posts);
@@ -157,9 +157,9 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         insertTermRelationships(postsParam, posts);
 
         // 重新调整定时发布的时间
-        /*if (needShcduleAfter) {
+        if (needScheduleAfter) {
             handleScheduledAfter(posts);
-        }*/
+        }
 
     }
 
@@ -196,18 +196,18 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         LOGGER.debug("定时任务{}开始执行", jobName);
     }
 
-    private boolean handleScheduledBefore(Posts posts) {
+    private boolean handleScheduledBefore(PostsParam param, Posts posts) {
 
         // 条件是指定了发布时间，并且状态为发布
         // 如果指定了发布时间，那么以草稿的形式先保存起来，把文章的 ID传递给定时任务，然后再加入到定时任务中
         // 定时任务到了，执行，从定时任务中删除任务
         // 修改文章的状态为已发布
         // 定时发布一定是草稿状态
-        if (posts.getPostDate() != null) {
-            LOGGER.debug("定时发布，时间{}", DateUtil.formatDateTime(posts.getPostDate()));
+        if (param.getPostDate() != null) {
+            LOGGER.debug("定时发布，时间{}", DateUtil.formatDateTime(param.getPostDate()));
 
             // 定时任务的时间必须大于当前时间 10 分钟
-            if (DateUtil.between(DateTime.now(), posts.getPostDate(), DateUnit.MINUTE, false) <= postScheduleMinInterval) {
+            if (DateUtil.between(DateTime.now(), param.getPostDate(), DateUnit.MINUTE, false) <= postScheduleMinInterval) {
                 Asserts.fail("定时发布的时间必须在 10 分钟后");
             }
 
