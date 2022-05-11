@@ -21,11 +21,13 @@ import java.util.regex.Pattern;
  */
 public class Convert {
 
-    final static String directory = "nginx/";
-    final static String key = "40-interview";
+    final static String directory = "oo/";
+    final static String key = "inner-class";
 
-    final static String docPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/" + directory;
-    final static String imgPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/images/" + directory;
+    final static String pcName = "itwanger";
+
+    final static String docPath = "/Users/"+pcName+"/Documents/GitHub/toBeBetterJavaer/docs/" + directory;
+    final static String imgPath = "/Users/"+pcName+"/Documents/GitHub/toBeBetterJavaer/images/" + directory;
 
     final static String fileName = key + ".md";
     private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
