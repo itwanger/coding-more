@@ -113,7 +113,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         save(posts);
 
         // 处理标签
-        insertOrUpdateTag(postsParam, posts);
+        insertOrUpdateTag(postsParam.getTags(), posts.getPostsId());
 
         // 处理栏目
         insertTermRelationships(postsParam, posts);
@@ -149,7 +149,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         updateById(posts);
 
         // 更新标签
-        insertOrUpdateTag(postsParam, posts);
+        insertOrUpdateTag(postsParam.getTags(), posts.getPostsId());
 
         // 删除原来的栏目
         deleteTermRelationships(postsParam);
@@ -221,26 +221,25 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         return false;
     }
 
-    private void insertOrUpdateTag(PostsParam postsParam, Posts posts) {
+    private void insertOrUpdateTag(String tags, Long post_Id) {
         // 标签可为空
-        if (StringUtils.isBlank(postsParam.getTags())) {
+        if (StringUtils.isBlank(tags)) {
             return;
         }
         //删除旧的内容标签关联
         QueryWrapper<PostTagRelation> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("post_id", posts.getPostsId());
+        queryWrapper.eq("post_id", post_Id);
         iPostTagRelationService.remove(queryWrapper);
 
-        String[] tags = postsParam.getTags().split(",");
         // TODO: 2021/11/14 先默认 循环添加
         int order = 0;
-        for (String tag : tags) {
+        for (String tag : tags.split(",")) {
             QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
             postTagQueryWrapper.eq("description", tag);
             List<PostTag> tagList = iPostTagService.list(postTagQueryWrapper);
             if (tagList.size() == 0) {
                 PostAddTagParam postAddTagParam = new PostAddTagParam();
-                postAddTagParam.setPostId(posts.getPostsId());
+                postAddTagParam.setPostId(post_Id);
                 postAddTagParam.setDescription(tag);
                 postAddTagParam.setTermOrder(order);
                 iPostTagService.savePostTag(postAddTagParam);
@@ -248,7 +247,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             } else {
                 PostTagRelation postTagRelation = new PostTagRelation();
                 postTagRelation.setPostTagId(tagList.get(0).getPostTagId());
-                postTagRelation.setPostId(posts.getPostsId());
+                postTagRelation.setPostId(post_Id);
                 postTagRelation.setTermOrder(order);
                 iPostTagRelationService.save(postTagRelation);
             }
