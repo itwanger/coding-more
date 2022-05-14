@@ -136,6 +136,14 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 加微信交流，公众号后台回复「**加群**」即可。
 
+# 参与人
+
+|  参与人 |   角色 | 公众号  |
+| ------------ | ------------ | ------------ |
+|  沉默王二 | 产品经理  |   |
+|  程序员石磊 |   | ![关注程序员石磊](https://img-blog.csdnimg.cn/20200607122146933.png "关注程序员石磊")  |
+|  谷明 | 前端架构  |   |
+
 ## 许可证
 
 [Apache License 2.0](https://github.com/itwanger/codingmore/blob/master/LICENSE)
