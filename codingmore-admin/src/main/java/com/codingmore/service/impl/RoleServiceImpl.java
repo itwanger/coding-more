@@ -82,6 +82,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             relationList.add(relation);
         }
         roleMenuRelationService.saveBatch(relationList);
+        usersCacheService.delResourceListByRole(roleId);
         return menuIds.size();
     }
 
