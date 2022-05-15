@@ -10,6 +10,7 @@ import com.aliyun.oss.OSSClient;
 import com.codingmore.exception.Asserts;
 import com.codingmore.service.IOssService;
 import com.codingmore.util.FileNameUtil;
+import com.codingmore.util.OSSUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,6 @@ public class OssServiceImpl implements IOssService {
     private OSSClient ossClient;
 
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(OssServiceImpl.class);
 
     /**
@@ -53,13 +53,7 @@ public class OssServiceImpl implements IOssService {
             LOGGER.error("根据外链上传图片到 OSS 出错了：", e);
             Asserts.fail("上传图片到 OSS 出错了");
         }
-        return formatOSSPath(objectName);
-    }
-
-
-
-    private String formatOSSPath(String objectName) {
-        return "https://" + cdn  + "/" + objectName;
+        return OSSUtil.formatOSSPath(objectName, cdn);
     }
 
     @Override
@@ -67,7 +61,7 @@ public class OssServiceImpl implements IOssService {
         String objectName = FileNameUtil.getFileName(dirPrefix, name);
         // 创建PutObject请求。
         ossClient.putObject(bucketName, objectName, inputStream);
-        return formatOSSPath(objectName);
+        return OSSUtil.formatOSSPath(objectName, cdn);
     }
 
     @Override
@@ -81,7 +75,13 @@ public class OssServiceImpl implements IOssService {
     }
 
     @Override
-    public String getEndPoint() {
-        return ossClient.getEndpoint().getHost();
+    public boolean needUpload(String imageUrl) {
+        if (imageUrl.indexOf(ossClient.getEndpoint().getHost()) != -1) {
+            return false;
+        }
+        if (imageUrl.indexOf(cdn) != -1) {
+            return false;
+        }
+        return true;
     }
 }

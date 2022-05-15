@@ -20,6 +20,7 @@ import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.state.PostStatus;
 import com.codingmore.state.TermRelationType;
+import com.codingmore.util.OSSUtil;
 import com.codingmore.vo.PostsVo;
 import com.codingmore.webapi.ResultObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -208,7 +209,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
             // 定时任务的时间必须大于当前时间 10 分钟
             if (DateUtil.between(DateTime.now(), postDate, DateUnit.MINUTE, false) <= postScheduleMinInterval) {
-                Asserts.fail("定时发布的时间必须在 10 分钟后");
+                Asserts.fail("定时发布的时间必须在 "+ postScheduleMinInterval +" 分钟后");
             }
 
             posts.setPostStatus(PostStatus.DRAFT.name());
@@ -387,7 +388,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             LOGGER.info("使用分组进行替换图片名字：{}，图片路径：{}", imageName, imageUrl);
 
             // 确认是本站链接，不处理
-            if (imageUrl.indexOf(iOssService.getEndPoint()) != -1) {
+            if (!iOssService.needUpload(imageUrl)) {
                 continue;
             }
 
