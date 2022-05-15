@@ -208,7 +208,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
             // 定时任务的时间必须大于当前时间 10 分钟
             if (DateUtil.between(DateTime.now(), postDate, DateUnit.MINUTE, false) <= postScheduleMinInterval) {
-                Asserts.fail("定时发布的时间必须在 10 分钟后");
+                Asserts.fail("定时发布的时间必须在 "+ postScheduleMinInterval +" 分钟后");
             }
 
             posts.setPostStatus(PostStatus.DRAFT.name());
