@@ -65,6 +65,17 @@
     outline: 0px;
   }
 
+  .search-area img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .search-area {
+    height: 50px;
+    box-sizing: border-box;
+    padding-top: 13px;
+  }
+
   /*搜索层样式*/
   .search-layer{
     display: none;
@@ -154,17 +165,6 @@
   input.txt-search::-moz-placeholder{color: rgba(204, 204, 204, 70%)} /* Firefox版本19+ */
   input.txt-search:-ms-input-placeholder{color: rgba(204, 204, 204, 70%)}
 
-  .search-area {
-    height: 50px;
-    box-sizing: border-box;
-    padding-top: 13px;
-  }
-
-  .search-area img {
-    width: 24px;
-    height: 24px;
-  }
-
   .def-list{
     color: #ffffff;
   }
@@ -176,6 +176,8 @@
   .def-list-item svg {
     display: inline-block;
     vertical-align: middle;
+    width: 35px;
+    height: 35px;
   }
 
   .def-list-item h4{
@@ -410,6 +412,10 @@
   }
 
   /* PC端第二版样式结束 */
+
+  .mobile {
+    display: none !important;
+  }
 }
 
 /* PC、手机共用样式开始 */
@@ -449,6 +455,8 @@ body {
 
 .flex-auto-item {
   flex-grow: 1;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 div {
@@ -525,6 +533,9 @@ div {
 }
 
 /* 骨架屏样式开始 */
+.el-skeleton {
+  padding-bottom: 16px;
+}
 @keyframes el-skeleton-loading {
   0% {
     background-position:100% 50%
@@ -537,6 +548,7 @@ div {
   margin-left: 15px;
   margin-right: 15px;
 }
+
 .el-skeleton.is-animated .el-skeleton__item {
   background: linear-gradient(90deg, #e6e6e6 25%, #ccc 37%, #e6e6e6 63%);
   background-size: auto;
@@ -571,8 +583,9 @@ div {
     width: 100%;
     top: 0;
     /* left: 0; */
-    padding: 1vw 2vw;
+    padding: 0 2vw 0 0;
     line-height: 10vw;
+    height: 10vw;
   }
 
   /* 网站标题区域 */
@@ -580,6 +593,28 @@ div {
     font-size: 6vw;
     letter-spacing: 0.5vw;
     color: #fff;
+  }
+
+  /* 菜单图标相关样式 */
+  .menu-icon {
+    width: 10vw;
+    height: 10vw;
+    cursor: pointer;
+    background-color: #4E9359;
+  }
+
+  .menu-icon.opened,
+  .menu-icon:hover{
+    background-color: #546076;
+  }
+
+  .menu-icon img{
+    width: 5vw;
+    height: 5vw;
+  }
+  .menu-icon img.small{
+    width: 3vw;
+    height: 3vw;
   }
 
   /* 头部所有元素垂直居中对齐 */
@@ -590,14 +625,20 @@ div {
   /* logo图标大小 */
   .logo-top {
     width: 7vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
   }
 
   /* 输入框隐藏 */
-  .txt-search {
-    display: none;
-  }
+  /*.txt-search {*/
+  /*  display: none;*/
+  /*}*/
 
+  .reflesh-area{
+    padding-right: 3vw;
+  }
   /* 搜索图标大小 */
+  .reflesh-area img,
   .search-area img {
     height: 6vw;
   }
@@ -644,4 +685,188 @@ div {
   .bottom-info .info-container a:visited {
     color: #f4f4f4;
   }
+
+  /*搜索层样式*/
+  .search-layer{
+    display: none;
+    position: fixed;
+    top: 10vw;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background-color: #525E74;
+  }
+
+  /*搜索层内容容器*/
+  .search-layer .content{
+    margin:0 auto;
+    width: 96vw;
+    box-sizing: content-box;
+    padding: 2vw;
+    background-color: #546076;
+  }
+
+  .search-layer .content > .top{
+    height: 15vw;
+  }
+
+  /*搜索框左侧的小图标*/
+  a.search-input-icon,
+  a.search-input-icon:active,
+  a.search-input-icon:link,
+  a.search-input-icon:visited {
+    width: 8vw;
+    height: 8vw;
+    border-right: 1px solid #546076;
+    background-color: #ffffff;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  a.search-input-icon:hover {
+    background-color: #dddddd;
+  }
+
+  .search-input-icon > img {
+    width: 4vw;
+    height: 4vw;
+  }
+
+  /*搜索框容器*/
+  .search-input-area{
+    width: 70vw;
+    height: 8vw;
+    background-color: #ffffff;
+  }
+
+  /*搜索框后的搜索按钮*/
+  a.search-input-btn,
+  a.search-input-btn:active,
+  a.search-input-btn:link,
+  a.search-input-btn:visited{
+    display: block;
+    box-sizing: border-box;
+    width: 8vw;
+    height: 8vw;
+    line-height: 8vw;
+    border: 1px solid #63B175;
+    background-color: #546076;
+    color: #ffffff;
+    font-weight: 500;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  a.search-input-btn:hover{
+    text-decoration: none;
+    background-color: #63B175;
+  }
+
+  /*搜索框样式*/
+  .txt-search,
+  .txt-search:focus {
+    border: 0;
+    font-size: 4vw;
+    color: #333;
+    width: 64vw;
+  }
+
+  input.txt-search::-webkit-input-placeholder{color: rgba(204, 204, 204, 70%)} /* 使用webkit内核的浏览器 */
+  input.txt-search:-moz-placeholder{color: rgba(204, 204, 204, 70%)} /* Firefox版本4-18 */
+  input.txt-search::-moz-placeholder{color: rgba(204, 204, 204, 70%)} /* Firefox版本19+ */
+  input.txt-search:-ms-input-placeholder{color: rgba(204, 204, 204, 70%)}
+
+  .search-area {
+    height: auto;
+    box-sizing: border-box;
+    padding-top: 0;
+  }
+
+  .def-list{
+    color: #ffffff;
+  }
+
+  .def-list-item{
+    width: 96vw;
+  }
+
+  .def-list-item svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: 7vw;
+    height: 7vw;
+  }
+
+  .def-list-item h4{
+    font-size: 5vw;
+    line-height: 8vw;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 0;
+    font-weight: 700;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 1vw;
+  }
+
+  .def-list-item hr{
+    color: #4e9359;
+    border-color: #4e9359;
+    margin: 2vw 0px 2vw;
+    /*width: 80%;*/
+    text-align: left;
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
+  }
+
+  .def-list-item ul {
+    list-style: outside none none;
+    padding-left: 0px;
+    margin-bottom: 10vw;
+  }
+
+  .def-list-item ul li {
+    padding-bottom: 2vw;
+    width: 49%;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+  }
+  .def-list-item ul li:nth-child(odd) {
+    padding-right: 4vw;
+  }
+  .def-list-item ul li:nth-child(even) {
+    padding-right: 0;
+  }
+
+  .def-list-item ul li a,
+  .def-list-item ul li a:active,
+  .def-list-item ul li a:link,
+  .def-list-item ul li a:visited {
+    font-size: 4vw;
+    font-weight: 300;
+    color: #ffffff;
+  }
+  .def-list-item ul li a:hover {
+    text-decoration: underline;
+  }
+
+  /* 右侧部分样式 */
+  .right-side {
+    display: none;
+  }
+
+  .btn-back-top.mobile{
+    position: fixed;
+    bottom: 5vw;
+    right: 5vw;
+    cursor: pointer;
+    background-color: #63b175;
+    padding: 2vw;
+    border-radius: 2vw;
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+    filter: alpha(opacity=70);
+  }
+
 }

@@ -18,7 +18,7 @@
   }
 
   .article-area .title{
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 600;
     line-height: 1.2;
     text-align: left;
@@ -136,6 +136,9 @@
   }
 }
 
+.article-area img{
+  max-width: 100%;
+}
 
 /* 移动端样式 */
 @media screen and (max-width: 750px) {
@@ -159,10 +162,6 @@
     margin-top: 3vw;
     
     /* min-height: 100%; */
-  }
-
-  .article-area img{
-    max-width: 100%;
   }
 
   .article-area .title{
@@ -220,6 +219,7 @@
     background-color: #63B175;
     padding-left: 2vw;
     padding-right: 2vw;
+    margin-right: 2vw;
   }
   .article-area .author-and-flags a.label:hover{
     background-color: #2E8041;
@@ -235,4 +235,42 @@
     width: 100%;
   }
 
+  /* 点赞区域样式 */
+  .like-area {
+    padding: 20px;
+  }
+
+  /* 点赞按钮相关样式 */
+  .btn-like {
+    display: inline-block;
+    padding: 3vw;
+    border: 0.2vw solid #63b175;
+    border-radius: 1vw;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+  .btn-like.clicked {
+    background-color: #63b175;
+  }
+  .btn-like img {
+    width: 5vw;
+    height: 5vw;
+  }
+  .btn-like .like-clicked{
+    display: none;
+  }
+  .btn-like .like-unclicked{
+    display: block;
+  }
+
+  .btn-like.clicked .like-clicked{
+    display: block;
+  }
+  .btn-like.clicked .like-unclicked{
+    display: none;
+  }
+
+  .reflesh-area.mobile {
+    display: none;
+  }
 }

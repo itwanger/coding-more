@@ -13,7 +13,7 @@ const bindEvents = () => {
     }
 
     // 绑定滚动条事件，以合理显示返回顶部按钮
-    $('body').scroll(() => {
+    $('body').scroll(function () {
         let scrollTop = $(this).scrollTop();
 
         if (scrollTop > 900) {
@@ -38,6 +38,17 @@ const likeArticleClick = () => {
 const jumpToSearchTag = (tagId, tagName) => {
     localStorage.setItem('search_tag_id', tagId)
     localStorage.setItem('search_tag_name', tagName)
+    openNewPage('/')
+}
+
+// 文章点击标签跳转标签文章列表方法
+const searchByText = () => {
+    let paramText = $('#txtSearch').val().trim()
+    if(!paramText) {
+        alert('请输入搜索内容再搜索')
+        return
+    }
+    localStorage.setItem('search_text', paramText)
     openNewPage('/')
 }
 

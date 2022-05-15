@@ -21,7 +21,7 @@
                 <a class="tab-link" href="javascript:tabChanged(2)">热榜</a>
                 <!-- 其他条件区域 -->
                 <div class="other-condition-area">
-                    <div id="condition_container" class="condition-container flex-row">
+                    <div class="condition-container flex-row">
                         <!-- <div class="condition-item flex-row h-center v-center flex-fixed-item">
                             搜索：论程序员的自我修养如何养成
                             <i class="close-icon">
@@ -36,6 +36,9 @@
                         </div> -->
                     </div>
                 </div>
+            </div>
+            <!-- 手机端条件区域 -->
+            <div class="condition-container mobile flex-row">
             </div>
             <!-- 骨架屏 -->
             <div class="el-skeleton is-animated" id="skeleton_container">
@@ -79,7 +82,7 @@
                         Vite+Vue3.2+TS 相关API归纳总结
                     </a>
                     <div class="flex-row">
-                        <div class="flex-auto-item">
+                        <div class="flex-auto-item article-item-left">
                             <!-- PC端文章标题 -->
                             <a href="javascript:void(0)" class="article-title"
                                th:text="${pageVo.postTitle}">

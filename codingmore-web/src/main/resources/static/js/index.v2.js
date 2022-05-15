@@ -5,10 +5,13 @@ let currentTabIndex = 0
 let searchText = ''
 let searchTagId = null
 let searchTagName = null
+let dataLoadingStatus = 0
 
 // document ready 事件
 $(() => {
     initPage()
+    // 加载手机端console，调试代码
+    // new VConsole()
 })
 
 const initPage = () => {
@@ -25,11 +28,26 @@ const initPage = () => {
         localStorage.removeItem('search_tag_name')
         tabChanged(0)
     }
+
+    let transText = localStorage.getItem('search_text')
+    if(!transText) {
+        // 显示骨架屏
+        reloadArticleListEffect()
+        bindEvents()
+    } else {
+        searchText = transText
+        localStorage.removeItem('search_text')
+        tabChanged(0)
+    }
 }
 
 // 绑定页面事件
 const bindEvents = () => {
     bindBodyEndScroll(true)
+
+    $('#refleshBtn').click(function () {
+        window.location.reload()
+    })
 }
 
 // 重新加载列表效果方法
@@ -47,7 +65,7 @@ const tabChanged = (tabIndex) => {
     $('#loading_over').text('').removeClass('noshow')
     $('#loading-more').addClass('noshow')
     $('.btn-back-top').addClass('noshow')
-    bindBodyEndScroll(false)
+    dataLoadingStatus = 1
 
     // 切换效果
     $('.article-list-head > a.active').removeClass('active')
@@ -65,36 +83,30 @@ const tabChanged = (tabIndex) => {
 // 重新加载列表的骨架屏效果方法
 const showSkeleton = (isToShow) => {
     let skeletonContainer = $('#skeleton_container')
-    let articleList = $('#article_list')
+    let articleList = $('#article_list, .bottom-loading')
     if(isToShow) {
-        if(articleList.is(':visible')) {
-            articleList.addClass('noshow')
-        }
-        if(!skeletonContainer.is(':visible')) {
-            skeletonContainer.removeClass('noshow')
-        }
+        articleList.addClass('noshow')
+        skeletonContainer.removeClass('noshow')
     } else {
-        if(!articleList.is(':visible')) {
-            articleList.removeClass('noshow')
-        }
-        if(skeletonContainer.is(':visible')) {
-            skeletonContainer.addClass('noshow')
-        }
+        articleList.removeClass('noshow')
+        skeletonContainer.addClass('noshow')
     }
 }
 
 // 绑定滚动条事件
 const bindBodyEndScroll = (isBind) => {
+    let bodyElement = $('body')
     if (isBind) {
-        let bodyElement = $('body')
-        bodyElement.unbind()
+        bodyElement.unbind('scroll')
         // 监听滚动条位置是否到最下面了
         bodyElement.scroll(function () {
             let scrollTop = $(this).scrollTop();
             let scrollHeight = $(document).height();
             let windowHeight = $(this).height();
+
             // 滚动条到最底部判断
-            if (scrollTop + windowHeight === scrollHeight) {
+            if (scrollTop + windowHeight + 70 >= scrollHeight && dataLoadingStatus === 0) {
+                dataLoadingStatus = 1
                 loadData()
             }
             if (scrollTop > 900) {
@@ -104,7 +116,7 @@ const bindBodyEndScroll = (isBind) => {
             }
         });
     } else {
-        $('body').unbind('scroll')
+        bodyElement.unbind('scroll')
     }
 }
 
@@ -172,7 +184,7 @@ const makeTopConditionChange = () => {
             '</div>';
         conditionHtml += tagConditionHtml
     }
-    $('#condition_container').html(conditionHtml)
+    $('.condition-container').html(conditionHtml)
 }
 
 // 加载更多文章的方法（搜索关键词，当前tab页签索引）
@@ -234,7 +246,7 @@ const loadData = (otherAjaxOptions) => {
                         + '</div>'
                         + '<a href="javascript:void(0)" class="article-title-cellphone">' + pageVo.postTitle + '</a>'
                         + '<div class="flex-row">'
-                        + '<div class="flex-auto-item">'
+                        + '<div class="flex-auto-item article-item-left">'
                         + '<a href="javascript:void(0)" class="article-title">' + pageVo.postTitle + '</a>'
                         + '<p class="article-summary tab-link light-gray keep-rows">' + pageVo.postExcerpt + '</p>'
                         + '<div class="clear"></div>'
@@ -255,12 +267,13 @@ const loadData = (otherAjaxOptions) => {
                     totalHtml += articleItemHtml
                 })
                 $('#article_list').append(totalHtml)
-                if(dataArr.length === pageSize) {
-                    bindBodyEndScroll(true)
-                }
-            } else {
+            }
+            if (retData.result.items.length < pageSize) {
                 $('#loading_over').text('没有更多内容了')
-                bindBodyEndScroll(false)
+                dataLoadingStatus = -1
+            } else {
+                $('#loading_over').text('')
+                dataLoadingStatus = 0
             }
         }
     }, null, otherAjaxOptions)
@@ -291,7 +304,6 @@ const firstPageLoadingEffect = {
 // 底部加载更多文章的效果控制
 const bottomLoadingFn = (showLoading) => {
     if (showLoading) {
-        bindBodyEndScroll(false)
         $('.loading-over').addClass('noshow')
         $('.loading-more').removeClass('noshow')
     } else {
