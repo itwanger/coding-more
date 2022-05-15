@@ -8,5 +8,5 @@ public interface IOssService {
     String upload(String url);
     String upload(MultipartFile file);
     String upload(InputStream inputStream,String name);
-    String getEndPoint();
+    boolean needUpload(String imageUrl);
 }
