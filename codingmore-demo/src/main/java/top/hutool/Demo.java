@@ -3,12 +3,14 @@ package top.hutool;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.LineHandler;
 import cn.hutool.core.io.file.FileReader;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,5 +37,16 @@ public class Demo {
         Date now = DateTime.now();
         Date publishTime = DateUtil.parse("2022/4/25 18:55:00");
         System.out.println(DateUtil.between(now,publishTime, DateUnit.MINUTE, false));
+
+
+        List<File> files = FileUtil.loopFiles("/Users/itwanger/Documents/GitHub/toBeBetterJavaer/images/");
+//        for (File file: files) {
+//            System.out.println(file.getAbsolutePath());
+//            System.out.println(file.getName());
+//            System.out.println(file.getPath());
+//        }
+
+//        FileReader mdReader = FileReader.create(, Charset.forName("utf-8"));
+//        String content = mdReader.readString();
     }
 }
