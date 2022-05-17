@@ -1,33 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration >
+<!--
+scan：当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒当scan为true时，此属性生效。默认的时间间隔为1分钟。
+debug：当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
+-->
+<configuration>
     <!-- https://github.com/spring-projects/spring-boot/blob/v1.4.2.RELEASE/spring-boot/src/main/resources/org/springframework/boot/logging/logback/defaults.xml -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-
+    <!-- 定义日志文件名称 -->
     <property name="APP_NAME" value="codingmore-admin" />
+    <!-- 定义日志文件的路径 -->
     <property name="LOG_PATH" value="${user.home}/${APP_NAME}/logs" />
-    <property name="LOG_FILE" value="${LOG_PATH}/codingmore-admin.log" />
+    <!-- 定义日志的文件名 -->
+    <property name="LOG_FILE" value="${LOG_PATH}/${APP_NAME}.log" />
 
+    <!-- 滚动记录日志，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
     <appender name="APPLICATION"
         class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
         <file>${LOG_FILE}</file>
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <!--
+          当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名
+          TimeBasedRollingPolicy： 最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责触发滚动。
+          -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--
+           滚动时产生的文件的存放位置及文件名称
+           %d{yyyy-MM-dd}：按天进行日志滚动
+           %i：当文件大小超过maxFileSize时，按照i进行文件滚动
+           -->
             <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--
+           可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每天滚动，
+           且maxHistory是7，则只保存最近7天的文件，删除之前的旧文件。
+           注意，删除旧文件时，那些为了归档而创建的目录也会被删除。
+           -->
             <maxHistory>7</maxHistory>
-            <maxFileSize>50MB</maxFileSize>
-            <totalSizeCap>2GB</totalSizeCap>
+            <!--
+           当日志文件超过maxFileSize指定的大小时，根据上面提到的%i进行日志文件滚动
+           注意此处配置SizeBasedTriggeringPolicy是无法实现按文件大小进行滚动的，
+           必须配置timeBasedFileNamingAndTriggeringPolicy
+           -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
+        <!-- 日志输出格式： -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+        </layout>
     </appender>
-
+    <!-- ch.qos.logback.core.ConsoleAppender 表示控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>utf8</charset>
-        </encoder>
+        <!--
+       日志输出格式：
+           %d表示日期时间，%green 绿色
+           %thread表示线程名，%magenta 洋红色
+           %-5level：级别从左显示5个字符宽度 %highlight 高亮色
+           %logger{36} 表示logger名字最长36个字符，否则按照句点分割 %yellow 黄色
+           %msg：日志消息
+           %n是换行符
+       -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%magenta(%thread)] %highlight(%-5level) %yellow(%logger{36}): %msg%n</pattern>
+        </layout>
     </appender>
 
+    <!--
+   root与logger是父子关系，没有特别定义则默认为root，任何一个类只会和一个logger对应，
+   要么是定义的logger，要么是root，判断的关键在于找到这个logger，然后判断这个logger的appender和level。
+   -->
     <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="APPLICATION" />
