@@ -48,5 +48,7 @@ public class Demo {
 
 //        FileReader mdReader = FileReader.create(, Charset.forName("utf-8"));
 //        String content = mdReader.readString();
+
+        System.out.println(System.getProperty("user.home"));
     }
 }

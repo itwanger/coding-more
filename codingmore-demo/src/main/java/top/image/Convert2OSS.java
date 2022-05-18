@@ -32,15 +32,15 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class Convert2OSS {
-    final static String directory = "gongju/";
-    final static String key = "Chocolatey-Homebrew";
+    final static String directory = "springboot/";
+    final static String key = "swagger";
 
     private final static String img_url_pre_afters [] = {
             "http://cdn.tobebetterjavaer.com/tobebetterjavaer/images/",
             "https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/",
             "https://itwanger-oss.oss-cn-beijing.aliyuncs.com/tobebetterjavaer/images/" };
-    private final static String docPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/";
-    final static String imgPath = "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/images/";
+    private final static String docPath = System.getProperty("user.home")+"/Documents/GitHub/toBeBetterJavaer/docs/";
+    final static String imgPath = System.getProperty("user.home")+"/Documents/GitHub/toBeBetterJavaer/images/";
     private final static String fileName = directory + key + ".md";
     private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
 
