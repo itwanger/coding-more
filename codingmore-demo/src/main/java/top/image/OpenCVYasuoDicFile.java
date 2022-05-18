@@ -11,23 +11,16 @@ import java.io.File;
 import java.util.List;
 
 public class OpenCVYasuoDicFile {
-    private final static String [] docPaths = {
-            "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/",
-            "/Users/itwanger/Documents/Github/toBeBetterJavaer/images/itwanger/",
-            "/Users/itwanger/Documents/GitHub/toBeBetterJavaer/images/",
-    };
+    private final static String docPath = System.getProperty("user.home")
+            + "/Documents/Github/toBeBetterJavaer/images/";
 
     public static void main(String[] args) {
         OpenCV.loadShared();
-        String docPath = docPaths[2];
 
         List<File> files = FileUtil.loopFiles(docPath);
         for (File file: files) {
             if (!FileNameUtil.isType(file.getName(), "jpg","png","jpeg")) {
                 System.out.println(file.getAbsolutePath());
-                continue;
-            }
-            if (FileUtil.size(file)<50*1000) {
                 continue;
             }
             Mat sourceImage = Imgcodecs.imread(file.getAbsolutePath());
@@ -38,7 +31,7 @@ public class OpenCVYasuoDicFile {
                         Imgcodecs.IMWRITE_PNG_COMPRESSION, 9);
 
             } else if ("jpg".equals(extName) || "jpeg".equals(extName)) {
-                dstImageParam = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, 50);
+//                dstImageParam = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, 50);
             }
 
             if (dstImageParam != null) {

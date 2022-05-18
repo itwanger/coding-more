@@ -6,19 +6,18 @@ import org.opencv.core.MatOfInt;
 import org.opencv.imgcodecs.Imgcodecs;
 
 public class OpenCVYasuoSingleFile {
-    private final static String [] docPaths = {
-            "/Users/maweiqing/Documents/GitHub/toBeBetterJavaer/docs/",
-            "/Users/itwanger/Documents/Github/toBeBetterJavaer/images/itwanger/",
-    };
+    private final static String docPath = System.getProperty("user.home")
+            + "/Documents/Github/toBeBetterJavaer/images/";
+
 
     public static void main(String[] args) {
         OpenCV.loadShared();
-        String filename = "xingbiaogongzhonghao.png";
-        Mat sourceImage = Imgcodecs.imread(docPaths[1]+filename);
+        String filename = "logo.png";
+        Mat sourceImage = Imgcodecs.imread(docPath+filename);
 
         MatOfInt dstImageParam = new MatOfInt(Imgcodecs.IMWRITE_JPEG_QUALITY, 50);
-        dstImageParam = new MatOfInt(Imgcodecs.IMWRITE_PNG_COMPRESSION, 50);
-        Imgcodecs.imwrite(docPaths[1]+filename, sourceImage, dstImageParam);
+        dstImageParam = new MatOfInt(Imgcodecs.IMWRITE_PNG_COMPRESSION, 9);
+        Imgcodecs.imwrite(docPath+filename, sourceImage, dstImageParam);
 
     }
 }
