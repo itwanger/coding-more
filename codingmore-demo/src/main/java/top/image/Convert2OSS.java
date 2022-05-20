@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Convert2OSS {
     final static String directory = "springboot/";
-    final static String key = "swagger";
+    final static String key = "springtask";
 
     private final static String img_url_pre_afters [] = {
             "http://cdn.tobebetterjavaer.com/tobebetterjavaer/images/",
