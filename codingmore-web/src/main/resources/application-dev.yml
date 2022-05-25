@@ -52,12 +52,13 @@ spring:
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
     password: learnsuccess # Redis服务器连接密码（默认为空）
-    timeout: 5000ms # 连接超时时间（毫秒）
+    # https://support.huaweicloud.com/usermanual-dcs/dcs-ug-0312024.html
+    timeout: 0ms # 连接超时时间（毫秒）参数设为0表示连接永不断开。
     jedis:
       pool:
-        max-active: 1000
-        min-idle: 2
-        max-idle: 3
-        max-wait: 3000
+        max-active: 8 # 连接池最大连接数
+        max-idle: 8 # 连接池最大空闲连接数
+        min-idle: 0 # 连接池最小空闲连接数
+        max-wait: -1ms # 连接池最大阻塞等待时间，负值表示没有限制
 
 

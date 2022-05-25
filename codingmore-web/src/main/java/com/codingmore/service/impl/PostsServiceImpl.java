@@ -41,6 +41,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     private IPostTagRelationService iPostTagRelationService;
     @Autowired
     private RedisService redisService;
+
     private static final String PAGE_VIEW_KEY = "pageView";
     /**
      * 点赞

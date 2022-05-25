@@ -326,6 +326,17 @@
     cursor: pointer;
     background-color: #63b175;
     padding: 5px;
+    margin: 0;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    position: fixed;
+    right: 103px;
+    bottom: 49px;
+    z-index: 10;
   }
   .btn-back-top:hover {
     background-color: #2E8041;
