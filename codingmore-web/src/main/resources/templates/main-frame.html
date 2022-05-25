@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-ontop.jpg">
+    <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-without-name.ico">
     <title th:text="${siteConfig.siteName}"></title>
     <meta name="keywords" th:content="${siteConfig.keywords}">
     <meta name="description" th:content="${siteConfig.siteDesc}">
@@ -30,8 +30,9 @@
                     <img class="small noshow" src="images/menu-close-icon.png" />
                 </div>
                 <div class="logo-area flex-auto-item flex-row v-center">
-                    <img src="images/logo-ontop.jpg" alt="logo" class="logo-top">
-                    <span th:text="${siteConfig.siteName}"></span>
+                    <a href="/">
+                        <img src="images/logo.svg" alt="logo" class="logo-top">
+                    </a>
                 </div>
                 <div class="reflesh-area mobile flex-fixed-item">
                     <a id="refleshBtn" href="javascript:void(0)"><img src="images/reflesh.png" /></a>
@@ -151,8 +152,8 @@
                     <h4>⭐编程知识星球</h4>
                     <hr>
                     <ul>
-                        <li><a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/java-mianshi-zhinan.html">Java<b>面试指南</b></a></li>
-                        <li><a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/">星球5大价值</a></li>
+                        <li><a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/java-mianshi-zhinan.html">星球专栏：<b>Java面试指南</b></a></li>
+                        <li><a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/">星球详细介绍</a></li>
                     </ul>
                 </div>
                 
