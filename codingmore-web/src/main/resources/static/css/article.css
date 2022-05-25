@@ -77,7 +77,8 @@
   /* 封面图样式 */
   .cover-pic{
     max-width: 820px;
-    margin-bottom: 15px;
+    display: block;
+    margin: 30px auto;
   }
 
   /* 广告列 */
@@ -155,7 +156,8 @@
   /* 封面图样式 */
   .cover-pic{
     max-width: 96vw;
-    margin-bottom: 3vw;
+    display: block;
+    margin: 3vw auto;
   }
 
   .article-area{

@@ -3,6 +3,9 @@
 <head>
   <title>内容页</title>
   <link href="css/article.css" type="text/css" rel="stylesheet" />
+  <link href="css/fonts.css" type="text/css" rel="stylesheet" />
+  <link href="css/github.min.css" type="text/css" rel="stylesheet" />
+  <link href="css/github-markdown.css" type="text/css" rel="stylesheet" />
   <script type="text/javascript" src="js/article.js"></script>
 </head>
 
@@ -25,7 +28,7 @@
           </div>
         </div>
         <!-- 文章正文，该容器内是md文件转化的Html代码 -->
-        <div class="article-content">
+        <div class="article-content markdown-body">
           <!-- 这个是封面图，从后台数据单独取的 -->
           <img class="cover-pic"  th:if="${not #strings.isEmpty(postsVo.attribute?.get('articleCoverUrl'))}" th:src="${postsVo.attribute?.get('articleCoverUrl')?:'images/article-cover-demo.jpg'}"/>
           <!-- 下面是文章内容 -->
