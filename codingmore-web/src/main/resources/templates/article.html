@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{main-frame :: layout (~{::link}, ~{::script}, ~{::#main_part})}" lang="en">
+
 <head>
   <title>内容页</title>
   <link href="css/article.css" type="text/css" rel="stylesheet" />
@@ -11,45 +12,55 @@
 
 <body>
 
-    <!-- 主体内容区域 -->
-    <div id="main_part" class="article-main flex-auto-item">
-      <input type="hidden" id="article_id" th:value="${postsVo.postsId}" />
-      <!-- 文章内容区域 -->
-      <div class="article-area">
-        <p class="title" th:text="${postsVo.postTitle}">干掉 PowerDesigner！这款国人开源的数据库设计工具真香！</p>
-        <p class="last-update-time color_gray1" th:text="'最后更新：'+${#dates.format(postsVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">最后更新：2022-01-18 12:12</p>
-        <div class="author-and-flags">
-          <div class="author-box color_gray1">
-            <span>作者</span>
-            <a href="javascript:void(0)" class="author-name" th:text="${postsVo.userNiceName}"></a>
-          </div>
-          <div class="labels text-right" >
-            <a href="javascript:void(0)" class="label" th:onclick="jumpToSearchTag([[${tag.postTagId}]],[[${tag.description}]])" th:each="tag : ${postsVo.tags}" th:text="${tag.description}">数据库设计</a>
-          </div>
-        </div>
-        <!-- 文章正文，该容器内是md文件转化的Html代码 -->
-        <div class="article-content markdown-body">
-          <!-- 这个是封面图，从后台数据单独取的 -->
-          <img class="cover-pic"  th:if="${not #strings.isEmpty(postsVo.attribute?.get('articleCoverUrl'))}" th:src="${postsVo.attribute?.get('articleCoverUrl')?:'images/article-cover-demo.jpg'}"/>
-          <!-- 下面是文章内容 -->
-          <div th:utext="${postsVo.htmlContent}"></div>
-          <!-- 下面是文章点赞区域 -->
-          <div class="like-area text-center">
-            <div class="btn-like " th:classappend="${hasClickedLike ? 'clicked': ''}">
-              <img class="like-clicked" src="images/like-clicked.png" />
-              <img class="like-unclicked" src="images/like-unclicked.png" />
+  <!-- 主体内容区域 -->
+  <div id="main_part" class="article-main flex-auto-item">
+    <input type="hidden" id="article_id" th:value="${postsVo.postsId}" />
+    <!-- 文章内容区域 -->
+    <div class="article-area">
+      <header>
+        <div class="page-header">
+          <h1 class="title" th:text="${postsVo.postTitle}"></h1>
+          <p class="last-update-time color_gray1"
+            th:text="'最后更新：'+${#dates.format(postsVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">最后更新：2022-01-18 12:12</p>
+          <div class="author-and-flags">
+            <div class="author-box color_gray1">
+              <span class="author-by">作者</span>
+              <span class="author-name">
+                <a href="javascript:void(0)" th:text="${postsVo.userNiceName}"></a>
+              </span>
             </div>
-            <div class="thanks-note " th:classappend="${hasClickedLike ? '' : 'noshow'}">您已赞过，感谢您的支持</div>
+            <div class="labels text-right">
+              <a href="javascript:void(0)" class="label"
+                th:onclick="jumpToSearchTag([[${tag.postTagId}]],[[${tag.description}]])"
+                th:each="tag : ${postsVo.tags}" th:text="${tag.description}">数据库设计</a>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- 广告占位列 -->
-      <div th:replace="index :: index_right" class="fiex-ad">
-        <a target="_blank" href="http://www.baidu.com">
-          <img src="images/demo-ad.png" />
-        </a>
+      </header>
+      <!-- 文章正文，该容器内是md文件转化的Html代码 -->
+      <div class="article-content markdown-body">
+        <!-- 这个是封面图，从后台数据单独取的 -->
+        <img class="cover-pic" th:if="${not #strings.isEmpty(postsVo.attribute?.get('articleCoverUrl'))}"
+          th:src="${postsVo.attribute?.get('articleCoverUrl')?:'images/article-cover-demo.jpg'}" />
+        <!-- 下面是文章内容 -->
+        <div th:utext="${postsVo.htmlContent}"></div>
+        <!-- 下面是文章点赞区域 -->
+        <div class="like-area text-center">
+          <div class="btn-like " th:classappend="${hasClickedLike ? 'clicked': ''}">
+            <img class="like-clicked" src="images/like-clicked.png" />
+            <img class="like-unclicked" src="images/like-unclicked.png" />
+          </div>
+          <div class="thanks-note " th:classappend="${hasClickedLike ? '' : 'noshow'}">您已赞过，感谢您的支持</div>
+        </div>
       </div>
     </div>
+    <!-- 广告占位列 -->
+    <div th:replace="index :: index_right" class="fiex-ad">
+      <a target="_blank" href="http://www.baidu.com">
+        <img src="images/demo-ad.png" />
+      </a>
+    </div>
+  </div>
 
 </body>
 
