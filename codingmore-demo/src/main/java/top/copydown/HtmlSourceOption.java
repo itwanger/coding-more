@@ -1,7 +1,8 @@
-package io.github.furstenheim;
+package top.copydown;
 
 import lombok.Builder;
 import lombok.Data;
+import top.copydown.HtmlSourceType;
 
 /**
  * 微信搜索「沉默王二」，回复 Java
@@ -28,4 +29,6 @@ public class HtmlSourceOption {
     private String authorKey;
     // 昵称
     private String nicknameKey;
+    // 类型
+    private HtmlSourceType htmlSourceType;
 }

@@ -2,13 +2,14 @@ package io.github.furstenheim;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileWriter;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
-import org.jsoup.select.Elements;
+import top.copydown.HtmlSourceOption;
+import top.copydown.HtmlSourceResult;
+import top.copydown.MdUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,99 +46,6 @@ public class CopyDown {
         CopyNode copyRootNode = new CopyNode(input);
         String result = process(copyRootNode);
         return postProcess(result);
-    }
-
-    public void convert(HtmlSourceOption htmlSourceOption) throws IOException {
-        Document doc = Jsoup.connect(htmlSourceOption.getUrl()).get();
-        HtmlSourceResult result = findImgAndTitleAndNickname(doc, htmlSourceOption);
-
-        String pinyin = Pinyin4jUtil.getFirstSpellPinYin(result.getMdTitle(), true);
-        log.info("pinyin{}", pinyin);
-
-        Elements content = doc.select(htmlSourceOption.getContentSelector());
-        String input = content.html();
-
-        // 指定 md 名字
-        // 下载题图
-        String markdown = convert(input);
-        log.info("markdown\n{}", markdown);
-
-        // 下载封面图
-        long size = HttpUtil.downloadFile(result.getCoverImageUrl(),
-                FileUtil.file(htmlSourceOption.getImgdest() + pinyin + ".jpg"));
-        log.info("cover image size{}", size);
-
-        FileWriter writer = new FileWriter(htmlSourceOption.getMddest()+ pinyin + ".md");
-
-        // 作者名写到文件中
-        String author = findAuthor(doc, htmlSourceOption);
-        if (StringUtils.isBlank(author)) {
-            author = result.getNickName();
-        }
-
-        // 标题写入到文件中
-        writer.append("---\n");
-        writer.append("author: " + author + "\n");
-        writer.append("title: " + result.getMdTitle() + "\n");
-        writer.append("category:\n");
-        writer.append("  - 优质文章\n");
-        writer.append("---\n\n");
-        writer.append(markdown);
-        log.info("all done");
-    }
-
-    public String findAuthor(Document doc, HtmlSourceOption option) {
-        for (Element metaTag : doc.getElementsByTag("meta")) {
-            String content = metaTag.attr("content");
-            String name = metaTag.attr("name");
-            if (option.getAuthorKey().equals(name)) {
-                return content;
-            }
-        }
-        return null;
-    }
-
-    public HtmlSourceResult findImgAndTitleAndNickname(Document doc, HtmlSourceOption option) {
-        // get <script>
-        for (Element scripts : doc.getElementsByTag("script")) {
-            // get data from <script>
-            for (DataNode dataNode : scripts.dataNodes()) {
-                // find data which contains
-                if (dataNode.getWholeData().contains(option.getCoverImageKey())) {
-                    log.info("contains");
-                    HtmlSourceResult result = HtmlSourceResult.builder().build();
-
-                    // 昵称
-                    Pattern nikeNamePattern = Pattern.compile("var\\s+"+option.getNicknameKey()+"\\s+=\\s+\"(.*)\";");
-                    Matcher nikeNameMatcher = nikeNamePattern.matcher(dataNode.getWholeData());
-                    if (nikeNameMatcher.find()) {
-                        String nickName = nikeNameMatcher.group(1);
-                        log.info("find nickName success{}", nickName);
-                        result.setNickName(nickName);
-                    }
-
-                    // 文件名
-                    Pattern titlePattern = Pattern.compile("var\\s+"+option.getTitleKey()+"\\s+=\\s+'(.*)'\\.html\\(false\\);");
-                    Matcher titleMatcher = titlePattern.matcher(dataNode.getWholeData());
-                    if (titleMatcher.find()) {
-                        String title = titleMatcher.group(1);
-                        log.info("find title success{}", title);
-                        result.setMdTitle(title);
-                    }
-
-                    // 封面图
-                    Pattern pattern = Pattern.compile("var\\s+"+option.getCoverImageKey()+"\\s+=\\s+\"(.*)\";");
-                    Matcher matcher = pattern.matcher(dataNode.getWholeData());
-                    if (matcher.find()) {
-                        String msg_cdn_url = matcher.group(1);
-                        log.info("find msg_cdn_url success{}", msg_cdn_url);
-                        result.setCoverImageUrl(msg_cdn_url);
-                    }
-                    return result;
-                }
-            }
-        }
-        return null;
     }
 
     private Rules rules;

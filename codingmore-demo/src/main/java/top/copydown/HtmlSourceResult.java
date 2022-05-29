@@ -1,7 +1,8 @@
-package io.github.furstenheim;
+package top.copydown;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 /**
  * 微信搜索「沉默王二」，回复 Java
@@ -18,4 +19,17 @@ public class HtmlSourceResult {
     private String mdTitle;
     // nickName
     private String nickName;
+    // 作者名
+    private String author;
+    // 原文链接
+    private String sourceLink;
+    // MD 内容
+    private String mdInput;
+    // MD
+    private String md;
+
+    @Tolerate
+    public HtmlSourceResult() {
+
+    }
 }

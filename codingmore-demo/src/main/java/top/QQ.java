@@ -1,5 +1,7 @@
 package top;
 
+import cn.hutool.core.text.UnicodeUtil;
+
 import java.net.Socket;
 
 /**
@@ -14,5 +16,8 @@ public class QQ {
 
         Socket socket = new Socket();
         System.out.println("写不出来，放弃");
+
+        String s = UnicodeUtil.toString("\\u002F\\u002F");
+        System.out.println(s);
     }
 }
