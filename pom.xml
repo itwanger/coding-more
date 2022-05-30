@@ -28,7 +28,6 @@
         <module>codingmore-web</module>
         <module>codingmore-admin</module>
         <module>codingmore-security</module>
-        <module>codingmore-demo</module>
     </modules>
 
     <parent>
