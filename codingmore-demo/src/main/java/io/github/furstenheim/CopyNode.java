@@ -179,6 +179,7 @@ class CopyNode {
     static boolean isBlock (Node element) {
         return getBlockNodesSet().contains(element.nodeName());
     }
+
     private static Set<String> getBlockNodesSet() {
         if (BLOCK_ELEMENTS_SET != null) {
             return BLOCK_ELEMENTS_SET;

@@ -2,11 +2,13 @@ package io.github.furstenheim;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileWriter;
+import cn.hutool.core.text.StrBuilder;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
+import org.jsoup.select.Elements;
 import top.copydown.HtmlSourceOption;
 import top.copydown.HtmlSourceResult;
 import top.copydown.MdUtil;
@@ -146,7 +148,7 @@ public class CopyDown {
             addRule("blankReplacement", new Rule((element) -> CopyNode.isBlank(element), (content, element) ->
                     CopyNode.isBlock(element) ? "\n\n" : ""));
             addRule("paragraph", new Rule("p", (content, element) -> {return "\n\n" + content + "\n\n";}));
-            addRule("br", new Rule("br", (content, element) -> {return options.br + "\n";}));
+            addRule("br", new Rule("br", (content, element) -> {return options.br + "\n\n";}));
             addRule("heading", new Rule(new String[]{"h1", "h2", "h3", "h4", "h5", "h6" }, (content, element) -> {
                 Integer hLevel = Integer.parseInt(element.nodeName().substring(1, 2));
                 if (options.headingStyle == HeadingStyle.SETEXT && hLevel < 3) {
@@ -168,6 +170,45 @@ public class CopyDown {
                 } else {
                     return "\n\n" + content + "\n\n";
                 }
+            }));
+            addRule("table", new Rule(new String[] { "th", "td", "tr", "thead", "tbody"}, (content, element) -> {
+                // 净身
+                content = content.replaceAll("^\n+", "") // remove leading new lines
+                        .replaceAll("\n+$", "\n"); // indent
+                String separator = "|";
+                String delimiter = "---";
+                StrBuilder builder = StrBuilder.create(content);
+                builder.append(separator);
+
+                String nodeName = element.nodeName();
+                Element next = (Element)element.nextSibling();
+                // 根据tr 的 th 的数量添加表头和表体之间的分割线
+                Element parent = (Element)element.parentNode();
+                Elements children = parent.children();
+
+                // tr
+                if (nodeName.equals("tr")) {
+                    return content + "\n";
+                }
+                // thead
+                if (nodeName.equals("thead") || nodeName.equals("tbody")) {
+                    return content;
+                }
+
+                // 表头
+                if (nodeName.equals("th")) {
+                    // 最后一个表头的话，需要加上
+                    if (element.equals(children.last())) {
+                        builder.append("\n");
+                        for (int i =0;i<children.size();i++) {
+                            builder.append(delimiter);
+                            builder.append(separator);
+                        }
+                    }
+                }
+
+
+                return builder.toString();
             }));
             addRule("listItem", new Rule("li", (content, element) -> {
                 content = content.replaceAll("^\n+", "") // remove leading new lines
@@ -344,7 +385,7 @@ public class CopyDown {
                 String alt = cleanAttribute(element.attr("alt"));
                 String src = element.hasAttr("src") ? element.attr("src"): element.attr("data-src");
 
-                if (src.length() == 0) {
+                if (src.length() == 0 || src.indexOf("data:image/svg+xml") >= 0) {
                     return "";
                 }
                 String title = cleanAttribute(element.attr("title"));
@@ -354,7 +395,10 @@ public class CopyDown {
                 }
                 return "![" + alt + "]" + "(" + src + titlePart + ")";
             }));
-            addRule("default", new Rule((element -> true), (content, element) -> CopyNode.isBlock(element) ? "\n\n" + content + "\n\n" : content));
+            addRule("default", new Rule((element -> true), (content, element) ->
+            {
+                return CopyNode.isBlock(element) ? "\n\n" + content + "\n\n" : content;
+            }));
         }
 
         public Rule findRule (Node node) {

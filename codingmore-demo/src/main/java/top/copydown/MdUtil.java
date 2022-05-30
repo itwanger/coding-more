@@ -7,6 +7,7 @@ import cn.hutool.core.text.StrSplitter;
 import cn.hutool.core.text.UnicodeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import com.overzealous.remark.Remark;
 import io.github.furstenheim.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -30,7 +31,7 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class MdUtil {
-    public static void convert(HtmlSourceOption htmlSourceOption) throws IOException {
+    public static void convert(HtmlSourceOption htmlSourceOption) {
         OptionsBuilder optionsBuilder = OptionsBuilder.anOptions();
         Options options = optionsBuilder
                 .withEmDelimiter("*")
@@ -40,10 +41,16 @@ public class MdUtil {
         CopyDown copyDown = new CopyDown(options);
 
         // 根据 URL 获取 jsoup 文档对象
-        Document doc = Jsoup.connect(htmlSourceOption.getUrl()).get();
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(htmlSourceOption.getUrl()).get();
+        } catch (IOException e) {
+            log.error("jsoup error{}", e);
+        }
 
         HtmlSourceResult result = null;
         String markdown = null;
+
         switch (htmlSourceOption.getHtmlSourceType()) {
 
             case WEIXIN:
@@ -74,6 +81,16 @@ public class MdUtil {
                 log.info("zhihu markdown\n{}", markdown);
                 result.setMd(markdown);
                 break;
+            case BOKEYUAN:
+                result = MdUtil.findBokeyuan(doc,htmlSourceOption);
+                // HTML 转 MD
+//                Remark remark = new Remark();
+//                markdown = remark.convert(result.getMdInput());
+//                log.info("bokeyuan remark markdown\n{}", markdown);
+                markdown = copyDown.convert(result.getMdInput());
+                log.info("bokeyuan markdown\n{}", markdown);
+                result.setMd(markdown);
+                break;
             default:
                 break;
         }
@@ -82,30 +99,56 @@ public class MdUtil {
         String pinyin = Pinyin4jUtil.getFirstSpellPinYin(result.getMdTitle(), true);
         log.info("pinyin{}", pinyin);
 
+        // 标题加上前缀
+        String filename = htmlSourceOption.getHtmlSourceType().name().toLowerCase() + "-"+ pinyin;
+        log.info("filename{}", filename);
+
         // 下载封面图
         if (StringUtils.isNotBlank(result.getCoverImageUrl())) {
             long size = HttpUtil.downloadFile(result.getCoverImageUrl(),
-                    FileUtil.file(htmlSourceOption.getImgdest() + pinyin + ".jpg"));
+                    FileUtil.file(htmlSourceOption.getImgdest() + filename + ".jpg"));
             log.info("cover image size{}", size);
         }
 
-        // 准备吸入到 MD 文档
-        FileWriter writer = new FileWriter(htmlSourceOption.getMddest()+ pinyin + ".md");
-
+        StrBuilder builder = StrBuilder.create();
+        builder.append("---\n");
         // 标题写入到文件中
-        writer.append("---\n");
-
-        writer.append("title: " + result.getMdTitle() + "\n");
-        writer.append("shortTitle: " + result.getMdTitle() + "\n");
+        builder.append("title: " + result.getMdTitle() + "\n");
+        builder.append("shortTitle: " + result.getMdTitle() + "\n");
         if (StringUtils.isNotBlank(result.getSourceLink())) {
-            writer.append("description: 转载链接：" + result.getSourceLink() + "\n");
+            builder.append("description: 转载链接：" + result.getSourceLink() + "\n");
         }
-        writer.append("author: " + result.getAuthor() + "\n");
-        writer.append("category:\n");
-        writer.append("  - 优质文章\n");
-        writer.append("---\n\n");
-        writer.append(result.getMd());
+        builder.append("author: " + result.getAuthor() + "\n");
+        builder.append("category:\n");
+        builder.append("  - 优质文章\n");
+        builder.append("---\n\n");
+        builder.append(result.getMd());
+
+        // 准备吸入到 MD 文档
+        FileWriter writer = new FileWriter(htmlSourceOption.getMddest()+ filename + ".md");
+        writer.write(builder.toString());
         log.info("all done");
+    }
+
+    private static HtmlSourceResult findBokeyuan(Document doc, HtmlSourceOption option) {
+        HtmlSourceResult result = new HtmlSourceResult();
+        // 标题
+        Elements title = doc.select(option.getTitleKey());
+        String [] texts = StrSplitter.splitToArray(title.text(),"-", 0, true,true);
+        result.setMdTitle(texts[0]);
+
+        // 作者名
+        result.setAuthor(texts[1]);
+
+        // 转载链接
+        result.setSourceLink(option.getUrl());
+
+        // 获取文章内容
+        Elements content = doc.select(option.getContentSelector());
+        String input = content.html();
+        result.setMdInput(input);
+
+        return result;
     }
 
     private static HtmlSourceResult findZhihu(Document doc, HtmlSourceOption option) {
