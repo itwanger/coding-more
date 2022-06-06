@@ -1,9 +1,9 @@
 spring:
   datasource:
-    username: codingmoretiny02
-    password: Xw5y8bGFzb86DyGy
+    username: root
+    password: Codingmore123
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://118.190.99.232:3306/codingmoretiny02?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/codingmore?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #初始化连接池大小
@@ -45,13 +45,12 @@ spring:
         #登录名
         login-username: root
         #登录密码
-        login-password: root
-
+        login-password: 123456
   redis:
-    host: 118.190.99.232 # Redis服务器地址
+    host: 127.0.0.1 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
-    password: learnsuccess # Redis服务器连接密码（默认为空）
+    password:  # Redis服务器连接密码（默认为空）
     # https://support.huaweicloud.com/usermanual-dcs/dcs-ug-0312024.html
     timeout: 0ms # 连接超时时间（毫秒）参数设为0表示连接永不断开。
     jedis:

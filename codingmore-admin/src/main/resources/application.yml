@@ -1,7 +1,7 @@
 # Spring Boot 配置
 spring:
   profiles:
-    active: dev #默认为开发环境
+    active: prod #默认为开发环境
   servlet:
     multipart:
       enabled: true #开启文件上传
@@ -55,31 +55,12 @@ jwt:
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
 
-  # oss
-aliyun:
-  oss:
-      # oss对外服务的访问域名
-    endpoint: oss-cn-beijing.aliyuncs.com
-      # 访问身份验证中用到用户标识
-    accessKeyId:
-      # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
-    accessKeySecret:
-      # oss的存储空间
-    bucketName: itwanger-oss
-      # 上传文件大小(M)
-    maxSize: 3
-      # 上传文件夹路径前缀
-    dir:
-      prefix: codingmore/images/
-  cdn: cdn.tobebetterjavaer.com
-
-redis:
-  database: codingmore
+codingmore-admin-redis:
+  prefix: codingmore-admin
   key:
-    admin: 'codingmore:users'
-    resourceList: 'codingmore:resourceList'
-  expire:
-    common: 86400 # 24小时
+    user: user
+    resource: resource
+  expire: 86400 # 24小时
 
 #异步线程配置
 async:

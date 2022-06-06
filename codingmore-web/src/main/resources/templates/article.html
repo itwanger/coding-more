@@ -21,7 +21,7 @@
         <div class="page-header">
           <h1 class="title" th:text="${postsVo.postTitle}"></h1>
           <p class="last-update-time color_gray1"
-            th:text="'最后更新：'+${#dates.format(postsVo.postModified, 'yyyy-MM-dd HH:mm:ss')}">最后更新：2022-01-18 12:12</p>
+            th:text="'最后更新 '+${#dates.format(postsVo.postModified, 'yyyy-MM-dd HH:mm:ss')} + ' ·  阅读 ' + ${postsVo.pageView}">最后更新：2022-01-18 12:12</p>
           <div class="author-and-flags">
             <div class="author-box color_gray1">
               <span class="author-by">作者</span>

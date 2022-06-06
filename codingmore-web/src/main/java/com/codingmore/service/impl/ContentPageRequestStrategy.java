@@ -34,9 +34,11 @@ public class ContentPageRequestStrategy implements ILearnWebRequestStrategy {
     private ISiteService siteService;
     @Autowired
     private IPostsService iPostsService;
+
     @Override
     public String handleRequest(WebRequestParam webRequestParam) {
         iPostsService.increasePageView(webRequestParam.getPostId(),webRequestParam.getRequest());
+
         Boolean hasClickedLike = iPostsService.hasClickedLike(webRequestParam.getPostId(),webRequestParam.getRequest());
         webRequestParam.getRequest().setAttribute(CLICKED_LIKE, hasClickedLike);
         PostsVo postsVo = iPostsService.getPostsById(webRequestParam.getPostId());

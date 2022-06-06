@@ -1,10 +1,7 @@
 package com.codingmore.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.codingmore.dto.PostsPageQueryParam;
-import com.codingmore.mapper.RoleResourceRelationMapper;
 import com.codingmore.model.Menu;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Role;
@@ -82,7 +79,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
             relationList.add(relation);
         }
         roleMenuRelationService.saveBatch(relationList);
-        usersCacheService.delResourceListByRole(roleId);
+        usersCacheService.delResourceListByRoleId(roleId);
         return menuIds.size();
     }
 
@@ -103,7 +100,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
                relationList.add(relation);
            }
            roleResourceRelationService.saveBatch(relationList);
-           usersCacheService.delResourceListByRole(roleId);
+           usersCacheService.delResourceListByRoleId(roleId);
            return resourceIds.size();
     }
 

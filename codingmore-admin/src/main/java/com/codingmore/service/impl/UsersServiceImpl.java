@@ -159,7 +159,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
         user.setUserPass(passwordEncoder.encode(updatePasswordParam.getNewPassword()));
         baseMapper.updateById(user);
-        usersCacheService.delAdmin(user.getUsersId());
+        usersCacheService.delAdminUserByUserId(user.getUsersId());
         return 1;
     }
 
@@ -179,7 +179,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public List<Resource> getResourceList(Long adminId) {
-        List<Resource> resourceList = usersCacheService.getResourceList(adminId);
+        List<Resource> resourceList = usersCacheService.getResourceListByUserId(adminId);
         if(CollUtil.isNotEmpty(resourceList)){
             return  resourceList;
         }
@@ -216,7 +216,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
             }
             adminRoleRelationMapper.insertList(list);
         }
-        usersCacheService.delResourceList(adminId);
+        usersCacheService.delResourceListByUserId(adminId);
         return count;
     }
 

@@ -28,14 +28,13 @@
     color: #333;
     font-weight: 300;
     letter-spacing: -1.5px;
-    margin-top: 60px;
+    margin-top: 20px;
     font-size: 47px;
     line-height: 1;
   }
 
   .article-area .last-update-time {
     color: #333;
-    font-size: smaller;
     margin-top: 3em;
     font-weight: 300;
   }

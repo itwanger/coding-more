@@ -45,12 +45,12 @@ spring:
         #登录名
         login-username: root
         #登录密码
-        login-password: root
+        login-password: 123456
   redis:
-    host: 118.190.99.232 # Redis服务器地址
+    host: 127.0.0.1 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
-    password: learnsuccess # Redis服务器连接密码（默认为空）
+    password:  # Redis服务器连接密码（默认为空）
     # https://support.huaweicloud.com/usermanual-dcs/dcs-ug-0312024.html
     timeout: 0ms # 连接超时时间（毫秒）参数设为0表示连接永不断开。
     jedis:
@@ -83,6 +83,24 @@ spring:
             threadCount: 25 # 线程池大小。默认为 10 。
             threadPriority: 5 # 线程优先级
             class: org.quartz.simpl.SimpleThreadPool # 指定线程池实现类，对调度器提供固定大小的线程池
+# oss
+aliyun:
+  # CDN
+  cdn: yours
+  oss:
+    # oss对外服务的访问域名
+    endpoint: oss-cn-beijing.aliyuncs.com
+    # 访问身份验证中用到用户标识
+    accessKeyId:
+    # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    accessKeySecret:
+    # oss的存储空间
+    bucketName: itwanger-oss
+    # 上传文件大小(M)
+    maxSize: 3
+    # 上传文件夹路径前缀
+    dir:
+      prefix:
 
 
 

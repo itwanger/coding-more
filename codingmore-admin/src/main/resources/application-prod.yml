@@ -1,9 +1,9 @@
 spring:
   datasource:
-    username: learn
-    password: 123
+    username: root
+    password: Codingmore123
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/learn?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/codingmore?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       #初始化连接池大小
@@ -45,21 +45,60 @@ spring:
         #登录名
         login-username: root
         #登录密码
-        login-password: root
-
-
+        login-password: 123456
   redis:
     host: 127.0.0.1 # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
-    password: learnsuccess # Redis服务器连接密码（默认为空）
-    timeout: 300ms # 连接超时时间（毫秒）
-    lettuce:
+    password:  # Redis服务器连接密码（默认为空）
+    # https://support.huaweicloud.com/usermanual-dcs/dcs-ug-0312024.html
+    timeout: 0ms # 连接超时时间（毫秒）参数设为0表示连接永不断开。
+    jedis:
       pool:
-        max-active: 1000
-        min-idle: 0
-        max-idle: 8
-        max-wait: 3000
+        max-active: 8 # 连接池最大连接数
+        max-idle: 8 # 连接池最大空闲连接数
+        min-idle: 0 # 连接池最小空闲连接数
+        max-wait: -1ms # 连接池最大阻塞等待时间，负值表示没有限制
 
+  quartz:
+    job-store-type: jdbc # 默认为内存 memory 的方式，这里我们使用数据库的形式
+    wait-for-jobs-to-complete-on-shutdown: true # 关闭时等待任务完成
+    overwrite-existing-jobs: true # 可以覆盖已有的任务
+    jdbc:
+      initialize-schema: never # 是否自动使用 SQL 初始化 Quartz 表结构
+    properties: # quartz原生配置
+      org:
+        quartz:
+          scheduler:
+            instanceName: scheduler # 调度器实例名称
+            instanceId: AUTO # 调度器实例ID自动生成
+          # JobStore 相关配置
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX # JobStore 实现类
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate # 使用完全兼容JDBC的驱动
+            tablePrefix: QRTZ_ # Quartz 表前缀
+            useProperties: false # 是否将JobDataMap中的属性转为字符串存储
+          # 线程池相关配置
+          threadPool:
+            threadCount: 25 # 线程池大小。默认为 10 。
+            threadPriority: 5 # 线程优先级
+            class: org.quartz.simpl.SimpleThreadPool # 指定线程池实现类，对调度器提供固定大小的线程池
+# oss
+aliyun:
+  cdn: cdn.tobebetterjavaer.com
+  oss:
+    # oss对外服务的访问域名
+    endpoint: oss-cn-beijing.aliyuncs.com
+    # 访问身份验证中用到用户标识
+    accessKeyId: LTAI5tFgj8xZA6siqiJ3vdRk
+    # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    accessKeySecret: yT2gGIdUBCvDkgQenf9L7MYi2LFTOO
+    # oss的存储空间
+    bucketName: itwanger-oss
+    # 上传文件大小(M)
+    maxSize: 3
+    # 上传文件夹路径前缀
+    dir:
+      prefix: codingmore/images/
 
 

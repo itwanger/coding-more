@@ -7,7 +7,7 @@ import com.codingmore.dto.PostTagParam;
 import com.codingmore.model.PostTag;
 import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
-import com.codingmore.service.RedisService;
+import com.codingmore.service.IRedisService;
 import com.codingmore.webapi.ResultObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +43,7 @@ public class PostTagController {
     private IPostTagRelationService postTagRelationService;
 
     @Autowired
-    private RedisService redisService;
+    private IRedisService redisService;
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody

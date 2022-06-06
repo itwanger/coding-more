@@ -3,6 +3,7 @@ package com.codingmore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.assist.RedisConstants;
 import com.codingmore.dto.PostsPageQueryParam;
 import com.codingmore.model.*;
 import com.codingmore.mapper.PostsMapper;
@@ -40,13 +41,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     @Autowired
     private IPostTagRelationService iPostTagRelationService;
     @Autowired
-    private RedisService redisService;
-
-    private static final String PAGE_VIEW_KEY = "pageView";
-    /**
-     * 点赞
-     */
-    private static final String POST_LIKE_COUNT = "likeCount";
+    private IRedisService redisService;
 
     @Override
     public PostsVo getPostsById(Long id) {
@@ -141,6 +136,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     public void increasePageView(Long id, HttpServletRequest  request) {
+<<<<<<< Updated upstream
         String ip = CusAccessObjectUtil.getIpAddress(request);
         String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
         //该ip已经读过本文章了，就不要加1了
@@ -148,44 +144,42 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             return;
         }
         redisService.incr(key, 1);
+=======
+        // 获取文章，如果文章不存在就直接返回
+>>>>>>> Stashed changes
         Posts posts = this.getById(id);
-        Integer pageView = (Integer)redisService.get(key);
-        if(pageView == null || posts == null){
+        if(posts == null){
             return;
         }
-        posts.setPageView(Long.parseLong(String.valueOf(pageView)));
+
+        // 通过 Redis 来给 PV + 1
+        Long pageView = redisService.incr(RedisConstants.getWebPageViewKey(id.toString()), 1);
+        // 更新 MySQL
+        posts.setPageView(pageView);
         this.updateById(posts);
-        
     }
 
 
     @Override
     public int getPageView(Long id) {
-        String key = PAGE_VIEW_KEY +":"+ id+":*";
-        return redisService.countKey(key);
+        return redisService.countKey(RedisConstants.getWebPageViewKey(id+":*"));
     }
 
     @Override
     public void increaseLikeCount(Long id, HttpServletRequest request) {
         String ip = CusAccessObjectUtil.getIpAddress(request);
-        String key = POST_LIKE_COUNT +":"+ id+":"+ip;
-        redisService.incr(key, 1);
+        redisService.incr(RedisConstants.getWebPostLikeKey(id+":"+ip), 1);
     }
 
     @Override
     public Boolean hasClickedLike(Long id, HttpServletRequest request) {
         String ip = CusAccessObjectUtil.getIpAddress(request);
-        String key = POST_LIKE_COUNT +":"+ id+":"+ip;
-        if(redisService.get(key) !=null){
-            return true;
-        } else {
-            return false;
-        }
+        return redisService.get(RedisConstants.getWebPostLikeKey(id+":"+ip)) !=null;
+
     }
 
     @Override
     public int getLikeCount(Long id) {
-        String key = POST_LIKE_COUNT +":"+ id+":*";
-        return redisService.countKey(key);
+        return redisService.countKey(RedisConstants.getWebPostLikeKey(id+":*"));
     }
 }

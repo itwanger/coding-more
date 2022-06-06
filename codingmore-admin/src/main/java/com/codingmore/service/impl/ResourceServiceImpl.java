@@ -22,7 +22,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     private IUsersCacheService usersCacheService;
     @Override
     public boolean remove(Long resourceId) {
-        usersCacheService.delResourceListByResource(resourceId);
+        usersCacheService.delResourceListByResourceId(resourceId);
         return this.removeById(resourceId);
     }
 }

@@ -9,6 +9,7 @@ import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.codingmore.assist.RedisConstants;
 import com.codingmore.component.PublishPostJob;
 import com.codingmore.dto.PostAddTagParam;
 import com.codingmore.dto.PostsPageQueryParam;
@@ -20,9 +21,7 @@ import com.codingmore.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.state.PostStatus;
 import com.codingmore.state.TermRelationType;
-import com.codingmore.util.OSSUtil;
 import com.codingmore.vo.PostsVo;
-import com.codingmore.webapi.ResultObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -34,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,16 +67,12 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     @Autowired
     private IOssService iOssService;
     @Autowired
-    private RedisService redisService;
+    private IRedisService redisService;
     @Autowired
     private IScheduleService scheduleService;
 
     @Value("${post.schedule.minInterval}")
     private int postScheduleMinInterval;
-
-
-    private static final String PAGE_VIEW_KEY = "pageView";
-    private static final String POST_LIKE_COUNT = "likeCount";
 
     // 匹配图片的 markdown 语法
     // ![](hhhx.png)
@@ -264,10 +258,10 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         queryWrapper.eq("term_relationships_id", id);
 
         //删除浏览量
-        redisService.del(PAGE_VIEW_KEY +":"+ id+":*");
+        redisService.del(RedisConstants.getWebPageViewKey(id+":*"));
 
         //删除点赞
-        redisService.del( POST_LIKE_COUNT +":"+ id+":*");
+        redisService.del(RedisConstants.getWebPostLikeKey(id+":*"));
 
         return iTermRelationshipsService.remove(queryWrapper);
     }

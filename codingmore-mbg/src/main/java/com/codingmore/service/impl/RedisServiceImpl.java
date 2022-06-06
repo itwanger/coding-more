@@ -1,6 +1,6 @@
 package com.codingmore.service.impl;
 
-import com.codingmore.service.RedisService;
+import com.codingmore.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * Created by 石磊 on 2020/3/3.
  */
 @Service
-public class RedisServiceImpl implements RedisService {
+public class RedisServiceImpl implements IRedisService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
