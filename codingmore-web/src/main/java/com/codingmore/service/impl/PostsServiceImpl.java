@@ -143,6 +143,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     public void increasePageView(Long id, HttpServletRequest  request) {
         String ip = CusAccessObjectUtil.getIpAddress(request);
         String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
+        //该ip已经读过本文章了，就不要加1了
         if(redisService.get(key) !=null){
             return;
         }
