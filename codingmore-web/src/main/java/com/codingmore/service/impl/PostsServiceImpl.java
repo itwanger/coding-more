@@ -136,17 +136,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     public void increasePageView(Long id, HttpServletRequest  request) {
-<<<<<<< Updated upstream
-        String ip = CusAccessObjectUtil.getIpAddress(request);
-        String key = PAGE_VIEW_KEY +":"+ id+":"+ip;
-        //该ip已经读过本文章了，就不要加1了
-        if(redisService.get(key) !=null){
-            return;
-        }
-        redisService.incr(key, 1);
-=======
-        // 获取文章，如果文章不存在就直接返回
->>>>>>> Stashed changes
         Posts posts = this.getById(id);
         if(posts == null){
             return;
