@@ -55,7 +55,7 @@ const reloadArticleListEffect = () => {
     showSkeleton(true)
     setTimeout(() => {
         showSkeleton(false)
-    }, 2000)
+    }, 0)
 }
 
 // 切换tab列表页方法
@@ -310,7 +310,7 @@ const bottomLoadingFn = (showLoading) => {
         setTimeout(() => {
             $('.loading-over').removeClass('noshow')
             $('.loading-more').addClass('noshow')
-        }, 2000)
+        }, 0)
     }
 }
 
