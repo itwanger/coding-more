@@ -65,21 +65,12 @@ public class IndexPageRequestStrategy implements ILearnWebRequestStrategy {
         pageQueryParam.setPage(webRequestParam.getPage());
         pageQueryParam.setAsc(webRequestParam.isAsc());
         pageQueryParam.setOrderBy(webRequestParam.getOrderBy());
-        /* pageQueryParam.setOrderBy("post_date"); */
         pageQueryParam.setPageSize(webRequestParam.getPageSize());
         pageQueryParam.setPostStatus(PostStatus.PUBLISHED.toString());
         pageQueryParam.setTermTaxonomyId(webRequestParam.getChannelId());
 
-        // IPage<PostsVo> pageVo = postsService.findByPageWithTag(pageQueryParam);
-
         List<PostsVo> pageVoList = postsService.findByPageWithTagPaged(pageQueryParam);
-
-        //设置浏览量
-        pageVoList.forEach(postsVo -> {
-            postsVo.setLikeCount(Long.parseLong(String.valueOf(postsService.getLikeCount(postsVo.getPostsId()))));
-        });
         webRequestParam.getRequest().setAttribute(POSTS_ITEMS, pageVoList);
-        // webRequestParam.getRequest().setAttribute(POSTS_TOTAL,pageVo.getTotal());
         return INDEX_PAGE;
     }
 }
