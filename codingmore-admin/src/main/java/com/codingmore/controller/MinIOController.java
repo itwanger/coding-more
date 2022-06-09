@@ -51,7 +51,7 @@ public class MinIOController {
                 minioClient.putObject(
                         PutObjectArgs.builder()
                                 .bucket(bucketName)
-                                .object(FileNameUtil.getFileName("", file.getOriginalFilename()))
+                                .object(FileNameUtil.getImgName(file.getOriginalFilename()))
                                 .stream(file.getInputStream(),file.getInputStream().available(),-1)
                                 .build());
             }

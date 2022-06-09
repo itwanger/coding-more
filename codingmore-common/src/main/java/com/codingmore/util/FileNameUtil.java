@@ -1,6 +1,7 @@
 package com.codingmore.util;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 
 /**
@@ -12,7 +13,7 @@ import cn.hutool.core.util.IdUtil;
 public class FileNameUtil {
     private static final String[] imageExtension = {".jpg", ".jpeg", ".png", ".gif"};
 
-    public static String getFileName(String dirPrefix, String url) {
+    public static String getImgName(String url) {
         String ext = "";
         for (String extItem : imageExtension) {
             if (url.indexOf(extItem) != -1) {
@@ -20,6 +21,7 @@ public class FileNameUtil {
                 break;
             }
         }
-        return dirPrefix + DateUtil.today() + "/" + IdUtil.randomUUID() + ext;
+        // 2022年06月09日 + UUID + .jpg
+        return  DateUtil.today() + UUID.fastUUID() + ext;
     }
 }

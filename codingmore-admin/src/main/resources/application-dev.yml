@@ -85,8 +85,8 @@ spring:
             class: org.quartz.simpl.SimpleThreadPool # 指定线程池实现类，对调度器提供固定大小的线程池
 # oss
 aliyun:
-  # CDN
-  cdn: cdn.tobebetterjavaer.com
+  # CDN 修改为你的
+  cdn:
   oss:
     # oss对外服务的访问域名
     endpoint: oss-cn-beijing.aliyuncs.com
