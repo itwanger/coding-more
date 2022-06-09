@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link data-n-head="true" rel="icon" type="image/x-icon" href="images/logo-without-name.ico">
-    <title th:text="${siteConfig.siteName}"></title>
-    <meta name="keywords" th:content="${siteConfig.keywords}">
-    <meta name="description" th:content="${siteConfig.siteDesc}">
+    <title th:text="${postsVo == null ? siteConfig.siteName : postsVo.postTitle + '_'+ postsVo.userNiceName + '_'+ siteConfig.siteName}"></title>
+    <meta name="keywords" th:content="${postsVo == null ? siteConfig.keywords : postsVo.postTitle}">
+    <meta name="description" th:content="${postsVo == null ? siteConfig.siteDesc : postsVo.postExcerpt}">
     <link href="css/reset.css" type="text/css" rel="stylesheet" />
     <link href="css/common.css" type="text/css" rel="stylesheet" />
     <th:block th:replace="${top_css_source}" />
