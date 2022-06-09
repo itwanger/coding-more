@@ -40,3 +40,4 @@ package-lock.json
 
 # 生产环境的不提交
 application-prod.yml
+dump.rdb
