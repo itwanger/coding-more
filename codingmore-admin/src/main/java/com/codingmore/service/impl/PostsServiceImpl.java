@@ -304,7 +304,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             });
 
             log.info("排序后的标签{}",postTags);
-            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
+            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getPostTagId).collect(Collectors.toList()), ","));
         }
 
         log.info("获取文章作者{}", posts.getPostAuthor());
