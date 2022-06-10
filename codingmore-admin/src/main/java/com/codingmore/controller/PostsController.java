@@ -56,6 +56,8 @@ public class PostsController {
     @ResponseBody
     @ApiOperation("添加文章")
     public ResultObject<String> insert(@Valid PostsParam postsParam, BindingResult result) {
+        // TODO 定时发布
+        postsParam.setPostDate(null);
         postsService.savePosts(postsParam);
         return ResultObject.success("保存成功");
     }
@@ -71,6 +73,8 @@ public class PostsController {
     @ResponseBody
     @ApiOperation("更新")
     public ResultObject<String> update(@Valid PostsParam postsParam) {
+        // TODO 定时发布
+        postsParam.setPostDate(null);
         postsService.updatePosts(postsParam);
         return ResultObject.success("更新成功");
     }

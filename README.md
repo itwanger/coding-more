@@ -2,8 +2,8 @@
 
 <p align="center">
   <a href="#公众号" target="_blank"><img src="https://img.shields.io/badge/公众号-沉默王二-brightgreen.svg"></a>
-  <a href="#公众号" target="_blank"><img src="https://img.shields.io/badge/交流-微信群-blue.svg"></a>
-  <a href="https://github.com/itwanger/codingmore-learning" target="_blank"><img src="https://img.shields.io/badge/学习教程-codingmore--learning-red"></a>
+  <a href="https://tobebetterjavaer.com/zhishixingqiu/" target="_blank"><img src="https://img.shields.io/badge/交流-知识星球-blue.svg"></a>
+  <a href="https://tobebetterjavaer.com/home.html" target="_blank"><img src="https://img.shields.io/badge/学习教程-Java 程序员进阶之路-red"></a>
   <a href="https://github.com/itwanger/codingmore-admin-web" target="_blank">
     <img src="https://img.shields.io/badge/前端项目-codingmore--admin--web-orange.svg" alt="前端项目">
   </a>
@@ -14,10 +14,10 @@
 
 ## 友情提示
 
-> 1. **快速体验项目**：[在线访问地址](http://www.codingmore.top/admin/index.html)。
-> 2. **全套学习教程**：[《codingmore学习教程》](http://www.codingmore.top/learning/README)。
-> 3. **专属学习路线**：学习不走弯路，整理了套非常不错的[《codingmore专属学习路线》](#公众号)。
-> 5. **项目交流**：想要加群交流项目的朋友，可以加入[codingmore项目交流群](#公众号)。
+> 1. **快速体验项目**：[在线访问地址](http://www.codingmore.top/admin/) 。
+> 2. **全套学习教程**：[《Java 程序员进阶之路》](https://tobebetterjavaer.com/home.html) 。
+> 3. **专属学习路线**：学习不走弯路，整理了一套非常不错的[《Java 后端学习路线》](#公众号)。
+> 5. **项目交流**：想要加群交流项目的朋友，可以加入 [知识星球，提供一对一 VIP 洗脚服务](https://tobebetterjavaer.com/zhishixingqiu/) 。
 
 ## 前言
 
@@ -25,20 +25,34 @@
 
 ## 项目文档
 
-- 文档地址：[doc.codingmore.com](http://www.codingmore.top/learning/)
-- 备用地址：[https://github.com/itwanger/codingmore-learning](https://github.com/itwanger/codingmore-learning)
+- 文档地址：[http://www.codingmore.top](http://www.codingmore.top)
+- 源码地址：[https://github.com/itwanger/codingmore-learning](https://github.com/itwanger/codingmore-learning)
 
 ## 项目介绍
 
-编程喵（Codingmore）是一套成熟的编程类学习网站，基于 SpringBoot+MyBatis实现，采用Docker容器化部署。网站前台包含首页门户、文章搜索、文章展示、文章推荐等模块。网站管理端包括统计报表、文章管理等模块。
+编程喵🐱（Codingmore）是一套成熟的编程类学习网站，基于 SpringBoot+Vue实现。Web 端包含首页门户、文章搜索、文章展示、文章推荐等模块。网站管理端包括统计报表、文章管理、栏目管理、权限管理等模块。
 
 ### 项目展示
 
 #### 后台管理系统
 
-后台管理系统的前端项目 `codingmore-admin-web` 地址：[https://github.com/itwanger/codingmore-admin-web](https://github.com/itwanger/codingmore-admin-web)
+后台管理的 Web 端 `codingmore-admin-web` 地址：[https://github.com/itwanger/codingmore-admin-web](https://github.com/itwanger/codingmore-admin-web)
 
-后台管理系统的演示地址：[http://www.codingmore.top/admin/index.html](http://www.codingmore.top/admin/index.html)
+后台管理系统的演示地址：[http://www.codingmore.top/admin](http://www.codingmore.top/admin)
+
+![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.admin.jpg)
+
+#### Web 前端
+
+Web 前端的演示地址：[http://www.codingmore.top](http://www.codingmore.top/)
+
+网页端：
+
+
+
+手机端：
+
+![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.admin.jpg)
 
 ### 组织结构：
 
@@ -86,9 +100,12 @@ nprogress |进度条控件| https://github.com/rstacruz/nprogress
 
 ##### 系统架构图
 
+![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.drawio.png)
 
 
 ##### 业务架构图
+
+
 
 #### 模块介绍
 

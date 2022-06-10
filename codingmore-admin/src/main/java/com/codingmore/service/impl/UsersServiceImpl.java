@@ -17,6 +17,7 @@ import com.codingmore.util.JwtTokenUtil;
 import com.codingmore.dto.UpdateAdminPasswordParam;
 import com.codingmore.dto.UsersPageQueryParam;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,7 @@ import java.util.List;
  * @since 2021-09-12
  */
 @Service
+@Slf4j
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
     private static Logger LOGGER = LoggerFactory.getLogger(UsersServiceImpl.class);
 
@@ -179,11 +181,16 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public List<Resource> getResourceList(Long adminId) {
+        log.info("根据用户{}找到资源", adminId);
         List<Resource> resourceList = usersCacheService.getResourceListByUserId(adminId);
+
+        log.info("Redis 用户关联的角色{}", resourceList);
         if(CollUtil.isNotEmpty(resourceList)){
             return  resourceList;
         }
+
         resourceList = adminRoleRelationMapper.getResourceList(adminId);
+        log.info("根据用户获取数据库中的资源大小{}, 内容{}", resourceList.size(), resourceList);
         if(CollUtil.isNotEmpty(resourceList)){
             usersCacheService.setResourceList(adminId,resourceList);
         }

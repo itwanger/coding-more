@@ -1,7 +1,7 @@
 # Spring Boot 配置
 spring:
   profiles:
-    active: dev #默认为开发环境
+    active: prod #默认为开发环境
   servlet:
     multipart:
       enabled: true #开启文件上传
@@ -54,13 +54,6 @@ jwt:
   secret: codingmore-admin-secret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
-
-codingmore-admin-redis:
-  prefix: codingmore-admin
-  key:
-    user: user
-    resource: resource
-  expire: 86400 # 24小时
 
 #异步线程配置
 async:

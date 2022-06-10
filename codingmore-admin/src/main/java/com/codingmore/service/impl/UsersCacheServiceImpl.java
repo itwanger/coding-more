@@ -6,9 +6,11 @@ import com.codingmore.mapper.AdminRoleRelationMapper;
 import com.codingmore.model.AdminRoleRelation;
 import com.codingmore.model.Resource;
 import com.codingmore.model.Users;
+import com.codingmore.service.IRoleResourceRelationService;
 import com.codingmore.service.IUsersCacheService;
 import com.codingmore.service.IUsersService;
 import com.codingmore.service.IRedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UsersCacheServiceImpl implements IUsersCacheService {
     @Autowired
     private IUsersService usersService;
@@ -25,6 +28,8 @@ public class UsersCacheServiceImpl implements IUsersCacheService {
     private IRedisService redisService;
     @Autowired
     private AdminRoleRelationMapper adminRoleRelationMapper;
+    @Autowired
+    private IRoleResourceRelationService roleResourceRelationService;
 
     @Override
     public void delAdminUserByUserId(Long userId) {
@@ -41,13 +46,17 @@ public class UsersCacheServiceImpl implements IUsersCacheService {
 
     @Override
     public void delResourceListByRoleId(Long roleId) {
+        log.info("Redis 根据角色 ID{} 查询 user 和 role 的关系", roleId);
         QueryWrapper<AdminRoleRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id", roleId);
         List<AdminRoleRelation> relations = adminRoleRelationMapper.selectList(queryWrapper);
+        log.info("根据角色获取到用户{}", relations);
+
         if (CollUtil.isNotEmpty(relations)) {
             List<String> keys = relations.stream().map(
                     relation -> RedisConstants.getAdminResourceKey(relation.getUsersId())
             ).collect(Collectors.toList());
+            log.info("Redis 要删除的 keys{}", keys);
             redisService.del(keys);
         }
     }

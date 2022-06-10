@@ -24,6 +24,7 @@ import com.codingmore.state.TermRelationType;
 import com.codingmore.vo.PostsVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -53,15 +54,16 @@ import java.util.stream.Collectors;
  * @since 2021-09-12
  */
 @Service
+@Slf4j
 public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements IPostsService {
     @Autowired
-    private IUsersService iUsersService;
+    private IUsersService userService;
     @Autowired
     private ITermRelationshipsService iTermRelationshipsService;
     @Autowired
-    private IPostTagService iPostTagService;
+    private IPostTagService postTagService;
     @Autowired
-    private IPostTagRelationService iPostTagRelationService;
+    private IPostTagRelationService postTagRelationService;
     @Autowired
     private ThreadPoolTaskExecutor ossUploadImageExecutor;
     @Autowired
@@ -81,8 +83,6 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PostsServiceImpl.class);
-
     @Override
     @Transactional
     public void savePosts(PostsParam postsParam) {
@@ -99,7 +99,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         posts.setCommentCount(0L);
 
         // 当然登录用户
-        posts.setPostAuthor(iUsersService.getCurrentUserId());
+        posts.setPostAuthor(userService.getCurrentUserId());
 
         // 对图片进行转链
         handleContentImg(posts);
@@ -122,15 +122,15 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     @Transactional
     public void updatePosts(PostsParam postsParam) {
         if (postsParam.getPostsId() == null) {
-            LOGGER.error("更新文章时，文章 ID 为空");
+            log.error("更新文章时，文章 ID 为空");
             Asserts.fail("文章 ID 不能为空");
         }
 
         // 根据文章 ID 获取文章
         Posts posts = getById(postsParam.getPostsId());
         if (posts == null) {
+            log.error("文章不存在，文章ID{}",postsParam.getPostsId());
             Asserts.fail("更新文章时，文章不存在");
-            LOGGER.error("文章不存在，文章ID{}",postsParam.getPostsId());
         }
         BeanUtils.copyProperties(postsParam, posts);
 
@@ -160,11 +160,11 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     public boolean updatePostByScheduler(Long postId) {
-        LOGGER.info("更新文章{}状态", postId);
+        log.info("更新文章{}状态", postId);
         // 根据文章 ID 获取文章
         Posts posts = getById(postId);
         if (posts == null) {
-            LOGGER.error("文章定时发布出错，文章 ID 不存在");
+            log.error("文章定时发布出错，文章 ID 不存在");
             return false;
         }
 
@@ -188,7 +188,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 文章已经保存为草稿了，并且拿到了文章 ID
         // 调用定时任务
         String jobName = scheduleService.scheduleFixTimeJob(PublishPostJob.class, posts.getPostDate(), posts.getPostsId().toString());
-        LOGGER.debug("定时任务{}开始执行", jobName);
+        log.debug("定时任务{}开始执行", jobName);
     }
 
     private boolean handleScheduledBefore(Date postDate, Posts posts) {
@@ -199,7 +199,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         // 修改文章的状态为已发布
         // 定时发布一定是草稿状态
         if (postDate != null) {
-            LOGGER.debug("定时发布，时间{}", DateUtil.formatDateTime(postDate));
+            log.debug("定时发布，时间{}", DateUtil.formatDateTime(postDate));
 
             // 定时任务的时间必须大于当前时间 10 分钟
             if (DateUtil.between(DateTime.now(), postDate, DateUnit.MINUTE, false) <= postScheduleMinInterval) {
@@ -217,35 +217,29 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
     }
 
     private void insertOrUpdateTag(String tags, Long post_Id) {
+        log.info("准备更新文章{}标签{}", post_Id, tags);
         // 标签可为空
         if (StringUtils.isBlank(tags)) {
             return;
         }
-        //删除旧的内容标签关联
+        log.info("准备删除旧的标签关联");
         QueryWrapper<PostTagRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("post_id", post_Id);
-        iPostTagRelationService.remove(queryWrapper);
+        postTagRelationService.remove(queryWrapper);
 
         // TODO: 2021/11/14 先默认 循环添加
         int order = 0;
         for (String tag : tags.split(",")) {
             QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
             postTagQueryWrapper.eq("description", tag);
-            List<PostTag> tagList = iPostTagService.list(postTagQueryWrapper);
-            if (tagList.size() == 0) {
-                PostAddTagParam postAddTagParam = new PostAddTagParam();
-                postAddTagParam.setPostId(post_Id);
-                postAddTagParam.setDescription(tag);
-                postAddTagParam.setTermOrder(order);
-                iPostTagService.savePostTag(postAddTagParam);
+            List<PostTag> tagList = postTagService.list(postTagQueryWrapper);
 
-            } else {
-                PostTagRelation postTagRelation = new PostTagRelation();
-                postTagRelation.setPostTagId(tagList.get(0).getPostTagId());
-                postTagRelation.setPostId(post_Id);
-                postTagRelation.setTermOrder(order);
-                iPostTagRelationService.save(postTagRelation);
-            }
+            PostTagRelation postTagRelation = new PostTagRelation();
+            postTagRelation.setPostTagId(tagList.get(0).getPostTagId());
+            postTagRelation.setPostId(post_Id);
+            postTagRelation.setTermOrder(order);
+            postTagRelationService.save(postTagRelation);
+
             order++;
         }
     }
@@ -268,37 +262,53 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     @Override
     public PostsVo getPostsById(Long id) {
+        log.info("获取文章{}", id);
         Posts posts = this.getById(id);
         PostsVo postsVo = new PostsVo();
         if (posts == null) {
             return postsVo;
         }
+
+        // 转成 VO
         BeanUtils.copyProperties(posts, postsVo);
+
+        log.info("获取文章所属栏目{}", posts.getPostsId());
         QueryWrapper<TermRelationships> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("term_relationships_id", posts.getPostsId());
         List<TermRelationships> termRelationshipsList = iTermRelationshipsService.list(queryWrapper);
         if (termRelationshipsList.size() > 0) {
             postsVo.setTermTaxonomyId(termRelationshipsList.get(0).getTermTaxonomyId());
         }
+
+        log.info("获取文章标签{}",posts.getPostsId());
         QueryWrapper<PostTagRelation> tagRelationWrapper = new QueryWrapper<>();
         tagRelationWrapper.eq("post_id", posts.getPostsId());
         tagRelationWrapper.orderBy(true,true,"term_order");
-        List<PostTagRelation> postTagRelationList = iPostTagRelationService.list(tagRelationWrapper);
+
+        List<PostTagRelation> postTagRelationList = postTagRelationService.list(tagRelationWrapper);
+        log.info("文章标签个数{}", postTagRelationList.size());
+
         if (postTagRelationList.size() > 0) {
+            // 取出标签 ID
             List<Long> tagIds = postTagRelationList.stream().map(PostTagRelation::getPostTagId).collect(Collectors.toList());
             QueryWrapper<PostTag> tagQuery = new QueryWrapper<>();
             tagQuery.in("post_tag_id", tagIds);
-            List<PostTag> postTags = iPostTagService.list(tagQuery);
+
+            log.info("根据标签 IDS{} 查询标签", tagIds);
+            List<PostTag> postTags = postTagService.list(tagQuery);
             Collections.sort(postTags, new Comparator<PostTag>() {
                 @Override
                 public int compare(PostTag o1, PostTag o2) {
                     return tagIds.indexOf(o1.getPostTagId())-tagIds.indexOf(o2.getPostTagId());
                 }
             });
+
+            log.info("排序后的标签{}",postTags);
             postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
         }
 
-        Users users = iUsersService.getById(posts.getPostAuthor());
+        log.info("获取文章作者{}", posts.getPostAuthor());
+        Users users = userService.getById(posts.getPostAuthor());
         postsVo.setUserNiceName(users.getUserNicename());
         return postsVo;
     }
@@ -348,7 +358,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
                 Map attribute = objectMapper.readValue(postsParam.getAttribute(), Map.class);
                 posts.setAttribute(attribute);
             } catch (JsonProcessingException e) {
-                LOGGER.error("扩展字段处理出错：{}", e);
+                log.error("扩展字段处理出错：{}", e);
                 Asserts.fail("扩展字段处理出错");
             }
         }
@@ -379,7 +389,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             String imageName = m.group(1);
             String imageUrl = m.group(2);
 
-            LOGGER.info("使用分组进行替换图片名字：{}，图片路径：{}", imageName, imageUrl);
+            log.info("使用分组进行替换图片名字：{}，图片路径：{}", imageName, imageUrl);
 
             // 确认是本站链接，不处理
             if (!iOssService.needUpload(imageUrl)) {
@@ -399,7 +409,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             try {
                 imageUrl = future.get();
             } catch (InterruptedException | ExecutionException e) {
-                LOGGER.error("图片地址获取出错{}", e);
+                log.error("图片地址获取出错{}", e);
                 Asserts.fail("图片转链失败");
             }
             content = content.replace(oldUrl, imageUrl);

@@ -29,5 +29,5 @@ public interface IPostTagService extends IService<PostTag> {
      * @param postTagId
      * @return
      */
-    boolean removeTag(long postTagId);
+    boolean removeTag(Long postTagId);
 }

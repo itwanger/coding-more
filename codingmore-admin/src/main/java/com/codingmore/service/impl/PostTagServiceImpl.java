@@ -8,6 +8,7 @@ import com.codingmore.model.PostTagRelation;
 import com.codingmore.service.IPostTagRelationService;
 import com.codingmore.service.IPostTagService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,20 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
+@Slf4j
 public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> implements IPostTagService {
     @Autowired
     private IPostTagRelationService postTagRelationService;
-    
 
     @Override
     public boolean savePostTag(PostAddTagParam postAddTagParam) {
+        log.info("保存文章的标签{}", postAddTagParam);
+
         PostTag postTag = new PostTag();
         BeanUtils.copyProperties(postAddTagParam,postTag);
-        boolean result = this.save(postTag);
+
+        boolean result = save(postTag);
+
         if(postAddTagParam.getPostId()!=null){
             PostTagRelation postTagRelation = new PostTagRelation();
             postTagRelation.setPostTagId(postTag.getPostTagId());
@@ -59,7 +64,7 @@ public class PostTagServiceImpl extends ServiceImpl<PostTagMapper, PostTag> impl
     }
 
     @Override
-    public boolean removeTag(long postTagId) {
+    public boolean removeTag(Long postTagId) {
         QueryWrapper<PostTagRelation> postTagRelationQueryWrapper = new QueryWrapper();
         postTagRelationQueryWrapper.eq("post_tag_id",postTagId);
         postTagRelationService.remove(postTagRelationQueryWrapper);

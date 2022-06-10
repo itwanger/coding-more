@@ -81,36 +81,6 @@ public class PostTagController {
         return ResultObject.success(postTagService.updateById(postTag) ? "修改成功" : "修改失败");
     }
 
-    @RequestMapping(value = "/simpleTest", method = RequestMethod.POST)
-    @ResponseBody
-    @ApiOperation("修改标签/Redis 测试用")
-    // Spring Cache 测试代码
-//  @CachePut(value = "codingmore", key = "'codingmore:postags:'+#postAddTagParam.postTagId")
-    public ResultObject<PostTag> simpleTest(@Valid PostTagParam postAddTagParam) {
-        if (postAddTagParam.getPostTagId() == null) {
-            return ResultObject.failed("标签id不能为空");
-        }
-        PostTag postTag = postTagService.getById(postAddTagParam.getPostTagId());
-        if (postTag == null) {
-            return ResultObject.failed("标签不存在");
-        }
-        QueryWrapper<PostTag> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("description", postAddTagParam.getDescription());
-        int count = postTagService.count(queryWrapper);
-        if (count > 0) {
-            return ResultObject.failed("标签名称已存在");
-        }
-        BeanUtils.copyProperties(postAddTagParam, postTag);
-
-        boolean successFlag = postTagService.updateById(postTag);
-
-        String key = "redis:simple:" + postTag.getPostTagId();
-        redisService.set(key, postTag);
-
-        PostTag cachePostTag = (PostTag) redisService.get(key);
-        return ResultObject.success(cachePostTag);
-    }
-
     @RequestMapping(value = "/getByPostId", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation("根据文章内容获取标签")
@@ -132,7 +102,8 @@ public class PostTagController {
     @ResponseBody
     @ApiOperation("删除")
     public ResultObject<String> delete(Long postTagId) {
-        return ResultObject.success(postTagService.removeTag(postTagId) ? "删除成功" : "删除失败");
+        postTagService.removeTag(postTagId);
+        return ResultObject.success("删除成功");
     }
 
     @RequestMapping(value = "/queryPageable", method = RequestMethod.GET)

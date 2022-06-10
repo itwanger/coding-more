@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.codingmore.service.IUsersCacheService;
 import com.codingmore.vo.RoleVo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ import java.util.List;
  * @since 2022-03-03
  */
 @Service
+@Slf4j
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
     @Autowired
     private RoleMapper roleMapper;
@@ -63,7 +65,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional
     public int allocMenu(Long roleId, List<Long> menuIds) {
         //先删除原有关系
         QueryWrapper<RoleMenuRelation> queryWrapper = new QueryWrapper<RoleMenuRelation>();
@@ -84,24 +86,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional
     public int allocResource(Long roleId, List<Long> resourceIds) {
-           //先删除原有关系
-           QueryWrapper<RoleResourceRelation> queryWrapper = new QueryWrapper<RoleResourceRelation>();
-           queryWrapper.eq("role_id",roleId);
-           roleResourceRelationService.remove(queryWrapper);
+        log.info("先删除原有关系，角色{}，资源{}", roleId, resourceIds);
+       QueryWrapper<RoleResourceRelation> queryWrapper = new QueryWrapper<RoleResourceRelation>();
+       queryWrapper.eq("role_id",roleId);
+       roleResourceRelationService.remove(queryWrapper);
 
-           List<RoleResourceRelation> relationList = new ArrayList<RoleResourceRelation>();
-           //批量插入新关系
-           for (Long resourceId : resourceIds) {
-               RoleResourceRelation relation = new RoleResourceRelation();
-               relation.setRoleId(roleId);
-               relation.setResourceId(resourceId);
-               relationList.add(relation);
-           }
-           roleResourceRelationService.saveBatch(relationList);
-           usersCacheService.delResourceListByRoleId(roleId);
-           return resourceIds.size();
+       List<RoleResourceRelation> relationList = new ArrayList<>();
+       //批量插入新关系
+       for (Long resourceId : resourceIds) {
+           RoleResourceRelation relation = new RoleResourceRelation();
+           relation.setRoleId(roleId);
+           relation.setResourceId(resourceId);
+           relationList.add(relation);
+       }
+       log.info("批量插入角色和资源的关系{}", relationList);
+       roleResourceRelationService.saveBatch(relationList);
+
+       usersCacheService.delResourceListByRoleId(roleId);
+       return resourceIds.size();
     }
 
     @Override
