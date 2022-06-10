@@ -218,16 +218,16 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
 
     private void insertOrUpdateTag(String tags, Long post_Id) {
         log.info("准备更新文章{}标签{}", post_Id, tags);
-        // 标签可为空
-        if (StringUtils.isBlank(tags)) {
-            return;
-        }
+
         log.info("准备删除旧的标签关联");
         QueryWrapper<PostTagRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("post_id", post_Id);
         postTagRelationService.remove(queryWrapper);
 
-        // TODO: 2021/11/14 先默认 循环添加
+        if (StringUtils.isBlank(tags)) {
+            return;
+        }
+
         int order = 0;
         for (String tag : tags.split(",")) {
             QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
@@ -304,7 +304,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
             });
 
             log.info("排序后的标签{}",postTags);
-            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getPostTagId).collect(Collectors.toList()), ","));
+            postsVo.setTagsName(StringUtils.join(postTags.stream().map(PostTag::getDescription).collect(Collectors.toList()), ","));
         }
 
         log.info("获取文章作者{}", posts.getPostAuthor());
