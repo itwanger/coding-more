@@ -130,22 +130,18 @@
                 <!-- 第一个推广 -->
                 <div class="right-text-item right-item">
                     <p class="title"><img src="images/planet-icon.png" />站长的编程知识星球开放啦！</p>
-                    <a target="_blank" href="https://tobebetterjavaer.com/zhishixingqiu/">
-                        <p class="desc">
-                            一个氛围超好的编程学习圈子，实战项目手把手教，海量学习资源免费送、疑难杂症1V1 指导、还有星球用户才能读到的VIP专栏哟（点击了解详情）
-                        </p>
+                    <a th:href="@{${siteConfig.attribute.zsxqHref}}">
+                        <p class="desc" th:text="${siteConfig.attribute.zsxqDesc}"></p>
                     </a>
                 </div>
                 <div class="right-text-item">
                     <p class="title">关于站长</p>
                 </div>
                 <div class="right-text-item mt-2">
-                    <a target="_blank" href="https://tobebetterjavaer.com/download/java.html">
+                    <a th:href="@{${siteConfig.attribute.headStationHref}}">
                         <div class="flex-row">
                             <img src="images/itwanger.png" class="img-itwanger" />
-                            <p class="desc">
-                                站长二哥，CSDN 两届博客之星，原创公号沉默王二主理人。点击了解他、交朋友、编程交流答疑、领取学习资料。
-                            </p>
+                            <p class="desc" th:text="${siteConfig.attribute.headStationDesc}"></p>
                         </div>
                     </a>
                 </div>
