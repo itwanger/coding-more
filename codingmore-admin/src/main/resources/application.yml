@@ -1,7 +1,7 @@
 # Spring Boot 配置
 spring:
   profiles:
-    active: prod #默认为开发环境
+    active: dev #默认为开发环境
   servlet:
     multipart:
       enabled: true #开启文件上传
