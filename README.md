@@ -3,7 +3,7 @@
 <p align="center">
   <a href="#公众号" target="_blank"><img src="https://img.shields.io/badge/公众号-沉默王二-brightgreen.svg"></a>
   <a href="https://tobebetterjavaer.com/zhishixingqiu/" target="_blank"><img src="https://img.shields.io/badge/交流-知识星球-blue.svg"></a>
-  <a href="https://tobebetterjavaer.com/home.html" target="_blank"><img src="https://img.shields.io/badge/学习教程-Java 程序员进阶之路-red"></a>
+  <a href="https://tobebetterjavaer.com/" target="_blank"><img src="https://img.shields.io/badge/学习教程-Java 程序员进阶之路-red"></a>
   <a href="https://github.com/itwanger/codingmore-admin-web" target="_blank">
     <img src="https://img.shields.io/badge/前端项目-codingmore--admin--web-orange.svg" alt="前端项目">
   </a>
@@ -15,7 +15,7 @@
 ## 友情提示
 
 > 1. **快速体验项目**：[在线访问地址](http://www.codingmore.top/admin/) 。
-> 2. **全套学习教程**：[《Java 程序员进阶之路》](https://tobebetterjavaer.com/home.html) 。
+> 2. **全套学习教程**：[《Java 程序员进阶之路》](https://tobebetterjavaer.com/) 。
 > 3. **专属学习路线**：学习不走弯路，整理了一套非常不错的[《Java 后端学习路线》](#公众号)。
 > 5. **项目交流**：想要加群交流项目的朋友，可以加入 [知识星球，提供一对一 VIP 洗脚服务](https://tobebetterjavaer.com/zhishixingqiu/) 。
 
@@ -40,7 +40,7 @@
 
 后台管理系统的演示地址：[http://www.codingmore.top/admin](http://www.codingmore.top/admin)
 
-![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.admin.jpg)
+![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-admin.jpg)
 
 #### Web 前端
 
@@ -48,11 +48,11 @@ Web 前端的演示地址：[http://www.codingmore.top](http://www.codingmore.to
 
 网页端：
 
-
+![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-web.jpg)
 
 手机端：
 
-![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.admin.jpg)
+![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-web-mobile.png)
 
 ### 组织结构：
 
@@ -100,22 +100,12 @@ nprogress |进度条控件| https://github.com/rstacruz/nprogress
 
 ##### 系统架构图
 
-![](https://cdn.tobebetterjavaer.com/codingmore/codingmore.drawio.png)
+![](http://cdn.tobebetterjavaer.com/codingmore/codingmore.drawio.png)
 
 
 ##### 业务架构图
 
-
-
-#### 模块介绍
-
-##### 后台管理系统 `codingmore-admin`
-
-文章管理
-
-##### 前台网站系统 `codingmore-web`
-
-#### 开发进度
+![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-business.jpg)
 
 ## 环境搭建
 
@@ -140,10 +130,15 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 >Windows 环境部署
 
+[如何在本地（Windows环境）跑起来编程喵（Spring Boot+Vue）项目源码？](http://www.codingmore.top/78.html)
 
->Docker 环境部署
+>macOS 环境部署
 
->相关环境部署
+[如何在本地（macOS环境）跑起来编程喵（Spring Boot+Vue）项目源码？](http://www.codingmore.top/77.html)
+
+>云服务器/Linux环境部署
+
+[编程喵🐱实战项目如何在云服务器上跑起来？](http://www.codingmore.top/79.html)
 
 # 公众号
 
@@ -155,17 +150,17 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 # 参与人
 
-|  参与人 |   角色 | 公众号  |
-| ------------ | ------------ | ------------ |
-|  沉默王二 | 产品经理  |   |
-|  程序员石磊 | 后端架构  | 关注公众号「**程序员石磊**」,在职读研、云原生技术 |
-|  谷明 | 前端架构  |   |
+|  参与人 |   角色 | 公众号                            |
+| ------------ | ------------ |--------------------------------|
+|  沉默王二 | 产品经理  | 关注公众号「**沉默王二**」,专注 Java 后端技术分享 |
+|  程序员石磊 | 后端架构  | 关注公众号「**程序员石磊**」,在职读研、云原生技术    |
+|  谷明 | 前端架构  |                                |
 
 ## 许可证
 
 [Apache License 2.0](https://github.com/itwanger/codingmore/blob/master/LICENSE)
 
-Copyright (c) 2022 沉默王二/程序员石磊/谷明
+Copyright (c) 2022 [沉默王二](https://tobebetterjavaer.com)/程序员石磊/谷明
 
 
 
