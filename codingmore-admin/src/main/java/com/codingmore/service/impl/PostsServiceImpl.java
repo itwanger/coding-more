@@ -231,7 +231,7 @@ public class PostsServiceImpl extends ServiceImpl<PostsMapper, Posts> implements
         int order = 0;
         for (String tag : tags.split(",")) {
             QueryWrapper<PostTag> postTagQueryWrapper = new QueryWrapper<>();
-            postTagQueryWrapper.eq("description", tag);
+            postTagQueryWrapper.eq("post_tag_id", tag);
             List<PostTag> tagList = postTagService.list(postTagQueryWrapper);
 
             PostTagRelation postTagRelation = new PostTagRelation();
