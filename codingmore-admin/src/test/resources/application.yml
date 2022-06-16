@@ -1,3 +1,4 @@
+# Spring Boot 配置
 spring:
   profiles:
     active: dev #默认为开发环境
@@ -9,9 +10,11 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
+# 端口号
 server:
-  port: 8080
+  port: 9002
 
+# MyBatis plus 的配置查询后写注释
 mybatis-plus:
   mapper-locations:
     - classpath:dao/*.xml
@@ -23,51 +26,34 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-ignored:
-  urls: #安全路径白名单
-    - /doc.html
-    - /swagger-ui/**
-    - /swagger/**
-    - /swagger-resources/**
-    - /**/v3/api-docs
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
-    - /webjars/springfox-swagger-ui/**
-    - /actuator/**
-    - /druid/**
-    - /users/login
-    - /users/register
-    - /users/info
-    - /users/logout
-    - /minio/upload
+# 自定义类 ignoreConfig，URL 的白名单
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /doc.html
+      - /swagger-ui/**
+      - /swagger/**
+      - /swagger-resources/**
+      - /**/v3/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /users/login
+      - /users/register
+      - /users/info
+      - /users/logout
+      - /minio/upload
 
 # 登录认证 token filter
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
-  secret: learn-admin-secret #JWT加解密使用的密钥
+  secret: codingmore-admin-secret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: 'Bearer '  #JWT负载中拿到开头
-
-
-  # oss
-aliyun:
-  oss:
-      # oss对外服务的访问域名
-    endpoint: oss-cn-beijing.aliyuncs.com
-      # 访问身份验证中用到用户标识
-    accessKeyId: LTAI5t924wYTNT9dQoAWGDKa
-      # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
-    accessKeySecret: RYNmqo4yZdTXbPcuQVE4jK9ax0HRLM
-      # oss的存储空间
-    bucketName: itwanger-oss
-      # 上传文件大小(M)
-    maxSize: 3
-      # 上传文件夹路径前缀
-    dir:
-      prefix: codingmore/images/
-
 
 #异步线程配置
 async:
@@ -81,4 +67,9 @@ async:
     #设置线程活跃时间（秒）
     keepAliveSeconds: 360
     #设置默认线程名称
-    threadNamePrefix: upload-image-thread-
+    threadNamePrefix: sync-thread-
+
+# 文章定时发布的最小间隔
+post:
+  schedule:
+    minInterval: 10

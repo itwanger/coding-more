@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Redis配置类
@@ -27,6 +31,7 @@ import java.time.Duration;
  */
 @EnableCaching
 @Configuration
+@Slf4j
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
@@ -67,12 +72,22 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean
-    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
-        //设置Redis缓存有效期为1天
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer())).entryTtl(Duration.ofDays(1));
-        return new RedisCacheManager(redisCacheWriter, redisCacheConfiguration);
+    public CacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofDays(1)) // 默认没有特殊指定的
+                .computePrefixWith(cacheName -> "caching:" + cacheName);
+
+        // 针对不同cacheName，设置不同的过期时间
+        Map<String, RedisCacheConfiguration> initialCacheConfiguration = new HashMap<String, RedisCacheConfiguration>() {{
+            put("demoCache", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMillis(20*1000)));
+            // ...
+        }};
+
+        RedisCacheManager redisCacheManager = RedisCacheManager.builder(redisConnectionFactory)
+                .cacheDefaults(defaultCacheConfig) // 默认配置（强烈建议配置上）。  比如动态创建出来的都会走此默认配置
+                .withInitialCacheConfigurations(initialCacheConfiguration) // 不同cache的个性化配置
+                .build();
+        return redisCacheManager;
     }
 
 }
