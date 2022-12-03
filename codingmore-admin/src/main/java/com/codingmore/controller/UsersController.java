@@ -107,7 +107,7 @@ public class UsersController {
     @ResponseBody
     public ResultObject<String> register(@Validated UsersParam users) {
         Users userDto = new Users();
-        userDto.setUserRegistered(new Date());
+//        userDto.setUserRegistered(new Date());
         BeanUtils.copyProperties(users, userDto);
         return ResultObject.success(usersService.register(userDto) ? "保存成功" : "保存失败");
     }
