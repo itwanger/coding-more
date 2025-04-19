@@ -14,7 +14,7 @@
 
 ## 友情提示
 
-> 1. **快速体验项目**：[在线访问地址]([http://paicoding.com/](https://paicoding.com/)) 。
+> 1. **快速体验项目**：[在线访问地址](https://paicoding.com/) 。
 > 2. **全套学习教程**：[《二哥的 Java 进阶之路》](https://javabetter.cn/) 。
 > 3. **专属学习路线**：学习不走弯路，整理了一套非常不错的[《Java 后端学习路线》](#公众号)。
 > 5. **项目交流**：想要加群交流项目的朋友，可以加入 [知识星球，提供一对一 VIP 洗脚服务](https://javabetter.cn/zhishixingqiu/) 。
