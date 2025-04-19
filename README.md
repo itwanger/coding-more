@@ -38,7 +38,7 @@
 
 后台管理的 Web 端 `codingmore-admin-web` 地址：[https://github.com/itwanger/codingmore-admin-web](https://github.com/itwanger/codingmore-admin-web)
 
-后台管理系统的演示地址：[https://paicoding.com/admin/](https://paicoding.com/admin/]
+后台管理系统的演示地址：[https://paicoding.com/admin/](https://paicoding.com/admin/)
 
 ![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-admin.jpg)
 
