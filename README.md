@@ -144,7 +144,7 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 学习不走弯路，关注公众号「**沉默王二**」，回复「**学习路线**」，获取编程喵学习网站专属学习路线！
 
-![当图片不显示的时候可以微信搜索「沉默王二」](https://itwanger-oss.oss-cn-beijing.aliyuncs.com/codingmore/banner/gongzhonghao.png)
+![当图片不显示的时候可以微信搜索「沉默王二」](https://cdn.tobebetterjavaer.com/tobebetterjavaer/images/gongzhonghao.png)
 
 加微信交流，公众号后台回复「**加群**」即可。
 
