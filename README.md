@@ -2,8 +2,8 @@
 
 <p align="center">
   <a href="#公众号" target="_blank"><img src="https://img.shields.io/badge/公众号-沉默王二-brightgreen.svg"></a>
-  <a href="https://tobebetterjavaer.com/zhishixingqiu/" target="_blank"><img src="https://img.shields.io/badge/交流-知识星球-blue.svg"></a>
-  <a href="https://tobebetterjavaer.com/" target="_blank"><img src="https://img.shields.io/badge/学习教程-Java 程序员进阶之路-red"></a>
+  <a href="https://javabetter.cn/zhishixingqiu/" target="_blank"><img src="https://img.shields.io/badge/交流-知识星球-blue.svg"></a>
+  <a href="https://javabetter.cn/" target="_blank"><img src="https://img.shields.io/badge/学习教程-二哥的Java进阶之路-red"></a>
   <a href="https://github.com/itwanger/codingmore-admin-web" target="_blank">
     <img src="https://img.shields.io/badge/前端项目-codingmore--admin--web-orange.svg" alt="前端项目">
   </a>
@@ -14,10 +14,10 @@
 
 ## 友情提示
 
-> 1. **快速体验项目**：[在线访问地址](http://www.codingmore.top/admin/) 。
-> 2. **全套学习教程**：[《Java 程序员进阶之路》](https://tobebetterjavaer.com/) 。
+> 1. **快速体验项目**：[在线访问地址]([http://paicoding.com/](https://paicoding.com/)) 。
+> 2. **全套学习教程**：[《二哥的 Java 进阶之路》](https://javabetter.cn/) 。
 > 3. **专属学习路线**：学习不走弯路，整理了一套非常不错的[《Java 后端学习路线》](#公众号)。
-> 5. **项目交流**：想要加群交流项目的朋友，可以加入 [知识星球，提供一对一 VIP 洗脚服务](https://tobebetterjavaer.com/zhishixingqiu/) 。
+> 5. **项目交流**：想要加群交流项目的朋友，可以加入 [知识星球，提供一对一 VIP 洗脚服务](https://javabetter.cn/zhishixingqiu/) 。
 
 ## 前言
 
@@ -25,7 +25,7 @@
 
 ## 项目文档
 
-- 文档地址：[http://www.codingmore.top](http://www.codingmore.top)
+- 文档地址：[https://javabetter.cn/springboot/initializr.html](https://javabetter.cn/springboot/initializr.html)
 - 源码地址：[https://github.com/itwanger/codingmore-learning](https://github.com/itwanger/codingmore-learning)
 
 ## 项目介绍
@@ -38,13 +38,13 @@
 
 后台管理的 Web 端 `codingmore-admin-web` 地址：[https://github.com/itwanger/codingmore-admin-web](https://github.com/itwanger/codingmore-admin-web)
 
-后台管理系统的演示地址：[http://www.codingmore.top/admin](http://www.codingmore.top/admin)
+后台管理系统的演示地址：[https://paicoding.com/admin/](https://paicoding.com/admin/]
 
 ![](http://cdn.tobebetterjavaer.com/codingmore/codingmore-admin.jpg)
 
 #### Web 前端
 
-Web 前端的演示地址：[http://www.codingmore.top](http://www.codingmore.top/)
+Web 前端的演示地址：[http://paicoding.com](http://paicoding.com/)
 
 网页端：
 
@@ -130,15 +130,15 @@ Nginx |1.10   | http://nginx.org/en/download.html
 
 >Windows 环境部署
 
-[如何在本地（Windows环境）跑起来编程喵（Spring Boot+Vue）项目源码？](http://www.codingmore.top/78.html)
+[如何在本地（Windows环境）跑起来编程喵（Spring Boot+Vue）项目源码？](https://javabetter.cn/springboot/windows-codingmore-run.html)
 
 >macOS 环境部署
 
-[如何在本地（macOS环境）跑起来编程喵（Spring Boot+Vue）项目源码？](http://www.codingmore.top/77.html)
+[如何在本地（macOS环境）跑起来编程喵（Spring Boot+Vue）项目源码？](https://javabetter.cn/springboot/macos-codingmore-run.html)
 
 >云服务器/Linux环境部署
 
-[编程喵🐱实战项目如何在云服务器上跑起来？](http://www.codingmore.top/79.html)
+[编程喵🐱实战项目如何在云服务器上跑起来？](https://javabetter.cn/springboot/linux-codingmore-run.html)
 
 # 公众号
 
